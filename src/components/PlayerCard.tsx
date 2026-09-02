@@ -61,7 +61,7 @@ export default function PlayerCard() {
           onClick={togglePlay}
           disabled={loading || episodes.length === 0}
           aria-label={isPlaying ? "Pause" : "Play"}
-          className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full border border-accent/60 text-accent transition-opacity disabled:opacity-40"
+          className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full border border-accent/60 text-accent transition-all hover:border-accent hover:bg-accent hover:text-bg disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-accent"
         >
           {isPlaying ? (
             <svg width="18" height="20" viewBox="0 0 18 20" fill="currentColor">
@@ -117,7 +117,7 @@ export default function PlayerCard() {
                 <button
                   type="button"
                   onClick={() => playEpisode(i)}
-                  className="flex w-full items-center gap-4 py-3 text-left"
+                  className="flex w-full items-center gap-4 rounded-lg px-2 py-3 text-left transition-colors hover:bg-white/[0.06] -mx-2"
                 >
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-semibold text-white">
