@@ -8,7 +8,7 @@ export default function Hero() {
       className="relative flex min-h-dvh flex-col overflow-hidden pt-28"
       style={{
         backgroundImage:
-          "radial-gradient(46% 52% at 40% 50%, rgba(224,74,63,0.4) 0%, rgba(224,74,63,0.15) 42%, rgba(224,74,63,0) 76%), radial-gradient(65% 60% at 80% 6%, rgba(255,255,255,0.4) 0%, transparent 60%), radial-gradient(55% 60% at 6% 2%, rgba(110,114,121,0.5) 0%, transparent 65%), linear-gradient(180deg, var(--ink) 0%, var(--bg) 100%)",
+          "linear-gradient(180deg, var(--bg-elevated) 0%, rgba(252,251,249,0.85) 10%, rgba(252,251,249,0) 24%), radial-gradient(46% 52% at 40% 50%, rgba(224,74,63,0.4) 0%, rgba(224,74,63,0.15) 42%, rgba(224,74,63,0) 76%), radial-gradient(65% 60% at 80% 6%, rgba(255,255,255,0.4) 0%, transparent 60%), radial-gradient(55% 60% at 6% 2%, rgba(110,114,121,0.5) 0%, transparent 65%), linear-gradient(180deg, var(--ink) 0%, var(--bg) 100%)",
       }}
     >
       <EqualizerLogo
