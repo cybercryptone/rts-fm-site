@@ -39,23 +39,27 @@ export default function RadioSection() {
           </div>
         </div>
 
-        <div className="mt-10 flex flex-wrap items-center gap-4">
+        <div className="mt-10 flex flex-wrap items-center gap-3">
           <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-fg-dim">
             also on
           </p>
-          <a
-            href="https://podcasts.apple.com/us/podcast/rts-fm-radio/id1586958635?itscg=30200&itsct=podcast_box_badge&ls=1&mttnsubad=1586958635"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block"
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="https://toolbox.marketingtools.apple.com/api/v2/badges/listen-on-apple-podcasts/badge-26/en-us"
-              alt="Listen on Apple Podcasts"
-              className="h-[54px] w-auto object-contain sm:h-[62px]"
-            />
-          </a>
+          {[
+            {
+              label: "Apple Podcasts",
+              href: "https://podcasts.apple.com/us/podcast/rts-fm-radio/id1586958635",
+            },
+            { label: "SoundCloud", href: "https://soundcloud.com/rtsfm" },
+          ].map((p) => (
+            <a
+              key={p.label}
+              href={p.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-full border border-line px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-fg-dim transition-colors hover:border-accent hover:text-accent"
+            >
+              {p.label} ↗
+            </a>
+          ))}
         </div>
 
         <SetsArchive />
