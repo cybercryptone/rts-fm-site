@@ -1,42 +1,40 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { EQ_BARS, EQ_VIEWBOX } from "@/lib/eq-bars";
 
-const TOTAL_BARS = 32;
-const TOTAL_SLATS = 22;
+const TOTAL_SLATS_MOBILE = 10;
+const TOTAL_SLATS_DESKTOP = 22;
 
-const VIEW_W = 800;
-const VIEW_H = 600;
-const BAR_W = 7;
-const SPACING = VIEW_W / (TOTAL_BARS - 1);
+const IDLE_AMPLITUDE = 0.1;
+const SURGE_MAX = 0.35;
 
-// Gaussian envelope — peak sits under/next to "FM", soft falloff either side.
-const PEAK = 16;
-const SPREAD = 7.2;
-
-function baseScaleFor(i: number) {
-  return Math.max(0.12, Math.exp(-Math.pow((i - PEAK) / SPREAD, 2)) * 0.95);
-}
+const SLAT_MASK = "linear-gradient(180deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.16) 35%, rgba(0,0,0,0.7) 75%, rgba(0,0,0,1) 100%)";
+const SLAT_MASK_STYLE: React.CSSProperties = {
+  WebkitMaskImage: SLAT_MASK,
+  maskImage: SLAT_MASK,
+};
 
 export default function CursorWaveform() {
   const rootRef = useRef<HTMLDivElement>(null);
-  const barRefs = useRef<(SVGRectElement | null)[]>([]);
+  const barRefs = useRef<(SVGEllipseElement | null)[]>([]);
 
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return;
 
-    const bars = Array.from({ length: TOTAL_BARS }, (_, i) => {
-      const base = baseScaleFor(i);
-      return { current: base, target: base, base, phase: i * 0.28 };
-    });
+    const bars = EQ_BARS.map((_, i) => ({
+      current: 1,
+      target: 1,
+      phase: i * 0.4,
+    }));
 
     const applyStatic = () => {
-      bars.forEach((b, i) => {
+      bars.forEach((_, i) => {
         const el = barRefs.current[i];
         if (!el) return;
-        el.style.transform = `scaleY(${b.base})`;
-        el.style.opacity = Math.max(0.25, b.base * 1.1).toFixed(3);
+        el.style.transform = "scaleY(1)";
+        el.style.opacity = "0.95";
       });
     };
 
@@ -86,7 +84,7 @@ export default function CursorWaveform() {
       const maxDistY = window.innerHeight * 0.7;
 
       bars.forEach((bar, i) => {
-        const idle = Math.sin(time + bar.phase) * 0.035;
+        const idle = Math.sin(time + bar.phase) * IDLE_AMPLITUDE;
         const el = barRefs.current[i];
 
         if (hovering && el) {
@@ -99,18 +97,18 @@ export default function CursorWaveform() {
 
           const proximity = Math.max(0, 1 - distX / maxDistX);
           const verticalFactor = Math.max(0.2, 1 - distY / maxDistY);
-          const surge = Math.pow(proximity, 1.7) * 0.65 * verticalFactor;
+          const surge = Math.pow(proximity, 1.7) * SURGE_MAX * verticalFactor;
 
-          bar.target = Math.min(1.18, bar.base + idle + surge);
+          bar.target = Math.min(1.5, 1 + idle + surge);
         } else {
-          bar.target = Math.max(0.08, bar.base + idle);
+          bar.target = Math.max(0.75, 1 + idle);
         }
 
         bar.current += (bar.target - bar.current) * 0.09;
 
         if (el) {
           el.style.transform = `scaleY(${bar.current.toFixed(4)})`;
-          el.style.opacity = Math.min(1, Math.max(0.25, bar.current * 1.1)).toFixed(3);
+          el.style.opacity = Math.min(1, Math.max(0.4, bar.current * 0.95)).toFixed(3);
         }
       });
 
@@ -148,57 +146,61 @@ export default function CursorWaveform() {
         </filter>
       </svg>
 
-      {/* 1. unified waveform SVG — single vector, no per-slat cutting */}
+      {/* 1. unified waveform SVG — the real brand equalizer geometry,
+             cursor-reactive instead of the static CSS pulse */}
       <svg
-        viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
-        preserveAspectRatio="none"
-        className="absolute right-[4vw] top-1/2 z-0 hidden h-[65vh] w-[62vw] max-w-[920px] -translate-y-[46%] overflow-visible sm:block"
+        viewBox={`0 0 ${EQ_VIEWBOX.w} ${EQ_VIEWBOX.h}`}
+        className="pointer-events-none absolute -right-6 top-1/2 z-0 hidden w-[380px] -translate-y-1/2 sm:block md:-right-8 md:w-[440px] lg:-right-10 lg:w-[500px] xl:w-[560px]"
+        style={{
+          WebkitMaskImage:
+            "linear-gradient(to bottom, black 0%, black 55%, transparent 92%)",
+          maskImage:
+            "linear-gradient(to bottom, black 0%, black 55%, transparent 92%)",
+          filter: "blur(3px)",
+        }}
       >
         <defs>
           <linearGradient id="spike-grad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="var(--accent)" stopOpacity={0.08} />
-            <stop offset="25%" stopColor="var(--accent)" stopOpacity={0.95} />
-            <stop offset="50%" stopColor="var(--accent-soft)" stopOpacity={1} />
-            <stop offset="75%" stopColor="var(--accent)" stopOpacity={0.95} />
-            <stop offset="100%" stopColor="var(--accent)" stopOpacity={0.08} />
+            <stop offset="0%" stopColor="var(--accent)" />
+            <stop offset="100%" stopColor="var(--accent-soft)" />
           </linearGradient>
         </defs>
         <g>
-          {Array.from({ length: TOTAL_BARS }).map((_, i) => {
-            const x = i * SPACING;
-            return (
-              <rect
-                key={i}
-                ref={(el) => {
-                  barRefs.current[i] = el;
-                }}
-                x={x - BAR_W / 2}
-                y={50}
-                width={BAR_W}
-                height={500}
-                rx={BAR_W / 2}
-                fill="url(#spike-grad)"
-                className="needle-path"
-              />
-            );
-          })}
+          {EQ_BARS.map((b, i) => (
+            <ellipse
+              key={i}
+              ref={(el) => {
+                barRefs.current[i] = el;
+              }}
+              cx={b.cx}
+              cy={b.cy}
+              rx={b.rx}
+              ry={b.ry}
+              fill="url(#spike-grad)"
+              className="needle-path"
+            />
+          ))}
         </g>
       </svg>
 
       {/* 2. fluted glass slats — purely optical, no blur; nearly invisible up
              top where the backdrop is plain, easing in toward the bottom.
              Visible on every breakpoint, including mobile, where it sits
-             over the static logo watermark instead of the cursor SVG. */}
+             over the static logo watermark instead of the cursor SVG.
+             Mobile gets fewer, wider slats than desktop. */}
       <div
-        className="pointer-events-none absolute inset-0 z-[1] flex overflow-hidden"
-        style={{
-          WebkitMaskImage:
-            "linear-gradient(180deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.16) 35%, rgba(0,0,0,0.7) 75%, rgba(0,0,0,1) 100%)",
-          maskImage:
-            "linear-gradient(180deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.16) 35%, rgba(0,0,0,0.7) 75%, rgba(0,0,0,1) 100%)",
-        }}
+        className="pointer-events-none absolute inset-0 z-[1] flex overflow-hidden sm:hidden"
+        style={SLAT_MASK_STYLE}
       >
-        {Array.from({ length: TOTAL_SLATS }).map((_, i) => (
+        {Array.from({ length: TOTAL_SLATS_MOBILE }).map((_, i) => (
+          <div key={i} className="waveform-slat" />
+        ))}
+      </div>
+      <div
+        className="pointer-events-none absolute inset-0 z-[1] hidden overflow-hidden sm:flex"
+        style={SLAT_MASK_STYLE}
+      >
+        {Array.from({ length: TOTAL_SLATS_DESKTOP }).map((_, i) => (
           <div key={i} className="waveform-slat" />
         ))}
       </div>
