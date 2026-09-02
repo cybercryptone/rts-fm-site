@@ -70,7 +70,7 @@ export default function Hero() {
 
         <div className="mt-8 flex max-w-xl flex-col gap-4 sm:mt-10">
           <p className="max-w-[240px] font-headline text-lg font-bold uppercase leading-tight tracking-[-0.02em] text-fg sm:max-w-none sm:text-2xl">
-            {SITE.tagline}.
+            {SITE.tagline}
           </p>
           <p className="text-sm leading-relaxed text-fg sm:text-base">
             Independent internet radio and record label broadcasting live
