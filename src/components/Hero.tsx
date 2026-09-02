@@ -22,15 +22,6 @@ export default function Hero() {
       <span className="crosshair bottom-16 right-6 hidden sm:block sm:right-10" />
 
       <div className="relative z-10 mx-auto flex w-full max-w-[1400px] flex-1 flex-col justify-center px-6 sm:px-10">
-        <EqualizerLogo
-          className="pointer-events-none absolute -right-6 top-1/2 -z-10 hidden w-[380px] -translate-y-1/2 opacity-70 sm:block md:-right-8 md:w-[440px] lg:-right-10 lg:w-[500px] xl:w-[560px]"
-          style={{
-            WebkitMaskImage:
-              "linear-gradient(to bottom, black 0%, black 55%, transparent 92%)",
-            maskImage:
-              "linear-gradient(to bottom, black 0%, black 55%, transparent 92%)",
-          }}
-        />
         <div className="flex items-baseline gap-3 font-mono text-xs uppercase tracking-[0.2em] text-fg-dim">
           <span className="h-1.5 w-1.5 rounded-full bg-accent" />
           est. {SITE.founded}

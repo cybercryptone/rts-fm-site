@@ -2,39 +2,40 @@
 
 import { useEffect, useRef } from "react";
 
-const SLAT_COUNT = 22;
+const TOTAL_BARS = 28;
+const TOTAL_SLATS = 22;
 
-// Envelope shape the needles settle into at rest — taller toward the
-// right, echoing the real EQ logo that sits over there.
-const BASE_WAVE = [
-  0.14, 0.16, 0.19, 0.22, 0.26, 0.3, 0.34, 0.38, 0.42, 0.48, 0.55, 0.64, 0.58,
-  0.72, 0.66, 0.6, 0.54, 0.48, 0.42, 0.36, 0.3, 0.24,
-];
+// Gaussian envelope — peak sits ~45% across the cluster, soft falloff on
+// either side, so it reads as an organic waveform rather than a grid.
+const CENTER = TOTAL_BARS * 0.45;
+const SPREAD = 7.5;
+
+function baseScaleFor(i: number) {
+  return Math.max(
+    0.12,
+    Math.exp(-Math.pow((i - CENTER) / SPREAD, 2)) * 0.95
+  );
+}
 
 export default function CursorWaveform() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const needleRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const barRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
+    const root = rootRef.current;
+    if (!root) return;
 
-    const slats = Array.from({ length: SLAT_COUNT }, (_, i) => {
-      const base = BASE_WAVE[i % BASE_WAVE.length];
-      return { current: base, target: base, base, phase: i * 0.4 };
+    const bars = Array.from({ length: TOTAL_BARS }, (_, i) => {
+      const base = baseScaleFor(i);
+      return { current: base, target: base, base, phase: i * 0.3 };
     });
 
-    let rect = container.getBoundingClientRect();
-    let mouseX = -1000;
-    let mouseY = -1000;
-    let hovering = false;
-
     const applyStatic = () => {
-      slats.forEach((s, i) => {
-        const el = needleRefs.current[i];
+      bars.forEach((b, i) => {
+        const el = barRefs.current[i];
         if (!el) return;
-        el.style.transform = `scaleY(${s.base})`;
-        el.style.opacity = Math.max(0.35, s.base * 1.1).toFixed(2);
+        el.style.transform = `scaleY(${b.base})`;
+        el.style.opacity = Math.max(0.25, b.base * 1.15).toFixed(3);
       });
     };
 
@@ -43,8 +44,13 @@ export default function CursorWaveform() {
       return;
     }
 
+    let rect = root.getBoundingClientRect();
+    let mouseX = -1000;
+    let mouseY = -1000;
+    let hovering = false;
+
     const updateRect = () => {
-      rect = container.getBoundingClientRect();
+      rect = root.getBoundingClientRect();
     };
 
     const handleMove = (e: MouseEvent) => {
@@ -58,8 +64,8 @@ export default function CursorWaveform() {
         return;
       }
       hovering = true;
-      mouseX = e.clientX - rect.left;
-      mouseY = e.clientY - rect.top;
+      mouseX = e.clientX;
+      mouseY = e.clientY;
     };
 
     const handleLeave = () => {
@@ -68,39 +74,42 @@ export default function CursorWaveform() {
 
     window.addEventListener("mousemove", handleMove, { passive: true });
     window.addEventListener("resize", updateRect);
-    container.addEventListener("mouseleave", handleLeave);
+    root.addEventListener("mouseleave", handleLeave);
 
     let time = 0;
     let rafId = 0;
 
     const render = () => {
-      time += 0.04;
-      const w = rect.width || 1;
-      const h = rect.height || 1;
+      time += 0.035;
+      const radiusX = rect.width * 0.22;
+      const radiusY = rect.height * 0.6;
 
-      slats.forEach((s, i) => {
-        const idle = Math.sin(time + s.phase) * 0.05;
+      bars.forEach((bar, i) => {
+        const idle = Math.sin(time + bar.phase) * 0.04;
+        const el = barRefs.current[i];
 
-        if (hovering) {
-          const slatCenterX = (i + 0.5) * (w / SLAT_COUNT);
-          const dist = Math.abs(mouseX - slatCenterX);
-          const radius = w * 0.25;
-          const proximity = Math.max(0, 1 - dist / radius);
-          const heightRatio = Math.max(0.25, 1 - (mouseY / h) * 0.7);
-          s.target = Math.min(
-            1.15,
-            s.base + idle + heightRatio * Math.pow(proximity, 1.6) * 0.85
-          );
+        if (hovering && el) {
+          const barRect = el.getBoundingClientRect();
+          const barCenterX = barRect.left + barRect.width / 2;
+          const barCenterY = barRect.top + barRect.height / 2;
+
+          const distX = Math.abs(mouseX - barCenterX);
+          const distY = Math.abs(mouseY - barCenterY);
+
+          const proximity = Math.max(0, 1 - distX / radiusX);
+          const yMultiplier = Math.max(0.3, 1 - distY / radiusY);
+          const waveBoost = Math.pow(proximity, 1.8) * 0.7 * yMultiplier;
+
+          bar.target = Math.min(1.2, bar.base + idle + waveBoost);
         } else {
-          s.target = Math.max(0.08, s.base + idle);
+          bar.target = Math.max(0.08, bar.base + idle);
         }
 
-        s.current += (s.target - s.current) * 0.09;
+        bar.current += (bar.target - bar.current) * 0.08;
 
-        const el = needleRefs.current[i];
         if (el) {
-          el.style.transform = `scaleY(${s.current.toFixed(4)})`;
-          el.style.opacity = Math.min(1, Math.max(0.35, s.current * 1.1)).toFixed(2);
+          el.style.transform = `scaleY(${bar.current.toFixed(4)})`;
+          el.style.opacity = Math.min(1, Math.max(0.25, bar.current * 1.15)).toFixed(3);
         }
       });
 
@@ -113,28 +122,37 @@ export default function CursorWaveform() {
       cancelAnimationFrame(rafId);
       window.removeEventListener("mousemove", handleMove);
       window.removeEventListener("resize", updateRect);
-      container.removeEventListener("mouseleave", handleLeave);
+      root.removeEventListener("mouseleave", handleLeave);
     };
   }, []);
 
   return (
     <div
-      ref={containerRef}
+      ref={rootRef}
       aria-hidden="true"
-      className="pointer-events-none absolute inset-0 z-0 hidden overflow-hidden sm:flex"
+      className="pointer-events-none absolute inset-0"
     >
-      {Array.from({ length: SLAT_COUNT }).map((_, i) => (
-        <div key={i} className="waveform-slat">
-          <div
-            ref={(el) => {
-              needleRefs.current[i] = el;
-            }}
-            className="waveform-needle-container"
-          >
-            <div className="waveform-needle" />
-          </div>
+      {/* 1. equalizer needles — bottom layer */}
+      <div className="pointer-events-none absolute inset-0 z-0 hidden items-center justify-end pr-[5vw] sm:flex">
+        <div className="flex h-[70%] items-center gap-4">
+          {Array.from({ length: TOTAL_BARS }).map((_, i) => (
+            <div
+              key={i}
+              ref={(el) => {
+                barRefs.current[i] = el;
+              }}
+              className="eq-needle"
+            />
+          ))}
         </div>
-      ))}
+      </div>
+
+      {/* 2. fluted glass slats — refracts the needles without cutting the type */}
+      <div className="pointer-events-none absolute inset-0 z-[1] hidden overflow-hidden sm:flex">
+        {Array.from({ length: TOTAL_SLATS }).map((_, i) => (
+          <div key={i} className="waveform-slat" />
+        ))}
+      </div>
     </div>
   );
 }
