@@ -25,7 +25,6 @@ export const STATS = [
 // mentions, kept city-level for consistency with the rest of the list.
 export const CITIES = [
   "Saint Petersburg",
-  "Kiev",
   "Kazan",
   "Lausanne",
   "Budapest",
