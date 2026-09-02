@@ -8,11 +8,11 @@ export default function Hero() {
       className="relative flex min-h-screen flex-col overflow-hidden pt-28"
       style={{
         backgroundImage:
-          "radial-gradient(46% 52% at 40% 50%, rgba(70,32,28,0.6) 0%, rgba(70,32,28,0.28) 42%, transparent 76%), radial-gradient(65% 60% at 80% 6%, rgba(255,255,255,0.4) 0%, transparent 60%), radial-gradient(55% 60% at 6% 2%, rgba(110,114,121,0.5) 0%, transparent 65%), linear-gradient(180deg, var(--ink) 0%, var(--bg) 100%)",
+          "radial-gradient(46% 52% at 40% 50%, rgba(224,74,63,0.4) 0%, rgba(224,74,63,0.15) 42%, rgba(224,74,63,0) 76%), radial-gradient(65% 60% at 80% 6%, rgba(255,255,255,0.4) 0%, transparent 60%), radial-gradient(55% 60% at 6% 2%, rgba(110,114,121,0.5) 0%, transparent 65%), linear-gradient(180deg, var(--ink) 0%, var(--bg) 100%)",
       }}
     >
       <EqualizerLogo
-        className="pointer-events-none absolute -right-16 top-1/2 hidden w-[420px] -translate-y-1/2 opacity-[0.35] mix-blend-multiply sm:block md:-right-20 md:w-[520px] lg:w-[600px]"
+        className="pointer-events-none absolute -right-16 top-1/2 hidden w-[420px] -translate-y-1/2 opacity-60 mix-blend-multiply sm:block md:-right-20 md:w-[520px] lg:w-[600px]"
         style={{
           WebkitMaskImage:
             "linear-gradient(to bottom, black 0%, black 42%, transparent 82%)",
@@ -28,27 +28,20 @@ export default function Hero() {
       <span className="crosshair bottom-16 right-6 hidden sm:block sm:right-10" />
 
       <div className="relative z-10 mx-auto flex w-full max-w-[1400px] flex-1 flex-col justify-center px-6 sm:px-10">
-        <div className="flex items-baseline gap-3 font-mono text-xs uppercase tracking-[0.2em] text-black">
+        <div className="flex items-baseline gap-3 font-mono text-xs uppercase tracking-[0.2em] text-fg-dim">
           <span className="h-1.5 w-1.5 rounded-full bg-accent" />
           est. {SITE.founded}
         </div>
 
-        <h1
-          className="mt-6 select-none font-headline text-[16vw] leading-[0.85] sm:text-[13vw] md:text-[130px] lg:text-[165px]"
-          style={{
-            color: "#FF4400",
-            textShadow:
-              "0 0 25px rgba(255,68,0,0.45), 0 0 50px rgba(255,68,0,0.2)",
-          }}
-        >
+        <h1 className="mt-6 select-none font-headline text-[16vw] leading-[0.85] text-fg sm:text-[13vw] md:text-[130px] lg:text-[165px]">
           RTS.FM
         </h1>
 
         <div className="mt-8 flex max-w-xl flex-col gap-4 sm:mt-10">
-          <p className="font-display text-xl font-bold uppercase tracking-[-0.02em] text-black sm:text-2xl">
+          <p className="font-display text-xl font-bold uppercase tracking-[-0.02em] text-fg sm:text-2xl">
             {SITE.tagline}.
           </p>
-          <p className="text-sm leading-relaxed text-black sm:text-base">
+          <p className="text-sm leading-relaxed text-fg sm:text-base">
             Independent internet radio and record label broadcasting live
             audio-visual DJ sets from underground studios around the world
             since {SITE.founded} — invite-only, non-commercial, artist-run.
@@ -59,7 +52,7 @@ export default function Hero() {
           {STATS.map((s) => (
             <span
               key={s}
-              className="shrink-0 snap-start whitespace-nowrap rounded-full border border-line px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-black"
+              className="shrink-0 snap-start whitespace-nowrap rounded-full border border-line px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-fg-dim"
             >
               {s}
             </span>
