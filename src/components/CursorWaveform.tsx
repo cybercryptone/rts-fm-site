@@ -15,6 +15,25 @@ const SLAT_MASK_STYLE: React.CSSProperties = {
   maskImage: SLAT_MASK,
 };
 
+// CSS mask-image binds its compositing buffer to the masked element's own
+// box, regardless of overflow:visible — unlike SVG filters, there's no way
+// to give it a larger region (confirmed by isolation testing: filter alone
+// was clean at max animated scale, mask alone reproduced the flat-cut).
+// Fix: pad the viewBox above the artwork so bars have room to grow upward
+// on cursor surge without ever reaching the box edge the mask is bound to.
+//
+//   TOP_PAD = 650 (viewBox units, ~35% of EQ_VIEWBOX.h — comfortably beyond
+//   the ~25% max overshoot at the 1.5x scale ceiling below)
+//   paddedH = EQ_VIEWBOX.h + TOP_PAD = 2515
+//   padFraction = TOP_PAD / paddedH = 25.85%
+//   artwork center = (EQ_VIEWBOX.h/2 + TOP_PAD) / paddedH = 62.92% down the
+//     padded box (was 50% pre-padding) — sm:-translate-y-[62.92%] below
+//     compensates so the artwork still renders in the same screen position.
+//   mask stops remapped: old 55%/92% (of the un-padded artwork) become
+//     padFraction + old% * (100 - padFraction) = 66.63% / 94.07%.
+// Bottom is untouched (viewBox maxY unchanged), so mobile — bottom-anchored,
+// no mask — needs no compensating changes at all.
+
 export default function CursorWaveform() {
   const rootRef = useRef<HTMLDivElement>(null);
   const barRefs = useRef<(SVGEllipseElement | null)[]>([]);
@@ -166,8 +185,8 @@ export default function CursorWaveform() {
       {/* 1. unified waveform SVG — the real brand equalizer geometry,
              cursor-reactive instead of the static CSS pulse */}
       <svg
-        viewBox={`0 0 ${EQ_VIEWBOX.w} ${EQ_VIEWBOX.h}`}
-        className="pointer-events-none absolute bottom-16 left-1/2 z-0 w-[126vw] max-w-none -translate-x-1/2 overflow-visible opacity-30 sm:bottom-auto sm:left-auto sm:right-[5vw] sm:top-1/2 sm:w-[378px] sm:max-w-[calc(76vh*1685/1865)] sm:translate-x-0 sm:-translate-y-1/2 sm:opacity-100 md:w-[468px] lg:w-[558px] xl:w-[630px] sm:[mask-image:linear-gradient(to_bottom,black_0%,black_55%,transparent_92%)] sm:[-webkit-mask-image:linear-gradient(to_bottom,black_0%,black_55%,transparent_92%)]"
+        viewBox={`0 -650 ${EQ_VIEWBOX.w} ${EQ_VIEWBOX.h + 650}`}
+        className="pointer-events-none absolute bottom-16 left-1/2 z-0 w-[126vw] max-w-none -translate-x-1/2 overflow-visible opacity-30 sm:bottom-auto sm:left-auto sm:right-[5vw] sm:top-1/2 sm:w-[378px] sm:max-w-[calc(76vh*1685/2515)] sm:translate-x-0 sm:-translate-y-[62.92%] sm:opacity-100 md:w-[468px] lg:w-[558px] xl:w-[630px] sm:[mask-image:linear-gradient(to_bottom,black_0%,black_66.63%,transparent_94.07%)] sm:[-webkit-mask-image:linear-gradient(to_bottom,black_0%,black_66.63%,transparent_94.07%)]"
       >
         <defs>
           <linearGradient id="spike-grad" x1="0" y1="0" x2="0" y2="1">
