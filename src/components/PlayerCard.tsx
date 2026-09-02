@@ -28,7 +28,7 @@ export default function PlayerCard() {
   const nowPlaying = currentEpisode ? splitTitle(currentEpisode.title) : null;
 
   return (
-    <div className="glass-dark relative flex flex-col justify-between rounded-2xl p-8 sm:p-10">
+    <div className="glass-dark relative flex h-full flex-col justify-between rounded-2xl p-8 sm:p-10">
       <span className="crosshair -left-[6px] -top-[6px]" />
       <span className="crosshair -right-[6px] -top-[6px]" />
       <span className="crosshair -bottom-[6px] -left-[6px]" />

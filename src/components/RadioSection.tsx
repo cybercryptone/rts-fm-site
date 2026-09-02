@@ -16,7 +16,7 @@ export default function RadioSection() {
         </div>
 
         <div className="mt-12 grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
-          <div className="relative">
+          <div className="relative h-full">
             <div
               aria-hidden="true"
               className="pointer-events-none absolute -inset-12 -z-10 rounded-[48px] opacity-80 blur-3xl"
