@@ -48,9 +48,29 @@ export default function CursorWaveform() {
     let mouseY = -1000;
     let hovering = false;
 
+    // Bar screen-space centers, cached and only recomputed on resize —
+    // reading getBoundingClientRect() per bar inside the render loop
+    // (interleaved with the transform/opacity writes for other bars)
+    // forces a synchronous layout flush on every read, 19 times a frame.
+    let barCenters: { x: number; y: number }[] = [];
+
+    const computeBarCenters = () => {
+      const svg = barRefs.current[0]?.ownerSVGElement;
+      if (!svg) return;
+      const svgRect = svg.getBoundingClientRect();
+      const scaleX = svgRect.width / EQ_VIEWBOX.w;
+      const scaleY = svgRect.height / EQ_VIEWBOX.h;
+      barCenters = EQ_BARS.map((b) => ({
+        x: svgRect.left + b.cx * scaleX,
+        y: svgRect.top + b.cy * scaleY,
+      }));
+    };
+
     const updateRect = () => {
       rect = root.getBoundingClientRect();
+      computeBarCenters();
     };
+    computeBarCenters();
 
     const handleMove = (e: MouseEvent) => {
       if (
@@ -86,14 +106,11 @@ export default function CursorWaveform() {
       bars.forEach((bar, i) => {
         const idle = Math.sin(time + bar.phase) * IDLE_AMPLITUDE;
         const el = barRefs.current[i];
+        const center = barCenters[i];
 
-        if (hovering && el) {
-          const barRect = el.getBoundingClientRect();
-          const barCenterX = barRect.left + barRect.width / 2;
-          const barCenterY = barRect.top + barRect.height / 2;
-
-          const distX = Math.abs(mouseX - barCenterX);
-          const distY = Math.abs(mouseY - barCenterY);
+        if (hovering && el && center) {
+          const distX = Math.abs(mouseX - center.x);
+          const distY = Math.abs(mouseY - center.y);
 
           const proximity = Math.max(0, 1 - distX / maxDistX);
           const verticalFactor = Math.max(0.2, 1 - distY / maxDistY);
