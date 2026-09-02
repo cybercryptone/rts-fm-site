@@ -185,8 +185,17 @@ export default function CursorWaveform() {
         </g>
       </svg>
 
-      {/* 2. fluted glass slats — purely optical, no blur */}
-      <div className="pointer-events-none absolute inset-0 z-[1] hidden overflow-hidden sm:flex">
+      {/* 2. fluted glass slats — purely optical, no blur; nearly invisible up
+             top where the backdrop is plain, easing in toward the bottom */}
+      <div
+        className="pointer-events-none absolute inset-0 z-[1] hidden overflow-hidden sm:flex"
+        style={{
+          WebkitMaskImage:
+            "linear-gradient(180deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.16) 35%, rgba(0,0,0,0.7) 75%, rgba(0,0,0,1) 100%)",
+          maskImage:
+            "linear-gradient(180deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.16) 35%, rgba(0,0,0,0.7) 75%, rgba(0,0,0,1) 100%)",
+        }}
+      >
         {Array.from({ length: TOTAL_SLATS }).map((_, i) => (
           <div key={i} className="waveform-slat" />
         ))}
