@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 const LINKS = [
-  { href: "#radio", label: "radio" },
-  { href: "#label", label: "label" },
-  { href: "#about", label: "about" },
+  { href: "/#radio", label: "radio" },
+  { href: "/#label", label: "label" },
+  { href: "/blog", label: "blog" },
+  { href: "/#about", label: "about" },
 ];
 
 export default function Nav() {
@@ -26,18 +28,18 @@ export default function Nav() {
       }`}
     >
       <div className="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-5 sm:px-10">
-        <a
-          href="#top"
+        <Link
+          href="/"
           className="font-display text-lg tracking-tight text-fg"
         >
           RTS.FM
-        </a>
+        </Link>
 
         <nav className="hidden items-center gap-8 font-mono text-xs uppercase tracking-[0.18em] text-fg-dim sm:flex">
           {LINKS.map((l) => (
-            <a key={l.href} href={l.href} className="transition-colors hover:text-fg">
+            <Link key={l.href} href={l.href} className="transition-colors hover:text-fg">
               {l.label}
-            </a>
+            </Link>
           ))}
           <a
             href="https://t.me/rtsfm"
@@ -69,9 +71,9 @@ export default function Nav() {
         <div className="border-t border-line bg-bg px-6 py-6 font-mono text-sm uppercase tracking-[0.18em] text-fg-dim sm:hidden">
           <div className="flex flex-col gap-5">
             {LINKS.map((l) => (
-              <a key={l.href} href={l.href} onClick={() => setOpen(false)} className="hover:text-fg">
+              <Link key={l.href} href={l.href} onClick={() => setOpen(false)} className="hover:text-fg">
                 {l.label}
-              </a>
+              </Link>
             ))}
             <a
               href="https://t.me/rtsfm"

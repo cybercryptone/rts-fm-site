@@ -4,7 +4,6 @@ import Ticker from "@/components/Ticker";
 import RadioSection from "@/components/RadioSection";
 import LabelSection from "@/components/LabelSection";
 import AboutFooter from "@/components/AboutFooter";
-import PlayerDock from "@/components/PlayerDock";
 
 export default function Home() {
   return (
@@ -17,7 +16,6 @@ export default function Home() {
         <LabelSection />
       </main>
       <AboutFooter />
-      <PlayerDock />
     </>
   );
 }

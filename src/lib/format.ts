@@ -10,6 +10,18 @@ export function formatTime(seconds: number) {
   return `${m}:${String(s).padStart(2, "0")}`;
 }
 
+export function formatDate(iso: string) {
+  const d = new Date(iso);
+  return d
+    .toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    })
+    .replace(/ /g, " ")
+    .toUpperCase();
+}
+
 // Feed titles look like "Artist | Venue x Label, City 12.06.2026" — split
 // the artist from the venue/city/date so the two can get separate
 // typographic treatment instead of running together as one dense string.

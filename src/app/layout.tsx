@@ -8,6 +8,7 @@ import {
 import "./globals.css";
 import { SITE, SOCIALS } from "@/lib/data";
 import { PlayerProvider } from "@/lib/PlayerProvider";
+import PlayerDock from "@/components/PlayerDock";
 
 const syne = Syne({
   variable: "--font-display",
@@ -111,7 +112,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <PlayerProvider>{children}</PlayerProvider>
+        <PlayerProvider>
+          {children}
+          <PlayerDock />
+        </PlayerProvider>
       </body>
     </html>
   );
