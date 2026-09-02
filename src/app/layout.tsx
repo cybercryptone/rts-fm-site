@@ -7,6 +7,7 @@ import {
 } from "next/font/google";
 import "./globals.css";
 import { SITE, SOCIALS } from "@/lib/data";
+import { PlayerProvider } from "@/lib/PlayerProvider";
 
 const bodoniModa = Bodoni_Moda({
   variable: "--font-display",
@@ -112,7 +113,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        {children}
+        <PlayerProvider>{children}</PlayerProvider>
       </body>
     </html>
   );

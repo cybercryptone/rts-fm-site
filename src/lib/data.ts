@@ -7,10 +7,14 @@ export const SITE = {
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://rts-fm-site.onrender.com",
 };
 
+// The show's SoundCloud RSS feed — same one submitted to Apple Podcasts.
+export const FEED_URL =
+  "https://feeds.soundcloud.com/users/soundcloud:users:1302198/sounds.rss";
+
 // Real numbers, not genre words — shown as the hero stat chips.
 export const STATS = [
   "3.8K Sets Archived",
-  "18 Releases",
+  "10,640,365 Views",
   "30+ Studios Worldwide",
   "38K Followers",
 ];
