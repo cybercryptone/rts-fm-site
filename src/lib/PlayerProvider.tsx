@@ -44,7 +44,9 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
       .then((res) => (res.ok ? res.json() : Promise.reject(res)))
       .then((data) => {
         if (cancelled) return;
-        setEpisodes(data.episodes ?? []);
+        const eps: FeedEpisode[] = data.episodes ?? [];
+        setEpisodes(eps);
+        if (eps.length > 0) setCurrentIndex(0);
       })
       .catch(() => !cancelled && setError(true))
       .finally(() => !cancelled && setLoading(false));

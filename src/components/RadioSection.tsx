@@ -23,11 +23,11 @@ export default function RadioSection() {
             <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-fg-dim">
               broadcasting from
             </p>
-            <ul className="mt-6 flex flex-col divide-y divide-line">
+            <ul className="mt-8 flex flex-col divide-y divide-line">
               {CITIES.map((s) => (
                 <li
                   key={s}
-                  className="flex items-center justify-between py-3 font-display text-lg font-bold uppercase tracking-[-0.02em] text-fg"
+                  className="flex items-center justify-between py-5 font-display text-lg font-bold uppercase tracking-[-0.02em] text-fg"
                 >
                   {s}
                   <span className="font-mono text-[11px] normal-case tracking-[0.14em] text-fg-dim">

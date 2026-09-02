@@ -6,13 +6,20 @@ function seeded(i: number) {
   return x - Math.floor(x);
 }
 
-export default function EqualizerLogo({ className }: { className?: string }) {
+export default function EqualizerLogo({
+  className,
+  style,
+}: {
+  className?: string;
+  style?: React.CSSProperties;
+}) {
   const gradientId = `eq-fill-${useId()}`;
 
   return (
     <svg
       viewBox={`0 0 ${EQ_VIEWBOX.w} ${EQ_VIEWBOX.h}`}
       className={className}
+      style={style}
       aria-hidden="true"
     >
       <defs>

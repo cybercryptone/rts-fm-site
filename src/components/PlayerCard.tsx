@@ -105,7 +105,7 @@ export default function PlayerCard() {
       </div>
 
       {recent.length > 0 && (
-        <ul className="mt-8 flex flex-col divide-y divide-white/10 border-t border-white/10">
+        <ul className="mt-8 flex flex-col divide-y divide-white/[0.06] border-t border-white/[0.06]">
           {recent.map((ep, i) => {
             const active = i === currentIndex;
             const { artist, meta } = splitTitle(ep.title);
@@ -160,7 +160,7 @@ export default function PlayerCard() {
         href="https://t.me/rtsfm"
         target="_blank"
         rel="noopener noreferrer"
-        className="mt-8 inline-flex w-fit items-center gap-2 rounded-full border border-white/15 px-4 py-2 font-mono text-xs uppercase tracking-[0.14em] text-white transition-colors hover:border-accent hover:text-accent"
+        className="mt-8 inline-flex w-fit items-center gap-2 self-center rounded-full border border-white/15 px-4 py-2 font-mono text-xs uppercase tracking-[0.14em] text-white transition-colors hover:border-accent hover:text-accent"
       >
         get live broadcast alerts →
       </a>
