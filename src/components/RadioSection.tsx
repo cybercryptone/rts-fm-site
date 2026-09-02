@@ -8,7 +8,7 @@ export default function RadioSection() {
       <div className="mx-auto max-w-[1400px]">
         <div className="flex items-end justify-between gap-6">
           <h2 className="font-display text-4xl font-bold uppercase tracking-[-0.02em] text-fg sm:text-5xl">
-            Radio.
+            Radio
           </h2>
           <span className="hidden font-mono text-xs uppercase tracking-[0.18em] text-fg-dim sm:block">
             01 / on air

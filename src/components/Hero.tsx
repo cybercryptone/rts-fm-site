@@ -11,15 +11,46 @@ export default function Hero() {
           "linear-gradient(180deg, rgba(216,218,222,0.85) 0%, rgba(216,218,222,0.45) 16%, rgba(216,218,222,0) 40%), radial-gradient(46% 52% at 40% 50%, rgba(224,74,63,0.4) 0%, rgba(224,74,63,0.15) 42%, rgba(224,74,63,0) 76%), radial-gradient(65% 60% at 80% 6%, rgba(255,255,255,0.4) 0%, transparent 60%), radial-gradient(55% 60% at 6% 2%, rgba(110,114,121,0.5) 0%, transparent 65%), linear-gradient(180deg, var(--ink) 0%, var(--bg) 100%)",
       }}
     >
-      <EqualizerLogo
-        className="pointer-events-none absolute -right-10 top-1/2 hidden w-[420px] -translate-y-1/2 opacity-70 sm:block md:-right-12 md:w-[520px] lg:-right-14 lg:w-[600px] xl:-right-4"
+      <div
+        aria-hidden="true"
+        className="hero-glow"
         style={{
-          WebkitMaskImage:
-            "linear-gradient(to bottom, black 0%, black 55%, transparent 92%)",
-          maskImage:
-            "linear-gradient(to bottom, black 0%, black 55%, transparent 92%)",
+          width: "60%",
+          height: "70%",
+          left: "8%",
+          top: "-10%",
+          background:
+            "radial-gradient(closest-side, rgba(110,114,121,0.55) 0%, transparent 70%)",
+          animation: "drift-c 26s ease-in-out infinite alternate",
         }}
       />
+      <div
+        aria-hidden="true"
+        className="hero-glow"
+        style={{
+          width: "55%",
+          height: "65%",
+          left: "22%",
+          top: "18%",
+          background:
+            "radial-gradient(closest-side, rgba(224,74,63,0.5) 0%, transparent 72%)",
+          animation: "drift-a 22s ease-in-out infinite alternate",
+        }}
+      />
+      <div
+        aria-hidden="true"
+        className="hero-glow"
+        style={{
+          width: "45%",
+          height: "50%",
+          right: "4%",
+          top: "-6%",
+          background:
+            "radial-gradient(closest-side, rgba(255,255,255,0.45) 0%, transparent 68%)",
+          animation: "drift-b 30s ease-in-out infinite alternate",
+        }}
+      />
+
       <EqualizerLogo className="pointer-events-none absolute bottom-16 left-1/2 w-[140vw] max-w-none -translate-x-1/2 opacity-[0.16] mix-blend-luminosity sm:hidden" />
 
       <span className="crosshair left-6 top-24 hidden sm:block sm:left-10" />
@@ -28,6 +59,15 @@ export default function Hero() {
       <span className="crosshair bottom-16 right-6 hidden sm:block sm:right-10" />
 
       <div className="relative z-10 mx-auto flex w-full max-w-[1400px] flex-1 flex-col justify-center px-6 sm:px-10">
+        <EqualizerLogo
+          className="pointer-events-none absolute -right-6 top-1/2 -z-10 hidden w-[380px] -translate-y-1/2 opacity-70 sm:block md:-right-8 md:w-[440px] lg:-right-10 lg:w-[500px] xl:w-[560px]"
+          style={{
+            WebkitMaskImage:
+              "linear-gradient(to bottom, black 0%, black 55%, transparent 92%)",
+            maskImage:
+              "linear-gradient(to bottom, black 0%, black 55%, transparent 92%)",
+          }}
+        />
         <div className="flex items-baseline gap-3 font-mono text-xs uppercase tracking-[0.2em] text-fg-dim">
           <span className="h-1.5 w-1.5 rounded-full bg-accent" />
           est. {SITE.founded}

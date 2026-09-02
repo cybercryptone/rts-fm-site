@@ -7,7 +7,7 @@ export default function AboutFooter() {
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1.2fr_1fr]">
           <div>
             <h2 className="font-display text-4xl font-bold uppercase tracking-[-0.02em] text-fg sm:text-5xl">
-              About.
+              About
             </h2>
             <p className="mt-6 max-w-xl text-sm leading-relaxed text-fg-dim sm:text-base">
               Launched in {SITE.founded}, {SITE.name} was one of

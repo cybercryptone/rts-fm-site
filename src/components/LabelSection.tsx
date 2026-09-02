@@ -6,7 +6,7 @@ export default function LabelSection() {
       <div className="mx-auto max-w-[1400px]">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <h2 className="font-display text-4xl font-bold uppercase tracking-[-0.02em] text-fg sm:text-5xl">
-            Label.
+            Label
           </h2>
           <a
             href="https://rtsfm.bandcamp.com/"
