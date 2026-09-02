@@ -9,3 +9,19 @@ export function formatTime(seconds: number) {
   }
   return `${m}:${String(s).padStart(2, "0")}`;
 }
+
+// Feed titles look like "Artist | Venue x Label, City 12.06.2026" — split
+// the artist from the venue/city/date so the two can get separate
+// typographic treatment instead of running together as one dense string.
+export function splitTitle(title: string) {
+  const idx = title.indexOf(" | ");
+  if (idx === -1) return { artist: title, meta: "" };
+  const artist = title.slice(0, idx).trim();
+  const rest = title
+    .slice(idx + 3)
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .join(" · ");
+  return { artist, meta: rest };
+}

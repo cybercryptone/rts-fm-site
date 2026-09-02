@@ -1,7 +1,7 @@
 "use client";
 
 import { usePlayer } from "@/lib/PlayerProvider";
-import { formatTime } from "@/lib/format";
+import { formatTime, splitTitle } from "@/lib/format";
 
 export default function PlayerCard() {
   const {
@@ -25,6 +25,7 @@ export default function PlayerCard() {
     : loading
       ? "loading sets…"
       : "on-demand · latest sets";
+  const nowPlaying = currentEpisode ? splitTitle(currentEpisode.title) : null;
 
   return (
     <div className="glass-dark relative flex flex-col justify-between rounded-2xl p-8 sm:p-10">
@@ -75,12 +76,13 @@ export default function PlayerCard() {
         </button>
         <div className="min-w-0">
           <p className="truncate font-display text-xl italic text-white">
-            {currentEpisode?.title ?? "RTS.FM Sets"}
+            {nowPlaying?.artist ?? "RTS.FM Sets"}
           </p>
-          <p className="mt-1 text-sm text-white/60">
-            {currentEpisode
-              ? "Streaming from the RTS.FM archive."
-              : "Pick a set below, or hit play for the latest upload."}
+          <p className="mt-1 truncate font-mono text-xs text-white/50">
+            {nowPlaying?.meta ||
+              (currentEpisode
+                ? "RTS.FM"
+                : "Pick a set below, or hit play for the latest upload.")}
           </p>
         </div>
       </div>
@@ -105,24 +107,44 @@ export default function PlayerCard() {
 
       {recent.length > 0 && (
         <ul className="mt-8 flex flex-col divide-y divide-white/10 border-t border-white/10">
-          {recent.map((ep, i) => (
-            <li key={ep.id}>
-              <button
-                type="button"
-                onClick={() => playEpisode(i)}
-                className={`flex w-full items-center justify-between gap-4 py-2.5 text-left transition-colors ${
-                  i === currentIndex ? "text-accent" : "text-white/70 hover:text-white"
-                }`}
-              >
-                <span className="truncate font-display text-sm italic">
-                  {ep.title}
-                </span>
-                <span className="shrink-0 font-mono text-[10px] text-white/40">
-                  {formatTime(ep.durationSeconds)}
-                </span>
-              </button>
-            </li>
-          ))}
+          {recent.map((ep, i) => {
+            const active = i === currentIndex;
+            const { artist, meta } = splitTitle(ep.title);
+            return (
+              <li key={ep.id} className="relative">
+                {active && (
+                  <span className="absolute -left-4 top-1/2 h-6 w-[2px] -translate-y-1/2 rounded-full bg-accent sm:-left-5" />
+                )}
+                <button
+                  type="button"
+                  onClick={() => playEpisode(i)}
+                  className="flex w-full items-center gap-4 py-3 text-left"
+                >
+                  <div className="min-w-0 flex-1">
+                    <p
+                      className={`truncate text-sm ${
+                        active ? "font-medium text-white" : "text-white/70"
+                      }`}
+                    >
+                      {artist}
+                    </p>
+                    {meta && (
+                      <p className="mt-0.5 truncate font-mono text-[11px] text-white/40">
+                        {meta}
+                      </p>
+                    )}
+                  </div>
+                  <span
+                    className={`shrink-0 font-mono text-[10px] tabular-nums ${
+                      active ? "text-accent" : "text-white/40"
+                    }`}
+                  >
+                    {formatTime(ep.durationSeconds)}
+                  </span>
+                </button>
+              </li>
+            );
+          })}
         </ul>
       )}
 
