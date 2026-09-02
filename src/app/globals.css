@@ -60,57 +60,56 @@ body::before {
   color: var(--bg);
 }
 
-@keyframes drift-a {
-  0% {
-    transform: translate(-22%, -16%) scale(0.9);
-  }
-  33% {
-    transform: translate(20%, 14%) scale(1.25);
-  }
-  66% {
-    transform: translate(-6%, 18%) scale(1.05);
-  }
-  100% {
-    transform: translate(-22%, -16%) scale(0.9);
-  }
+.waveform-slat {
+  position: relative;
+  flex: 1;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.14) 0%,
+    rgba(0, 0, 0, 0.03) 100%
+  );
+  border-left: 1px solid rgba(255, 255, 255, 0.3);
+  border-right: 1px solid rgba(0, 0, 0, 0.04);
 }
 
-@keyframes drift-b {
-  0% {
-    transform: translate(18%, -14%) scale(1);
-  }
-  33% {
-    transform: translate(-24%, 10%) scale(1.3);
-  }
-  66% {
-    transform: translate(6%, 20%) scale(0.9);
-  }
-  100% {
-    transform: translate(18%, -14%) scale(1);
-  }
-}
-
-@keyframes drift-c {
-  0% {
-    transform: translate(-14%, 16%) scale(0.85);
-  }
-  33% {
-    transform: translate(16%, -10%) scale(1.2);
-  }
-  66% {
-    transform: translate(-18%, -18%) scale(1.1);
-  }
-  100% {
-    transform: translate(-14%, 16%) scale(0.85);
-  }
-}
-
-.hero-glow {
+.waveform-slat::after {
+  content: "";
   position: absolute;
-  border-radius: 9999px;
-  filter: blur(70px);
+  inset: 0;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   pointer-events: none;
-  will-change: transform;
+}
+
+.waveform-needle-container {
+  position: absolute;
+  width: 100%;
+  height: 72%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-origin: center center;
+  will-change: transform, opacity;
+}
+
+.waveform-needle {
+  width: 9px;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 80, 0, 0.08) 0%,
+    var(--accent) 25%,
+    var(--accent-soft) 50%,
+    var(--accent) 75%,
+    rgba(255, 80, 0, 0.08) 100%
+  );
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  border-radius: 999px;
+  filter: drop-shadow(0 0 8px rgba(255, 80, 0, 0.4));
 }
 
 .font-display {

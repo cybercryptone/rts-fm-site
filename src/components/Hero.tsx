@@ -1,3 +1,4 @@
+import CursorWaveform from "./CursorWaveform";
 import EqualizerLogo from "./EqualizerLogo";
 import { SITE, STATS } from "@/lib/data";
 
@@ -11,45 +12,7 @@ export default function Hero() {
           "linear-gradient(180deg, rgba(216,218,222,0.85) 0%, rgba(216,218,222,0.45) 16%, rgba(216,218,222,0) 40%), radial-gradient(46% 52% at 40% 50%, rgba(224,74,63,0.4) 0%, rgba(224,74,63,0.15) 42%, rgba(224,74,63,0) 76%), radial-gradient(65% 60% at 80% 6%, rgba(255,255,255,0.4) 0%, transparent 60%), radial-gradient(55% 60% at 6% 2%, rgba(110,114,121,0.5) 0%, transparent 65%), linear-gradient(180deg, var(--ink) 0%, var(--bg) 100%)",
       }}
     >
-      <div
-        aria-hidden="true"
-        className="hero-glow"
-        style={{
-          width: "60%",
-          height: "70%",
-          left: "8%",
-          top: "-10%",
-          background:
-            "radial-gradient(closest-side, rgba(110,114,121,0.65) 0%, transparent 70%)",
-          animation: "drift-c 13s ease-in-out infinite",
-        }}
-      />
-      <div
-        aria-hidden="true"
-        className="hero-glow"
-        style={{
-          width: "55%",
-          height: "65%",
-          left: "22%",
-          top: "18%",
-          background:
-            "radial-gradient(closest-side, rgba(224,74,63,0.6) 0%, transparent 72%)",
-          animation: "drift-a 11s ease-in-out infinite",
-        }}
-      />
-      <div
-        aria-hidden="true"
-        className="hero-glow"
-        style={{
-          width: "45%",
-          height: "50%",
-          right: "4%",
-          top: "-6%",
-          background:
-            "radial-gradient(closest-side, rgba(255,255,255,0.55) 0%, transparent 68%)",
-          animation: "drift-b 15s ease-in-out infinite",
-        }}
-      />
+      <CursorWaveform />
 
       <EqualizerLogo className="pointer-events-none absolute bottom-16 left-1/2 w-[140vw] max-w-none -translate-x-1/2 opacity-[0.16] mix-blend-luminosity sm:hidden" />
 
