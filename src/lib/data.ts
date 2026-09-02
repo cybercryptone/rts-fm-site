@@ -1,7 +1,10 @@
 export const SITE = {
   name: "RTS.FM",
   tagline: "Online Underground Radio",
+  description:
+    "RTS.FM is an independent underground internet radio and record label broadcasting live audio-visual DJ sets since 2006 — tech house, minimal house, minimal techno, electronica.",
   founded: 2006,
+  url: process.env.NEXT_PUBLIC_SITE_URL || "https://rts-fm-site.onrender.com",
 };
 
 // Real numbers, not genre words — shown as the hero stat chips.

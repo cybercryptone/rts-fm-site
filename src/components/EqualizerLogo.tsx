@@ -1,3 +1,4 @@
+import { useId } from "react";
 import { EQ_BARS, EQ_VIEWBOX } from "@/lib/eq-bars";
 
 function seeded(i: number) {
@@ -6,6 +7,8 @@ function seeded(i: number) {
 }
 
 export default function EqualizerLogo({ className }: { className?: string }) {
+  const gradientId = `eq-fill-${useId()}`;
+
   return (
     <svg
       viewBox={`0 0 ${EQ_VIEWBOX.w} ${EQ_VIEWBOX.h}`}
@@ -13,7 +16,7 @@ export default function EqualizerLogo({ className }: { className?: string }) {
       aria-hidden="true"
     >
       <defs>
-        <linearGradient id="eq-fill" x1="0" y1="0" x2="0" y2="1">
+        <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="var(--accent)" />
           <stop offset="100%" stopColor="var(--accent-soft)" />
         </linearGradient>
@@ -28,7 +31,7 @@ export default function EqualizerLogo({ className }: { className?: string }) {
             cy={b.cy}
             rx={b.rx}
             ry={b.ry}
-            fill="url(#eq-fill)"
+            fill={`url(#${gradientId})`}
             style={{
               transformOrigin: `${b.cx}px ${b.cy}px`,
               animation: `eq-bar-pulse ${dur}s ease-in-out ${delay}s infinite alternate`,

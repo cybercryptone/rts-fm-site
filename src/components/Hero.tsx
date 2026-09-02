@@ -12,13 +12,14 @@ export default function Hero() {
       }}
     >
       <EqualizerLogo className="pointer-events-none absolute -right-16 top-1/2 hidden w-[420px] -translate-y-1/2 opacity-90 sm:block md:-right-20 md:w-[520px] lg:w-[600px]" />
+      <EqualizerLogo className="pointer-events-none absolute left-1/2 top-[44%] w-[160vw] max-w-none -translate-x-1/2 -translate-y-1/2 opacity-30 sm:hidden" />
 
       <span className="crosshair left-6 top-24 hidden sm:block sm:left-10" />
       <span className="crosshair right-6 top-24 hidden sm:block sm:right-10" />
       <span className="crosshair bottom-16 left-6 hidden sm:block sm:left-10" />
       <span className="crosshair bottom-16 right-6 hidden sm:block sm:right-10" />
 
-      <div className="relative mx-auto flex w-full max-w-[1400px] flex-1 flex-col justify-center px-6 sm:px-10">
+      <div className="relative z-10 mx-auto flex w-full max-w-[1400px] flex-1 flex-col justify-center px-6 sm:px-10">
         <div className="flex items-baseline gap-3 font-mono text-xs uppercase tracking-[0.2em] text-fg-dim">
           <span className="h-1.5 w-1.5 rounded-full bg-accent" />
           est. {SITE.founded}
@@ -51,7 +52,7 @@ export default function Hero() {
         </div>
       </div>
 
-      <div className="relative mx-auto flex w-full max-w-[1400px] items-end justify-between px-6 pb-8 sm:px-10">
+      <div className="relative z-10 mx-auto flex w-full max-w-[1400px] items-end justify-between px-6 pb-24 sm:px-10 sm:pb-12">
         <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-fg-dim">
           live from studios worldwide
         </span>
