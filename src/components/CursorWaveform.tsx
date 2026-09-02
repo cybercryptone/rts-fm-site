@@ -150,14 +150,8 @@ export default function CursorWaveform() {
              cursor-reactive instead of the static CSS pulse */}
       <svg
         viewBox={`0 0 ${EQ_VIEWBOX.w} ${EQ_VIEWBOX.h}`}
-        className="pointer-events-none absolute -right-6 top-1/2 z-0 hidden w-[380px] -translate-y-1/2 sm:block md:-right-8 md:w-[440px] lg:-right-10 lg:w-[500px] xl:w-[560px]"
-        style={{
-          WebkitMaskImage:
-            "linear-gradient(to bottom, black 0%, black 55%, transparent 92%)",
-          maskImage:
-            "linear-gradient(to bottom, black 0%, black 55%, transparent 92%)",
-          filter: "blur(3px)",
-        }}
+        className="pointer-events-none absolute bottom-16 left-1/2 z-0 w-[140vw] max-w-none -translate-x-1/2 sm:bottom-auto sm:left-auto sm:right-[5vw] sm:top-1/2 sm:w-[420px] sm:max-w-none sm:translate-x-0 sm:-translate-y-1/2 md:w-[520px] lg:w-[620px] xl:w-[700px] sm:[mask-image:linear-gradient(to_bottom,black_0%,black_55%,transparent_92%)] sm:[-webkit-mask-image:linear-gradient(to_bottom,black_0%,black_55%,transparent_92%)]"
+        style={{ filter: "blur(3px)" }}
       >
         <defs>
           <linearGradient id="spike-grad" x1="0" y1="0" x2="0" y2="1">

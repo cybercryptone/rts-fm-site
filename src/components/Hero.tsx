@@ -1,5 +1,4 @@
 import CursorWaveform from "./CursorWaveform";
-import EqualizerLogo from "./EqualizerLogo";
 import { SITE, STATS } from "@/lib/data";
 
 export default function Hero() {
@@ -53,8 +52,6 @@ export default function Hero() {
       />
 
       <CursorWaveform />
-
-      <EqualizerLogo className="pointer-events-none absolute bottom-16 left-1/2 w-[140vw] max-w-none -translate-x-1/2 opacity-[0.16] mix-blend-luminosity sm:hidden" />
 
       <span className="crosshair left-6 top-24 hidden sm:block sm:left-10" />
       <span className="crosshair right-6 top-24 hidden sm:block sm:right-10" />
