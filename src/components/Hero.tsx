@@ -20,8 +20,8 @@ export default function Hero() {
           left: "8%",
           top: "-10%",
           background:
-            "radial-gradient(closest-side, rgba(110,114,121,0.55) 0%, transparent 70%)",
-          animation: "drift-c 26s ease-in-out infinite alternate",
+            "radial-gradient(closest-side, rgba(110,114,121,0.65) 0%, transparent 70%)",
+          animation: "drift-c 13s ease-in-out infinite",
         }}
       />
       <div
@@ -33,8 +33,8 @@ export default function Hero() {
           left: "22%",
           top: "18%",
           background:
-            "radial-gradient(closest-side, rgba(224,74,63,0.5) 0%, transparent 72%)",
-          animation: "drift-a 22s ease-in-out infinite alternate",
+            "radial-gradient(closest-side, rgba(224,74,63,0.6) 0%, transparent 72%)",
+          animation: "drift-a 11s ease-in-out infinite",
         }}
       />
       <div
@@ -46,8 +46,8 @@ export default function Hero() {
           right: "4%",
           top: "-6%",
           background:
-            "radial-gradient(closest-side, rgba(255,255,255,0.45) 0%, transparent 68%)",
-          animation: "drift-b 30s ease-in-out infinite alternate",
+            "radial-gradient(closest-side, rgba(255,255,255,0.55) 0%, transparent 68%)",
+          animation: "drift-b 15s ease-in-out infinite",
         }}
       />
 
