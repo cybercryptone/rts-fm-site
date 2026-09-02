@@ -5,22 +5,22 @@ export default function Hero() {
   return (
     <section
       id="top"
-      className="relative flex min-h-screen flex-col overflow-hidden pt-28"
+      className="relative flex min-h-dvh flex-col overflow-hidden pt-28"
       style={{
         backgroundImage:
           "radial-gradient(46% 52% at 40% 50%, rgba(224,74,63,0.4) 0%, rgba(224,74,63,0.15) 42%, rgba(224,74,63,0) 76%), radial-gradient(65% 60% at 80% 6%, rgba(255,255,255,0.4) 0%, transparent 60%), radial-gradient(55% 60% at 6% 2%, rgba(110,114,121,0.5) 0%, transparent 65%), linear-gradient(180deg, var(--ink) 0%, var(--bg) 100%)",
       }}
     >
       <EqualizerLogo
-        className="pointer-events-none absolute -right-16 top-1/2 hidden w-[420px] -translate-y-1/2 opacity-60 mix-blend-multiply sm:block md:-right-20 md:w-[520px] lg:w-[600px]"
+        className="pointer-events-none absolute -right-10 top-1/2 hidden w-[420px] -translate-y-1/2 opacity-70 sm:block md:-right-12 md:w-[520px] lg:-right-14 lg:w-[600px] xl:-right-4"
         style={{
           WebkitMaskImage:
-            "linear-gradient(to bottom, black 0%, black 42%, transparent 82%)",
+            "linear-gradient(to bottom, black 0%, black 55%, transparent 92%)",
           maskImage:
-            "linear-gradient(to bottom, black 0%, black 42%, transparent 82%)",
+            "linear-gradient(to bottom, black 0%, black 55%, transparent 92%)",
         }}
       />
-      <EqualizerLogo className="pointer-events-none absolute left-1/2 top-[44%] w-[160vw] max-w-none -translate-x-1/2 -translate-y-1/2 opacity-10 mix-blend-luminosity sm:hidden" />
+      <EqualizerLogo className="pointer-events-none absolute bottom-16 left-1/2 w-[140vw] max-w-none -translate-x-1/2 opacity-[0.16] mix-blend-luminosity sm:hidden" />
 
       <span className="crosshair left-6 top-24 hidden sm:block sm:left-10" />
       <span className="crosshair right-6 top-24 hidden sm:block sm:right-10" />
@@ -33,12 +33,12 @@ export default function Hero() {
           est. {SITE.founded}
         </div>
 
-        <h1 className="mt-6 select-none font-headline text-[16vw] leading-[0.85] text-fg sm:text-[13vw] md:text-[130px] lg:text-[165px]">
+        <h1 className="thermal-glow mt-6 select-none font-headline text-[clamp(3.5rem,16vw,5rem)] leading-[0.85] sm:text-[13vw] md:text-[130px] lg:text-[165px]">
           RTS.FM
         </h1>
 
         <div className="mt-8 flex max-w-xl flex-col gap-4 sm:mt-10">
-          <p className="font-display text-xl font-bold uppercase tracking-[-0.02em] text-fg sm:text-2xl">
+          <p className="max-w-[240px] font-display text-lg font-bold uppercase leading-tight tracking-[-0.02em] text-fg sm:max-w-none sm:text-2xl">
             {SITE.tagline}.
           </p>
           <p className="text-sm leading-relaxed text-fg sm:text-base">
@@ -48,7 +48,15 @@ export default function Hero() {
           </p>
         </div>
 
-        <div className="no-scrollbar mt-8 flex snap-x gap-2 overflow-x-auto sm:mt-10 sm:flex-wrap sm:overflow-visible">
+        <div
+          className="no-scrollbar mt-8 flex snap-x gap-2 overflow-x-auto sm:mt-10 sm:flex-wrap sm:overflow-visible sm:[mask-image:none]"
+          style={{
+            WebkitMaskImage:
+              "linear-gradient(to right, black 80%, transparent 100%)",
+            maskImage:
+              "linear-gradient(to right, black 80%, transparent 100%)",
+          }}
+        >
           {STATS.map((s) => (
             <span
               key={s}
@@ -60,7 +68,10 @@ export default function Hero() {
         </div>
       </div>
 
-      <div className="relative z-10 mx-auto flex w-full max-w-[1400px] items-end justify-between px-6 pb-24 sm:px-10 sm:pb-12">
+      <div
+        className="relative z-10 mx-auto flex w-full max-w-[1400px] items-end justify-between px-6 sm:px-10"
+        style={{ paddingBottom: "calc(64px + env(safe-area-inset-bottom))" }}
+      >
         <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-fg-dim">
           live from studios worldwide
         </span>

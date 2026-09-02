@@ -15,8 +15,18 @@ export default function RadioSection() {
           </span>
         </div>
 
-        <div className="mt-12 grid grid-cols-1 gap-6 lg:grid-cols-[1.1fr_1fr]">
-          <PlayerCard />
+        <div className="mt-12 grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
+          <div className="relative">
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -inset-12 -z-10 rounded-[48px] opacity-80 blur-3xl"
+              style={{
+                background:
+                  "radial-gradient(55% 55% at 25% 15%, rgba(255,80,0,0.55) 0%, transparent 70%), radial-gradient(50% 50% at 85% 85%, rgba(224,74,63,0.45) 0%, transparent 70%)",
+              }}
+            />
+            <PlayerCard />
+          </div>
 
           {/* studios */}
           <div className="rounded-2xl border border-line p-8 sm:p-10">

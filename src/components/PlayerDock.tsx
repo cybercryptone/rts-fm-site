@@ -14,7 +14,10 @@ export default function PlayerDock() {
       : "RTS.FM Sets";
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-40 px-3 pb-3 sm:px-6 sm:pb-4">
+    <div
+      className="fixed inset-x-0 bottom-0 z-40 px-3 sm:px-6"
+      style={{ paddingBottom: "calc(0.75rem + env(safe-area-inset-bottom))" }}
+    >
       <div className="glass-dark mx-auto flex max-w-[1400px] items-center gap-3 rounded-xl px-3 py-2.5 sm:gap-4 sm:px-5 sm:py-3">
         <button
           type="button"
