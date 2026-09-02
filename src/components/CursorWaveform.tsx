@@ -201,7 +201,7 @@ export default function CursorWaveform() {
              cursor-reactive instead of the static CSS pulse */}
       <svg
         viewBox={`0 -650 ${EQ_VIEWBOX.w} ${EQ_VIEWBOX.h + 650}`}
-        className="pointer-events-none absolute bottom-16 left-1/2 z-0 w-[126vw] max-w-none -translate-x-1/2 overflow-visible opacity-30 sm:bottom-auto sm:left-auto sm:right-[max(5vw,calc((100vw_-_1400px)/2_+_150px))] sm:top-1/2 sm:w-[378px] sm:max-w-[calc(76vh*1685/2515)] sm:translate-x-0 sm:-translate-y-[62.92%] sm:opacity-100 md:w-[468px] lg:w-[558px] xl:w-[630px] sm:[mask-image:linear-gradient(to_bottom,black_0%,black_78%,rgba(0,0,0,0.3)_98%)] sm:[-webkit-mask-image:linear-gradient(to_bottom,black_0%,black_78%,rgba(0,0,0,0.3)_98%)]"
+        className="pointer-events-none absolute bottom-16 left-1/2 z-0 w-[126vw] max-w-none -translate-x-1/2 overflow-visible opacity-30 sm:bottom-auto sm:left-auto sm:right-[max(5vw,calc((100vw_-_1400px)/2_+_150px))] sm:top-1/2 sm:w-[378px] sm:max-w-[calc(76vh*1685/2515)] sm:translate-x-0 sm:-translate-y-[62.92%] sm:opacity-90 md:w-[468px] lg:w-[558px] xl:w-[630px] sm:[mask-image:linear-gradient(to_bottom,black_0%,black_78%,rgba(0,0,0,0.3)_98%)] sm:[-webkit-mask-image:linear-gradient(to_bottom,black_0%,black_78%,rgba(0,0,0,0.3)_98%)]"
       >
         <defs>
           {/* horizontal "hot core" — a real fluted-glass rib amplifies a
