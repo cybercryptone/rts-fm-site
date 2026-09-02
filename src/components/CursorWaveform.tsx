@@ -9,6 +9,15 @@ const TOTAL_SLATS_DESKTOP = 22;
 const IDLE_AMPLITUDE = 0.1;
 const SURGE_MAX = 0.35;
 
+// The rightmost few bars should dissolve into the ambient background
+// instead of just ending — a per-bar opacity multiplier ramping toward 0
+// for the last 3 bars, so the artwork trails off rather than cutting off.
+const RIGHT_EDGE_FADE = [0.35, 0.18, 0.08]; // 3rd-from-last, 2nd-from-last, last
+function edgeFadeFor(i: number) {
+  const fromEnd = EQ_BARS.length - 1 - i;
+  return fromEnd < RIGHT_EDGE_FADE.length ? RIGHT_EDGE_FADE[fromEnd] : 1;
+}
+
 const SLAT_MASK = "linear-gradient(180deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.16) 35%, rgba(0,0,0,0.7) 75%, rgba(0,0,0,1) 100%)";
 const SLAT_MASK_STYLE: React.CSSProperties = {
   WebkitMaskImage: SLAT_MASK,
@@ -46,14 +55,15 @@ export default function CursorWaveform() {
       current: 1,
       target: 1,
       phase: i * 0.4,
+      edgeFade: edgeFadeFor(i),
     }));
 
     const applyStatic = () => {
-      bars.forEach((_, i) => {
+      bars.forEach((bar, i) => {
         const el = barRefs.current[i];
         if (!el) return;
         el.style.transform = "scaleY(1)";
-        el.style.opacity = "0.95";
+        el.style.opacity = (0.95 * bar.edgeFade).toFixed(3);
       });
     };
 
@@ -144,7 +154,8 @@ export default function CursorWaveform() {
 
         if (el) {
           el.style.transform = `scaleY(${bar.current.toFixed(4)})`;
-          el.style.opacity = Math.min(1, Math.max(0.4, bar.current * 0.95)).toFixed(3);
+          const opacity = Math.min(1, Math.max(0.4, bar.current * 0.95)) * bar.edgeFade;
+          el.style.opacity = opacity.toFixed(3);
         }
       });
 
