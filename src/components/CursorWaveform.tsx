@@ -157,9 +157,18 @@ export default function CursorWaveform() {
             <stop offset="0%" stopColor="var(--accent)" />
             <stop offset="100%" stopColor="var(--accent-soft)" />
           </linearGradient>
-          {/* generous region so animated overshoot (cursor surge can scale
-              bars past the viewBox edge) never gets clipped by the filter */}
-          <filter id="eq-blur" x="-60%" y="-60%" width="220%" height="220%">
+          {/* fixed, absolute region (userSpaceOnUse) generous enough to
+              cover animated overshoot regardless of how the browser tracks
+              the live bounding box of the animated children — a percentage
+              objectBoundingBox region was still clipping mid-animation */}
+          <filter
+            id="eq-blur"
+            filterUnits="userSpaceOnUse"
+            x={-600}
+            y={-600}
+            width={EQ_VIEWBOX.w + 1200}
+            height={EQ_VIEWBOX.h + 1200}
+          >
             <feGaussianBlur stdDeviation="9" />
           </filter>
         </defs>
