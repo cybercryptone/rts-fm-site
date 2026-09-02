@@ -6,7 +6,7 @@ export default function AboutFooter() {
       <div className="mx-auto max-w-[1400px]">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1.2fr_1fr]">
           <div>
-            <h2 className="font-display text-4xl italic text-fg sm:text-5xl">
+            <h2 className="font-display text-4xl font-bold uppercase tracking-[-0.02em] text-fg sm:text-5xl">
               About.
             </h2>
             <p className="mt-6 max-w-xl text-sm leading-relaxed text-fg-dim sm:text-base">
@@ -37,10 +37,10 @@ export default function AboutFooter() {
                     href={s.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group flex items-center justify-between py-3 font-display text-lg italic text-fg transition-colors hover:text-accent"
+                    className="group flex items-center justify-between py-3 font-display text-lg font-bold uppercase tracking-[-0.01em] text-fg transition-colors hover:text-accent"
                   >
                     {s.label}
-                    <span className="font-mono text-xs not-italic text-fg-dim transition-colors group-hover:text-accent">
+                    <span className="font-mono text-xs normal-case tracking-[0.1em] text-fg-dim transition-colors group-hover:text-accent">
                       ↗
                     </span>
                   </a>

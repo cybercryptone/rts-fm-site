@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import {
-  Bodoni_Moda,
+  Syne,
   Unbounded,
   Space_Grotesk,
   JetBrains_Mono,
@@ -9,12 +9,10 @@ import "./globals.css";
 import { SITE, SOCIALS } from "@/lib/data";
 import { PlayerProvider } from "@/lib/PlayerProvider";
 
-const bodoniModa = Bodoni_Moda({
+const syne = Syne({
   variable: "--font-display",
   subsets: ["latin"],
-  axes: ["opsz"],
-  style: ["normal", "italic"],
-  weight: "variable",
+  weight: ["700", "800"],
 });
 
 const unbounded = Unbounded({
@@ -106,7 +104,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${bodoniModa.variable} ${unbounded.variable} ${spaceGrotesk.variable} ${jetBrainsMono.variable} h-full antialiased`}
+      className={`${syne.variable} ${unbounded.variable} ${spaceGrotesk.variable} ${jetBrainsMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-bg text-fg font-sans">
         <script

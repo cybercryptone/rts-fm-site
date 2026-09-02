@@ -7,7 +7,7 @@ export default function RadioSection() {
     <section id="radio" className="border-b border-line px-6 py-24 sm:px-10 sm:py-32">
       <div className="mx-auto max-w-[1400px]">
         <div className="flex items-end justify-between gap-6">
-          <h2 className="font-display text-4xl italic text-fg sm:text-5xl">
+          <h2 className="font-display text-4xl font-bold uppercase tracking-[-0.02em] text-fg sm:text-5xl">
             Radio.
           </h2>
           <span className="hidden font-mono text-xs uppercase tracking-[0.18em] text-fg-dim sm:block">
@@ -27,10 +27,10 @@ export default function RadioSection() {
               {CITIES.map((s) => (
                 <li
                   key={s}
-                  className="flex items-center justify-between py-3 font-display text-lg italic text-fg"
+                  className="flex items-center justify-between py-3 font-display text-lg font-bold uppercase tracking-[-0.02em] text-fg"
                 >
                   {s}
-                  <span className="font-mono text-[11px] not-italic text-fg-dim">
+                  <span className="font-mono text-[11px] normal-case tracking-[0.14em] text-fg-dim">
                     studio
                   </span>
                 </li>

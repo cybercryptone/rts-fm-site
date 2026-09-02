@@ -5,7 +5,7 @@ export default function LabelSection() {
     <section id="label" className="border-b border-line px-6 py-24 sm:px-10 sm:py-32">
       <div className="mx-auto max-w-[1400px]">
         <div className="flex flex-wrap items-end justify-between gap-6">
-          <h2 className="font-display text-4xl italic text-fg sm:text-5xl">
+          <h2 className="font-display text-4xl font-bold uppercase tracking-[-0.02em] text-fg sm:text-5xl">
             Label.
           </h2>
           <a
@@ -59,7 +59,7 @@ export default function LabelSection() {
                 </svg>
               </div>
               <div className="relative p-4 sm:p-5">
-                <p className="font-display text-base italic leading-tight text-white sm:text-lg">
+                <p className="font-display text-sm font-bold uppercase leading-tight tracking-[-0.01em] text-white sm:text-base">
                   {r.artist}
                 </p>
                 {r.title && (

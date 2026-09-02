@@ -29,8 +29,8 @@ export default function Hero() {
           RTS.FM
         </h1>
 
-        <div className="mt-8 flex max-w-xl flex-col gap-4 border-l border-line pl-6 sm:mt-10">
-          <p className="font-display text-2xl text-fg sm:text-3xl">
+        <div className="mt-8 flex max-w-xl flex-col gap-4 sm:mt-10">
+          <p className="font-display text-xl font-bold uppercase tracking-[-0.02em] text-fg sm:text-2xl">
             {SITE.tagline}.
           </p>
           <p className="text-sm leading-relaxed text-fg sm:text-base">
@@ -40,11 +40,11 @@ export default function Hero() {
           </p>
         </div>
 
-        <div className="mt-8 flex flex-wrap gap-2 sm:mt-10">
+        <div className="no-scrollbar mt-8 flex snap-x gap-2 overflow-x-auto sm:mt-10 sm:flex-wrap sm:overflow-visible">
           {STATS.map((s) => (
             <span
               key={s}
-              className="rounded-full border border-line px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-fg-dim"
+              className="shrink-0 snap-start whitespace-nowrap rounded-full border border-line px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-fg-dim"
             >
               {s}
             </span>

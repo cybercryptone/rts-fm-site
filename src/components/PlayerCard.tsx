@@ -75,10 +75,10 @@ export default function PlayerCard() {
           )}
         </button>
         <div className="min-w-0">
-          <p className="truncate font-display text-xl italic text-white">
+          <p className="truncate font-display text-xl font-bold uppercase tracking-[-0.02em] text-white">
             {nowPlaying?.artist ?? "RTS.FM Sets"}
           </p>
-          <p className="mt-1 truncate font-mono text-xs text-white/50">
+          <p className="mt-1 truncate font-mono text-[11px] tracking-[-0.01em] text-white/50">
             {nowPlaying?.meta ||
               (currentEpisode
                 ? "RTS.FM"
@@ -99,7 +99,7 @@ export default function PlayerCard() {
           className="w-full accent-[#ff5000] disabled:opacity-30"
           aria-label="Seek"
         />
-        <div className="mt-1 flex justify-between font-mono text-[10px] text-white/50">
+        <div className="mt-1 flex justify-between font-mono text-[10px] tabular-nums tracking-[-0.01em] text-white/50">
           <span>{formatTime(currentTime)}</span>
           <span>{formatTime(duration || currentEpisode?.durationSeconds || 0)}</span>
         </div>
@@ -123,23 +123,36 @@ export default function PlayerCard() {
                   <div className="min-w-0 flex-1">
                     <p
                       className={`truncate text-sm ${
-                        active ? "font-medium text-white" : "text-white/70"
+                        active ? "font-medium text-white" : "text-white/85"
                       }`}
                     >
                       {artist}
                     </p>
                     {meta && (
-                      <p className="mt-0.5 truncate font-mono text-[11px] text-white/40">
+                      <p className="mt-0.5 truncate font-mono text-[11px] tracking-[-0.01em] text-white/40">
                         {meta}
                       </p>
                     )}
                   </div>
-                  <span
-                    className={`shrink-0 font-mono text-[10px] tabular-nums ${
-                      active ? "text-accent" : "text-white/40"
-                    }`}
-                  >
-                    {formatTime(ep.durationSeconds)}
+                  <span className="flex shrink-0 items-center gap-2">
+                    {active && isPlaying && (
+                      <span className="flex items-end gap-[2px]" aria-hidden="true">
+                        {[0.4, 1, 0.6].map((d, bi) => (
+                          <span
+                            key={bi}
+                            className="eq-bar w-[2px] rounded-full bg-accent"
+                            style={{ height: "9px", animationDelay: `${bi * 0.12}s` }}
+                          />
+                        ))}
+                      </span>
+                    )}
+                    <span
+                      className={`font-mono text-[10px] tabular-nums tracking-[-0.01em] ${
+                        active ? "text-white" : "text-white/40"
+                      }`}
+                    >
+                      {formatTime(ep.durationSeconds)}
+                    </span>
                   </span>
                 </button>
               </li>

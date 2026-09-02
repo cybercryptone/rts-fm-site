@@ -20,8 +20,9 @@ export const STATS = [
 ];
 
 // Cities RTS.FM has broadcast live sets from, verified via the YouTube
-// channel archive (@rts_fm), plus Canada and Argentina — international
-// studio expansions Wikipedia cites as announced (not confirmed still live).
+// channel archive (@rts_fm). Montreal, Toronto and Buenos Aires stand in
+// for Wikipedia's country-level "Canada and Argentina" studio-expansion
+// mentions, kept city-level for consistency with the rest of the list.
 export const CITIES = [
   "Saint Petersburg",
   "Kiev",
@@ -30,8 +31,9 @@ export const CITIES = [
   "Budapest",
   "Mexico City",
   "Cali",
-  "Canada",
-  "Argentina",
+  "Montreal",
+  "Toronto",
+  "Buenos Aires",
 ];
 
 export const SOCIALS = [

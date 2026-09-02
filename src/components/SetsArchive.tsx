@@ -50,7 +50,7 @@ export default function SetsArchive() {
             </div>
 
             <div className="absolute inset-x-0 bottom-0 px-3 pb-2 pt-8">
-              <p className="font-display text-base italic leading-tight text-white">
+              <p className="font-display text-sm font-bold uppercase leading-tight tracking-[-0.01em] text-white">
                 {s.artist}
               </p>
               <p className="mt-0.5 truncate font-mono text-[10px] uppercase tracking-[0.08em] text-white/70">

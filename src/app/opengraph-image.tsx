@@ -61,13 +61,14 @@ export default function OpengraphImage() {
           <div
             style={{
               marginTop: 24,
-              fontSize: 40,
-              fontStyle: "italic",
+              fontSize: 36,
+              fontWeight: 800,
+              letterSpacing: -1,
               color: "#121214",
               display: "flex",
             }}
           >
-            {SITE.tagline}.
+            {SITE.tagline.toUpperCase()}.
           </div>
         </div>
 
