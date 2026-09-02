@@ -12,7 +12,7 @@ export default function Hero() {
       }}
     >
       <EqualizerLogo className="pointer-events-none absolute -right-16 top-1/2 hidden w-[420px] -translate-y-1/2 opacity-90 sm:block md:-right-20 md:w-[520px] lg:w-[600px]" />
-      <EqualizerLogo className="pointer-events-none absolute left-1/2 top-[44%] w-[160vw] max-w-none -translate-x-1/2 -translate-y-1/2 opacity-30 sm:hidden" />
+      <EqualizerLogo className="pointer-events-none absolute left-1/2 top-[44%] w-[160vw] max-w-none -translate-x-1/2 -translate-y-1/2 opacity-10 mix-blend-luminosity sm:hidden" />
 
       <span className="crosshair left-6 top-24 hidden sm:block sm:left-10" />
       <span className="crosshair right-6 top-24 hidden sm:block sm:right-10" />
