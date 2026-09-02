@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const LINKS = [
   { href: "#radio", label: "radio" },
@@ -10,9 +10,21 @@ const LINKS = [
 
 export default function Nav() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-40">
+    <header
+      className={`fixed inset-x-0 top-0 z-40 transition-colors duration-300 ${
+        scrolled ? "border-b border-line bg-bg/80 backdrop-blur-md" : ""
+      }`}
+    >
       <div className="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-5 sm:px-10">
         <a
           href="#top"

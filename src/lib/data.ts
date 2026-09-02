@@ -4,15 +4,17 @@ export const SITE = {
   founded: 2006,
 };
 
-export const GENRES = [
-  "Tech House",
-  "Minimal House",
-  "Minimal Techno",
-  "Electronica",
+// Real numbers, not genre words — shown as the hero stat chips.
+export const STATS = [
+  "3.8K Sets Archived",
+  "18 Releases",
+  "30+ Studios Worldwide",
+  "38K Followers",
 ];
 
-// Cities RTS.FM has broadcast live sets from across its history (2009–2026),
-// verified via the YouTube channel archive (@rts_fm) and Wikipedia.
+// Cities RTS.FM has broadcast live sets from, verified via the YouTube
+// channel archive (@rts_fm), plus Canada and Argentina — international
+// studio expansions Wikipedia cites as announced (not confirmed still live).
 export const CITIES = [
   "Saint Petersburg",
   "Kiev",
@@ -21,6 +23,8 @@ export const CITIES = [
   "Budapest",
   "Mexico City",
   "Cali",
+  "Canada",
+  "Argentina",
 ];
 
 export const SOCIALS = [

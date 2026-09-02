@@ -1,5 +1,5 @@
 import EqualizerLogo from "./EqualizerLogo";
-import { GENRES, SITE } from "@/lib/data";
+import { SITE, STATS } from "@/lib/data";
 
 export default function Hero() {
   return (
@@ -40,12 +40,12 @@ export default function Hero() {
         </div>
 
         <div className="mt-8 flex flex-wrap gap-2 sm:mt-10">
-          {GENRES.map((g) => (
+          {STATS.map((s) => (
             <span
-              key={g}
+              key={s}
               className="rounded-full border border-line px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-fg-dim"
             >
-              {g}
+              {s}
             </span>
           ))}
         </div>
