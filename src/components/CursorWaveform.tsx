@@ -12,7 +12,7 @@ const SURGE_MAX = 0.35;
 // The rightmost few bars should dissolve into the ambient background
 // instead of just ending — a per-bar opacity multiplier ramping toward 0
 // for the last 3 bars, so the artwork trails off rather than cutting off.
-const RIGHT_EDGE_FADE = [0.35, 0.18, 0.08]; // 3rd-from-last, 2nd-from-last, last
+const RIGHT_EDGE_FADE = [0.85, 0.65, 0.4]; // 3rd-from-last, 2nd-from-last, last
 function edgeFadeFor(i: number) {
   const fromEnd = EQ_BARS.length - 1 - i;
   return fromEnd < RIGHT_EDGE_FADE.length ? RIGHT_EDGE_FADE[fromEnd] : 1;
