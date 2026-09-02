@@ -150,16 +150,20 @@ export default function CursorWaveform() {
              cursor-reactive instead of the static CSS pulse */}
       <svg
         viewBox={`0 0 ${EQ_VIEWBOX.w} ${EQ_VIEWBOX.h}`}
-        className="pointer-events-none absolute bottom-16 left-1/2 z-0 w-[140vw] max-w-none -translate-x-1/2 overflow-visible sm:bottom-auto sm:left-auto sm:right-[5vw] sm:top-1/2 sm:w-[420px] sm:max-w-[calc(76vh*1685/1865)] sm:translate-x-0 sm:-translate-y-1/2 md:w-[520px] lg:w-[620px] xl:w-[700px] sm:[mask-image:linear-gradient(to_bottom,black_0%,black_55%,transparent_92%)] sm:[-webkit-mask-image:linear-gradient(to_bottom,black_0%,black_55%,transparent_92%)]"
-        style={{ filter: "blur(3px)" }}
+        className="pointer-events-none absolute bottom-16 left-1/2 z-0 w-[140vw] max-w-none -translate-x-1/2 overflow-visible opacity-30 sm:bottom-auto sm:left-auto sm:right-[5vw] sm:top-1/2 sm:w-[420px] sm:max-w-[calc(76vh*1685/1865)] sm:translate-x-0 sm:-translate-y-1/2 sm:opacity-100 md:w-[520px] lg:w-[620px] xl:w-[700px] sm:[mask-image:linear-gradient(to_bottom,black_0%,black_55%,transparent_92%)] sm:[-webkit-mask-image:linear-gradient(to_bottom,black_0%,black_55%,transparent_92%)]"
       >
         <defs>
           <linearGradient id="spike-grad" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="var(--accent)" />
             <stop offset="100%" stopColor="var(--accent-soft)" />
           </linearGradient>
+          {/* generous region so animated overshoot (cursor surge can scale
+              bars past the viewBox edge) never gets clipped by the filter */}
+          <filter id="eq-blur" x="-60%" y="-60%" width="220%" height="220%">
+            <feGaussianBlur stdDeviation="9" />
+          </filter>
         </defs>
-        <g>
+        <g filter="url(#eq-blur)">
           {EQ_BARS.map((b, i) => (
             <ellipse
               key={i}
