@@ -33,7 +33,7 @@ export default function Hero() {
           est. {SITE.founded}
         </div>
 
-        <h1 className="thermal-glow mt-6 select-none font-headline text-[clamp(3.5rem,16vw,5rem)] leading-[0.85] sm:text-[13vw] md:text-[130px] lg:text-[165px]">
+        <h1 className="mt-6 select-none font-headline text-[clamp(3.5rem,16vw,5rem)] leading-[0.85] text-fg sm:text-[13vw] md:text-[130px] lg:text-[165px]">
           RTS.FM
         </h1>
 
