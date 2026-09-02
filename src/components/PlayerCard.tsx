@@ -78,12 +78,11 @@ export default function PlayerCard() {
           <p className="truncate font-display text-xl font-bold uppercase tracking-[-0.02em] text-white">
             {nowPlaying?.artist ?? "RTS.FM Sets"}
           </p>
-          <p className="mt-1 truncate font-mono text-[11px] tracking-[-0.01em] text-white/50">
-            {nowPlaying?.meta ||
-              (currentEpisode
-                ? "RTS.FM"
-                : "Pick a set below, or hit play for the latest upload.")}
-          </p>
+          {(nowPlaying?.meta || currentEpisode) && (
+            <p className="mt-1 truncate font-mono text-[10.5px] tracking-[-0.015em] text-white/65">
+              {nowPlaying?.meta || "RTS.FM"}
+            </p>
+          )}
         </div>
       </div>
 
@@ -121,15 +120,11 @@ export default function PlayerCard() {
                   className="flex w-full items-center gap-4 py-3 text-left"
                 >
                   <div className="min-w-0 flex-1">
-                    <p
-                      className={`truncate text-sm ${
-                        active ? "font-medium text-white" : "text-white/85"
-                      }`}
-                    >
+                    <p className="truncate text-sm font-semibold text-white">
                       {artist}
                     </p>
                     {meta && (
-                      <p className="mt-0.5 truncate font-mono text-[11px] tracking-[-0.01em] text-white/40">
+                      <p className="mt-0.5 truncate font-mono text-[10.5px] tracking-[-0.015em] text-white/65">
                         {meta}
                       </p>
                     )}
