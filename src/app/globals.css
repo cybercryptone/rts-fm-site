@@ -33,12 +33,15 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
   background: var(--bg);
   color: var(--fg);
   position: relative;
+  overflow-x: hidden;
+  overscroll-behavior-x: none;
 }
 
 body::before {

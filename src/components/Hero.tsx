@@ -89,7 +89,7 @@ export default function Hero() {
         </div>
 
         <div
-          className="no-scrollbar mt-8 flex snap-x gap-2 overflow-x-auto sm:mt-10 sm:flex-wrap sm:overflow-visible sm:[mask-image:none]"
+          className="no-scrollbar mt-8 flex snap-x gap-2 overflow-x-auto overscroll-x-contain sm:mt-10 sm:flex-wrap sm:overflow-visible sm:[mask-image:none]"
           style={{
             WebkitMaskImage:
               "linear-gradient(to right, black 80%, transparent 100%)",
