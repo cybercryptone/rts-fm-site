@@ -4,8 +4,10 @@ import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import Nav from "@/components/Nav";
 import AboutFooter from "@/components/AboutFooter";
+import QuickWins from "@/components/QuickWins";
 import { getAllPosts, getPostBySlug } from "@/lib/blog";
 import { formatDate } from "@/lib/format";
+import { SITE } from "@/lib/data";
 
 export function generateStaticParams() {
   return getAllPosts().map((post) => ({ slug: post.slug }));
@@ -66,6 +68,7 @@ const mdxComponents = {
       {...props}
     />
   ),
+  QuickWins,
 };
 
 export default async function BlogPost({
@@ -77,8 +80,25 @@ export default async function BlogPost({
   const post = getPostBySlug(slug);
   if (!post) notFound();
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    headline: post.title,
+    description: post.excerpt,
+    datePublished: post.date,
+    dateModified: post.date,
+    url: `${SITE.url}/blog/${post.slug}`,
+    mainEntityOfPage: `${SITE.url}/blog/${post.slug}`,
+    author: { "@type": "Organization", name: SITE.name, url: SITE.url },
+    publisher: { "@type": "Organization", name: SITE.name, url: SITE.url },
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Nav />
       <main className="flex-1 px-6 pb-24 pt-32 sm:px-10 sm:pb-32 sm:pt-40">
         <article className="mx-auto max-w-[760px]">
@@ -90,13 +110,16 @@ export default async function BlogPost({
           </Link>
 
           <p className="mt-8 font-mono text-[11px] uppercase tracking-[0.18em] text-fg-dim">
-            {formatDate(post.date)}
+            {formatDate(post.date)} · rts.fm editorial
           </p>
           <h1 className="mt-3 font-display text-3xl font-bold uppercase tracking-[-0.02em] text-fg sm:text-4xl">
             {post.title}
           </h1>
+          <p className="mt-4 max-w-xl text-sm leading-relaxed text-fg-dim sm:text-base">
+            {post.excerpt}
+          </p>
 
-          <div className="mt-4 border-t border-line pt-4">
+          <div className="mt-6 border-t border-line pt-6">
             <MDXRemote source={post.content} components={mdxComponents} />
           </div>
         </article>
