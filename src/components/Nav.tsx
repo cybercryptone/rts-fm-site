@@ -28,7 +28,7 @@ export default function Nav() {
       <div className="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-5 sm:px-10">
         <a
           href="#top"
-          className="font-display text-lg italic tracking-tight text-fg"
+          className="font-display text-lg tracking-tight text-fg"
         >
           RTS.FM
         </a>

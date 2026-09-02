@@ -30,7 +30,7 @@ export default function Hero() {
         </h1>
 
         <div className="mt-8 flex max-w-xl flex-col gap-4 border-l border-line pl-6 sm:mt-10">
-          <p className="font-display text-2xl italic text-fg sm:text-3xl">
+          <p className="font-display text-2xl text-fg sm:text-3xl">
             {SITE.tagline}.
           </p>
           <p className="text-sm leading-relaxed text-fg sm:text-base">
