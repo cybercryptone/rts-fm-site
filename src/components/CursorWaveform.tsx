@@ -189,9 +189,15 @@ export default function CursorWaveform() {
         className="pointer-events-none absolute bottom-16 left-1/2 z-0 w-[126vw] max-w-none -translate-x-1/2 overflow-visible opacity-30 sm:bottom-auto sm:left-auto sm:right-[max(5vw,calc((100vw_-_1400px)/2_+_150px))] sm:top-1/2 sm:w-[378px] sm:max-w-[calc(76vh*1685/2515)] sm:translate-x-0 sm:-translate-y-[62.92%] sm:opacity-100 md:w-[468px] lg:w-[558px] xl:w-[630px] sm:[mask-image:linear-gradient(to_bottom,black_0%,black_66.63%,transparent_94.07%)] sm:[-webkit-mask-image:linear-gradient(to_bottom,black_0%,black_66.63%,transparent_94.07%)]"
       >
         <defs>
-          <linearGradient id="spike-grad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="var(--accent)" />
-            <stop offset="100%" stopColor="var(--accent-soft)" />
+          {/* horizontal "hot core" — a real fluted-glass rib amplifies a
+              bright filament down the center of what it's refracting,
+              rather than washing the whole shape into a flat color */}
+          <linearGradient id="spike-grad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="var(--accent)" stopOpacity={0.55} />
+            <stop offset="30%" stopColor="var(--accent)" />
+            <stop offset="50%" stopColor="#ffe0cc" />
+            <stop offset="70%" stopColor="var(--accent)" />
+            <stop offset="100%" stopColor="var(--accent)" stopOpacity={0.55} />
           </linearGradient>
           {/* fixed, absolute region (userSpaceOnUse) generous enough to
               cover animated overshoot regardless of how the browser tracks
@@ -205,7 +211,12 @@ export default function CursorWaveform() {
             width={EQ_VIEWBOX.w + 1200}
             height={EQ_VIEWBOX.h + 1200}
           >
-            <feGaussianBlur stdDeviation="9" />
+            {/* directional blur: fluted glass is a row of vertical
+                cylinders, so it smears light sideways across ribs while
+                keeping the vertical profile (needle tips) comparatively
+                sharp — a uniform blur reads as an out-of-focus photo,
+                not glass */}
+            <feGaussianBlur stdDeviation="10 2" />
           </filter>
         </defs>
         <g filter="url(#eq-blur)">

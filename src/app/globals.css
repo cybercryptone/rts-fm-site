@@ -119,11 +119,26 @@ body::before {
   background: linear-gradient(
     90deg,
     rgba(255, 255, 255, 0.16) 0%,
-    rgba(0, 0, 0, 0.08) 100%
+    rgba(255, 255, 255, 0) 25%,
+    rgba(0, 0, 0, 0.03) 80%,
+    rgba(0, 0, 0, 0.12) 100%
   );
+  /* crisp bevel highlight where light catches the seam, dark recess
+     on the opposite edge — sells a physical rib, not a flat stripe */
   border-left: 1px solid rgba(255, 255, 255, 0.28);
-  border-right: 1px solid rgba(0, 0, 0, 0.16);
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
   mix-blend-mode: overlay;
+}
+
+/* Snell's-law-style stepped offset: light through a cylindrical rib
+   shifts a hair to one side depending on which half of the lens it
+   crosses, so neighboring slats don't align into one flat sheet. */
+.waveform-slat:nth-child(odd) {
+  transform: translateX(-1.5px);
+}
+
+.waveform-slat:nth-child(even) {
+  transform: translateX(1.5px);
 }
 
 .needle-path {
