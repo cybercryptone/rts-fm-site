@@ -38,7 +38,7 @@ export default function LabelSection() {
                 alt={`${r.artist} — ${r.cat} cover art`}
                 fill
                 sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
+                className="object-cover text-[0px] transition-transform duration-500 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/5 to-transparent" />
 

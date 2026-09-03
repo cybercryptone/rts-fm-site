@@ -32,7 +32,7 @@ export default function SetsArchive() {
               alt={`${s.artist} — ${s.context}, ${s.date}`}
               fill
               sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
+              className="object-cover text-[0px] transition-transform duration-500 group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/10 to-black/10" />
 

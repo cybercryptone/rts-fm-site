@@ -3,6 +3,7 @@ import Hero from "@/components/Hero";
 import Ticker from "@/components/Ticker";
 import RadioSection from "@/components/RadioSection";
 import LabelSection from "@/components/LabelSection";
+import BlogSection from "@/components/BlogSection";
 import AboutFooter from "@/components/AboutFooter";
 
 export default function Home() {
@@ -14,6 +15,7 @@ export default function Home() {
         <Ticker />
         <RadioSection />
         <LabelSection />
+        <BlogSection />
       </main>
       <AboutFooter />
     </>

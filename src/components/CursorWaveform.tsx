@@ -331,12 +331,23 @@ export default function CursorWaveform() {
     // Pause the rAF loop entirely while the hero is scrolled out of view —
     // it's a continuous per-frame animation across ~50 elements, no reason
     // to keep paying for it once the user has scrolled past.
+    //
+    // Guarded against a premature/incorrect first callback (observed as a
+    // Safari-only "equalizer never animates" report — WebKit's initial
+    // IntersectionObserver callback has known edge cases reporting
+    // isIntersecting:false on first call even for an on-screen element):
+    // a false report is only trusted once we've seen a genuine true report
+    // first, so a bad initial callback can't permanently kill the loop.
     let isVisible = true;
+    let hasBeenVisible = false;
     const io = new IntersectionObserver(
       ([entry]) => {
-        isVisible = entry.isIntersecting;
-        if (isVisible && !rafId) {
-          rafId = requestAnimationFrame(render);
+        if (entry.isIntersecting) {
+          hasBeenVisible = true;
+          isVisible = true;
+          if (!rafId) rafId = requestAnimationFrame(render);
+        } else if (hasBeenVisible) {
+          isVisible = false;
         }
       },
       { threshold: 0 },
