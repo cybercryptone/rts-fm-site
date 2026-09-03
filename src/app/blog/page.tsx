@@ -26,7 +26,7 @@ export default function BlogIndex() {
             <span className="h-1.5 w-1.5 rounded-full bg-accent" />
             notes &amp; updates
           </div>
-          <h1 className="mt-6 font-display text-4xl font-bold uppercase tracking-[-0.02em] text-fg sm:text-5xl">
+          <h1 className="mt-[18px] font-display text-4xl font-bold uppercase tracking-[-0.02em] text-fg sm:text-5xl">
             Blog
           </h1>
 
@@ -40,9 +40,9 @@ export default function BlogIndex() {
                 <li key={post.slug} className="blog-row">
                   <Link
                     href={`/blog/${post.slug}`}
-                    className="flex gap-4 py-8 sm:gap-6"
+                    className="flex items-center gap-4 py-8 pr-4 sm:gap-6 sm:pr-10"
                   >
-                    <span className="hidden shrink-0 pt-1 font-mono text-[11px] text-fg-dim/50 sm:block sm:w-10">
+                    <span className="hidden shrink-0 self-center font-mono text-[11px] text-fg-dim/50 sm:block sm:w-10">
                       {String(i + 1).padStart(2, "0")}
                       {" //"}
                     </span>
@@ -51,10 +51,10 @@ export default function BlogIndex() {
                         {"[editorial] // "}
                         {formatDateCompact(post.date)}
                       </div>
-                      <p className="blog-row-title mt-2 max-w-[640px] font-display text-lg font-bold uppercase leading-tight tracking-[-0.03em] text-fg sm:text-xl">
+                      <p className="blog-row-title mt-2 max-w-[620px] font-display text-lg font-bold uppercase leading-tight tracking-[-0.03em] text-fg sm:text-xl">
                         {post.title}
                       </p>
-                      <p className="mt-2 max-w-[640px] text-sm leading-relaxed text-fg-dim">
+                      <p className="mt-2 max-w-[620px] text-sm leading-relaxed text-fg-dim">
                         {post.excerpt}
                       </p>
                     </div>
