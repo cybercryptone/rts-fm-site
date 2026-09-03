@@ -7,6 +7,7 @@ const TOTAL_SLATS_MOBILE = 10;
 const TOTAL_SLATS_DESKTOP = 22;
 
 const IDLE_AMPLITUDE = 0.1;
+const MOBILE_IDLE_AMPLITUDE = 0.32;
 const SURGE_MAX = 0.35;
 
 // Phosphor persistence — fast cursor flings spawn a lingering amber trail,
@@ -213,6 +214,8 @@ export default function CursorWaveform() {
       time += 0.035;
       const maxDistX = window.innerWidth * 0.24;
       const maxDistY = window.innerHeight * 0.7;
+      const idleAmplitude =
+        window.innerWidth < 640 ? MOBILE_IDLE_AMPLITUDE : IDLE_AMPLITUDE;
 
       // Velocity is sampled once per rAF tick (immune to raw mousemove
       // event-timing noise) against the REAL elapsed time since the last
@@ -251,7 +254,7 @@ export default function CursorWaveform() {
       lastFrameT = now;
 
       bars.forEach((bar, i) => {
-        const idle = Math.sin(time + bar.phase) * IDLE_AMPLITUDE;
+        const idle = Math.sin(time + bar.phase) * idleAmplitude;
         const el = barRefs.current[i];
         const center = barCenters[i];
 
@@ -364,6 +367,7 @@ export default function CursorWaveform() {
               ry={b.ry}
               fill="url(#spike-grad)"
               className="needle-path"
+              style={{ "--bar-rx": b.rx } as React.CSSProperties}
             />
           ))}
         </g>
