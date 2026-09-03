@@ -89,6 +89,9 @@ export const metadata: Metadata = {
     icon: "/icon.png",
     apple: "/apple-icon.png",
   },
+  verification: {
+    yandex: "6ba88ab1ec73ad70",
+  },
 };
 
 const GA_MEASUREMENT_ID = "G-0DY7WHB8BH";
