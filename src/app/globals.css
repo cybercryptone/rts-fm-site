@@ -10,6 +10,7 @@
   --ink: #6e7279;
   --line: rgba(18, 18, 20, 0.16);
   --glass-bg: rgba(35, 38, 43, 0.65);
+  --nav-height: 71px;
 }
 
 @theme inline {
@@ -509,4 +510,40 @@ body::before {
 .quick-wins-body p {
   margin-top: 0;
   color: var(--fg);
+}
+
+/* Blog index rows — soft dividers instead of the site-wide --line,
+   plus a faint hover tint and a headline nudge that reads as an
+   editorial list rather than static text. */
+.blog-divider {
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+.blog-row {
+  transition: background-color 0.2s ease;
+}
+
+.blog-row:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.blog-row-title {
+  transition: transform 0.2s ease;
+}
+
+.blog-row:hover .blog-row-title {
+  transform: translateX(2px);
+}
+
+.blog-row-arrow {
+  opacity: 0;
+  transform: translateX(-4px);
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.blog-row:hover .blog-row-arrow {
+  opacity: 1;
+  transform: translateX(0);
 }

@@ -22,6 +22,14 @@ export function formatDate(iso: string) {
     .toUpperCase();
 }
 
+export function formatDateCompact(iso: string) {
+  const d = new Date(iso);
+  const dd = String(d.getDate()).padStart(2, "0");
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const yy = String(d.getFullYear()).slice(-2);
+  return `${dd}.${mm}.${yy}`;
+}
+
 // Feed titles look like "Artist | Venue x Label, City 12.06.2026" — split
 // the artist from the venue/city/date so the two can get separate
 // typographic treatment instead of running together as one dense string.

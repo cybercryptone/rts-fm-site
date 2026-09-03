@@ -3,7 +3,7 @@ import Link from "next/link";
 import Nav from "@/components/Nav";
 import AboutFooter from "@/components/AboutFooter";
 import { getAllPosts } from "@/lib/blog";
-import { formatDate } from "@/lib/format";
+import { formatDateCompact } from "@/lib/format";
 
 export const metadata: Metadata = {
   title: "Blog",
@@ -17,7 +17,10 @@ export default function BlogIndex() {
   return (
     <>
       <Nav />
-      <main className="flex-1 px-6 pb-24 pt-32 sm:px-10 sm:pb-32 sm:pt-40">
+      <main
+        className="flex-1 px-6 pb-24 sm:px-10 sm:pb-32"
+        style={{ paddingTop: "calc(var(--nav-height) + 4rem)" }}
+      >
         <div className="mx-auto max-w-[1400px]">
           <div className="flex items-baseline gap-3 font-mono text-xs uppercase tracking-[0.2em] text-fg-dim">
             <span className="h-1.5 w-1.5 rounded-full bg-accent" />
@@ -32,23 +35,31 @@ export default function BlogIndex() {
               Nothing published yet — check back soon.
             </p>
           ) : (
-            <ul className="mt-12 flex flex-col divide-y divide-line border-t border-line">
-              {posts.map((post) => (
-                <li key={post.slug}>
+            <ul className="blog-divider mt-12 flex flex-col divide-y border-t">
+              {posts.map((post, i) => (
+                <li key={post.slug} className="blog-row">
                   <Link
                     href={`/blog/${post.slug}`}
-                    className="group flex flex-col gap-2 py-8 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6"
+                    className="flex gap-4 py-8 sm:gap-6"
                   >
-                    <div className="min-w-0">
-                      <p className="font-display text-xl font-bold uppercase tracking-[-0.02em] text-fg transition-colors group-hover:text-accent sm:text-2xl">
+                    <span className="hidden shrink-0 pt-1 font-mono text-[11px] text-fg-dim/50 sm:block sm:w-10">
+                      {String(i + 1).padStart(2, "0")}
+                      {" //"}
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-accent">
+                        {"[editorial] // "}
+                        {formatDateCompact(post.date)}
+                      </div>
+                      <p className="blog-row-title mt-2 max-w-[640px] font-display text-lg font-bold uppercase leading-tight tracking-[-0.03em] text-fg sm:text-xl">
                         {post.title}
                       </p>
-                      <p className="mt-2 max-w-xl text-sm leading-relaxed text-fg-dim">
+                      <p className="mt-2 max-w-[640px] text-sm leading-relaxed text-fg-dim">
                         {post.excerpt}
                       </p>
                     </div>
-                    <span className="shrink-0 font-mono text-[11px] uppercase tracking-[0.14em] text-fg-dim">
-                      {formatDate(post.date)}
+                    <span className="blog-row-arrow hidden shrink-0 self-center font-mono text-lg text-accent sm:block">
+                      →
                     </span>
                   </Link>
                 </li>
