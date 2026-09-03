@@ -334,21 +334,6 @@ body::before {
   );
 }
 
-/* Experiment: thinner needles on desktop too. */
-@media (min-width: 640px) {
-  .needle-path {
-    rx: calc(var(--bar-rx) * 0.6);
-  }
-}
-
-/* Experiment: on mobile, make each needle narrower (thinner, more
-   distinct spikes) rather than matching the slat rib's full width. */
-@media (max-width: 639px) {
-  .needle-path {
-    rx: calc(var(--bar-rx) * 0.5);
-  }
-}
-
 .hero-grain {
   position: absolute;
   inset: 0;

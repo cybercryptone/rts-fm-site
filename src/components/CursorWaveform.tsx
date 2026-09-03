@@ -3,6 +3,9 @@
 import { useEffect, useRef } from "react";
 import { EQ_BARS, EQ_VIEWBOX } from "@/lib/eq-bars";
 
+const DESKTOP_RX_SCALE = 0.6;
+const MOBILE_RX_SCALE = 0.5;
+
 const TOTAL_SLATS_MOBILE = 10;
 const TOTAL_SLATS_DESKTOP = 22;
 
@@ -95,6 +98,22 @@ export default function CursorWaveform() {
       edgeFade: edgeFadeFor(i),
     }));
 
+    // Needle thickness is set directly via the SVG rx attribute (not
+    // CSS `rx: calc(...)`) — CSS support for SVG geometry properties is
+    // inconsistent across browsers, and a silent failure there falls
+    // back to each bar's full un-thinned rx, which at this artwork's
+    // larger scale overlaps into one solid mass instead of distinct
+    // needles. Direct attribute writes work everywhere. Applied before
+    // the reduced-motion branch too, so those users still see thinned,
+    // distinct needles rather than the full-width fallback shape.
+    const applyResponsiveRx = () => {
+      const scale = window.innerWidth < 640 ? MOBILE_RX_SCALE : DESKTOP_RX_SCALE;
+      EQ_BARS.forEach((b, i) => {
+        barRefs.current[i]?.setAttribute("rx", String(b.rx * scale));
+      });
+    };
+    applyResponsiveRx();
+
     const applyStatic = () => {
       bars.forEach((bar, i) => {
         const el = barRefs.current[i];
@@ -107,7 +126,8 @@ export default function CursorWaveform() {
 
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       applyStatic();
-      return;
+      window.addEventListener("resize", applyResponsiveRx);
+      return () => window.removeEventListener("resize", applyResponsiveRx);
     }
 
     let rect = root.getBoundingClientRect();
@@ -150,9 +170,11 @@ export default function CursorWaveform() {
       rect = root.getBoundingClientRect();
       computeBarCenters();
       computeSlatCenters();
+      applyResponsiveRx();
     };
     computeBarCenters();
     computeSlatCenters();
+    applyResponsiveRx();
 
     // Reactive slat caustics: each slat picks up the highlight of the
     // nearest needle beneath it, brightening when that needle surges —
@@ -383,7 +405,6 @@ export default function CursorWaveform() {
               ry={b.ry}
               fill="url(#spike-grad)"
               className="needle-path"
-              style={{ "--bar-rx": b.rx } as React.CSSProperties}
             />
           ))}
         </g>
