@@ -58,7 +58,7 @@ export default function Hero() {
 
       {/* Studio HUD — channel/format readout top-left, geo + live UTC
           clock top-right, vertical dB scale beside the equalizer */}
-      <div className="absolute left-6 top-24 hidden items-start gap-5 sm:flex sm:left-10">
+      <div className="absolute left-6 top-[112px] hidden items-start gap-5 sm:flex sm:left-10">
         <span className="hud-reticle">+</span>
         <div className="hud-meta">
           <span>CH-01 // BROADCAST</span>
@@ -66,7 +66,7 @@ export default function Hero() {
         </div>
       </div>
 
-      <div className="absolute right-6 top-24 hidden items-start gap-5 sm:flex sm:right-10">
+      <div className="absolute right-6 top-[112px] hidden items-start gap-5 sm:flex sm:right-10">
         <div className="hud-meta text-right">
           <span>LAT. 55.7558° N</span>
           <HudClock />
@@ -87,7 +87,7 @@ export default function Hero() {
 
       <div className="relative z-10 mx-auto flex w-full max-w-[1400px] flex-1 flex-col justify-center px-6 sm:px-10">
         <div className="flex items-baseline gap-3 font-mono text-xs uppercase tracking-[0.2em] text-fg-dim">
-          <span className="h-1.5 w-1.5 translate-x-[6px] rounded-full bg-accent" />
+          <span className="h-1.5 w-1.5 translate-x-[11px] rounded-full bg-accent" />
           est. {SITE.founded}
         </div>
 
@@ -129,7 +129,7 @@ export default function Hero() {
       </div>
 
       <div
-        className="relative z-10 mx-auto mb-5 flex w-full max-w-[1400px] items-end justify-between px-6 sm:mb-0 sm:px-10"
+        className="relative z-10 mx-auto mb-5 flex w-full max-w-[1400px] items-end justify-between px-6 sm:px-10"
         style={{ paddingBottom: "calc(64px + env(safe-area-inset-bottom))" }}
       >
         <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-fg-dim">

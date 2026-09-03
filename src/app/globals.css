@@ -305,6 +305,40 @@ body::before {
   transform-box: fill-box;
   transform-origin: center;
   will-change: transform, opacity;
+  /* Sharpen the taper toward each tip: an ellipse's "shoulders" stay
+     wide for a while before curving in, which reads as blunt at needle
+     scale. Clipping with an octagon pulled in at the 15%/85% marks (any
+     point strictly inside the ellipse's own bounding rhombus is clipped
+     away, since the ellipse fully contains that rhombus) carves the
+     round shoulders into a straighter, more acute taper while keeping
+     a touch of curvature — a full diamond read as too graphic/harsh. */
+  clip-path: polygon(
+    50% 0%,
+    78% 15%,
+    100% 50%,
+    78% 85%,
+    50% 100%,
+    22% 85%,
+    0% 50%,
+    22% 15%
+  );
+  -webkit-clip-path: polygon(
+    50% 0%,
+    78% 15%,
+    100% 50%,
+    78% 85%,
+    50% 100%,
+    22% 85%,
+    0% 50%,
+    22% 15%
+  );
+}
+
+/* Experiment: thinner needles on desktop too. */
+@media (min-width: 640px) {
+  .needle-path {
+    rx: calc(var(--bar-rx) * 0.6);
+  }
 }
 
 /* Experiment: on mobile, make each needle narrower (thinner, more

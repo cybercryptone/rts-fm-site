@@ -6,9 +6,20 @@ import { EQ_BARS, EQ_VIEWBOX } from "@/lib/eq-bars";
 const TOTAL_SLATS_MOBILE = 10;
 const TOTAL_SLATS_DESKTOP = 22;
 
-const IDLE_AMPLITUDE = 0.1;
+const IDLE_AMPLITUDE = 0.22;
 const MOBILE_IDLE_AMPLITUDE = 0.32;
 const SURGE_MAX = 0.35;
+
+// Keep the center needles permanently taller than their neighbors — a
+// persistent peak rather than something idle phase drift could wash
+// out. Picked as the two bars with the largest base geometry (indices
+// 8 and 9, ry 892/932 in EQ_BARS) so the boost needed for a guaranteed
+// margin against every other bar's own idle range stays reasonable —
+// e.g. index 10 (ry 784) sits close enough to neighbors like index 11
+// (ry 807) that boosting it wouldn't reliably clear them at all idle
+// phases.
+const CENTER_BOOST_INDICES = [8, 9];
+const CENTER_BOOST = 1.17;
 
 // Phosphor persistence — fast cursor flings spawn a lingering amber trail,
 // mimicking analog radar/studio-monitor decay.
@@ -88,7 +99,8 @@ export default function CursorWaveform() {
       bars.forEach((bar, i) => {
         const el = barRefs.current[i];
         if (!el) return;
-        el.style.transform = "scaleY(1)";
+        const scale = CENTER_BOOST_INDICES.includes(i) ? CENTER_BOOST : 1;
+        el.style.transform = `scaleY(${scale})`;
         el.style.opacity = (0.95 * bar.edgeFade).toFixed(3);
       });
     };
@@ -271,6 +283,10 @@ export default function CursorWaveform() {
           bar.target = Math.max(0.75, 1 + idle);
         }
 
+        if (CENTER_BOOST_INDICES.includes(i)) {
+          bar.target *= CENTER_BOOST;
+        }
+
         bar.current += (bar.target - bar.current) * 0.09;
 
         if (el) {
@@ -321,7 +337,7 @@ export default function CursorWaveform() {
              cursor-reactive instead of the static CSS pulse */}
       <svg
         viewBox={`0 -650 ${EQ_VIEWBOX.w} ${EQ_VIEWBOX.h + 650}`}
-        className="pointer-events-none absolute left-1/2 top-1/2 z-0 w-[94vw] max-w-none -translate-x-1/2 -translate-y-[62.92%] overflow-visible opacity-45 sm:left-auto sm:right-[max(5vw,calc((100vw_-_1400px)/2_+_150px))] sm:top-1/2 sm:w-[435px] sm:max-w-[calc(76vh*1685/2515)] sm:translate-x-0 sm:opacity-90 md:w-[538px] lg:w-[642px] xl:w-[725px] sm:[mask-image:linear-gradient(to_bottom,black_0%,black_78%,rgba(0,0,0,0.3)_98%)] sm:[-webkit-mask-image:linear-gradient(to_bottom,black_0%,black_78%,rgba(0,0,0,0.3)_98%)]"
+        className="pointer-events-none absolute left-1/2 top-1/2 z-0 w-[94vw] max-w-none -translate-x-1/2 -translate-y-[62.92%] overflow-visible opacity-45 sm:left-auto sm:right-[max(5vw,calc((100vw_-_1400px)/2_+_150px))] sm:top-1/2 sm:w-[566px] sm:max-w-[calc(98.8vh*1685/2515)] sm:translate-x-0 sm:opacity-90 md:w-[699px] lg:w-[835px] xl:w-[943px] sm:[mask-image:linear-gradient(to_bottom,black_0%,black_78%,rgba(0,0,0,0.3)_98%)] sm:[-webkit-mask-image:linear-gradient(to_bottom,black_0%,black_78%,rgba(0,0,0,0.3)_98%)]"
       >
         <defs>
           {/* horizontal "hot core" — a real fluted-glass rib amplifies a
