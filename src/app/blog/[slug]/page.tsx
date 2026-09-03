@@ -22,7 +22,7 @@ export async function generateMetadata({
   const post = getPostBySlug(slug);
   if (!post) return {};
   return {
-    title: post.title,
+    title: { absolute: post.title },
     description: post.excerpt,
     alternates: { canonical: `/blog/${slug}` },
     openGraph: {
@@ -30,6 +30,11 @@ export async function generateMetadata({
       title: post.title,
       description: post.excerpt,
       publishedTime: post.date,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.excerpt,
     },
   };
 }

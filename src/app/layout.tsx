@@ -97,15 +97,22 @@ export const metadata: Metadata = {
 
 const GA_MEASUREMENT_ID = "G-0DY7WHB8BH";
 
-const jsonLd = {
+const organizationJsonLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
   name: SITE.name,
   url: SITE.url,
-  logo: `${SITE.url}/brand/rts-icon.png`,
+  logo: `${SITE.url}/icon.png`,
   description: SITE.description,
   foundingDate: String(SITE.founded),
   sameAs: SOCIALS.map((s) => s.href),
+};
+
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: SITE.name,
+  url: SITE.url,
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -117,7 +124,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col bg-bg text-fg font-sans">
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
