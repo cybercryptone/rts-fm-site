@@ -1,4 +1,5 @@
 import CursorWaveform from "./CursorWaveform";
+import HudClock from "./HudClock";
 import { SITE, STATS } from "@/lib/data";
 
 export default function Hero() {
@@ -11,6 +12,8 @@ export default function Hero() {
           "linear-gradient(180deg, rgba(216,218,222,0.85) 0%, rgba(216,218,222,0.45) 16%, rgba(216,218,222,0) 40%), radial-gradient(46% 52% at 40% 50%, rgba(224,74,63,0.4) 0%, rgba(224,74,63,0.15) 42%, rgba(224,74,63,0) 76%), radial-gradient(65% 60% at 80% 6%, rgba(255,255,255,0.4) 0%, transparent 60%), radial-gradient(55% 60% at 6% 2%, rgba(110,114,121,0.5) 0%, transparent 65%), linear-gradient(180deg, var(--ink) 0%, var(--bg) 100%)",
       }}
     >
+      <div aria-hidden="true" className="hero-brushed-metal" />
+
       <div
         aria-hidden="true"
         className="hero-glow"
@@ -53,14 +56,38 @@ export default function Hero() {
 
       <CursorWaveform />
 
-      <span className="crosshair left-6 top-24 hidden sm:block sm:left-10" />
-      <span className="crosshair right-6 top-24 hidden sm:block sm:right-10" />
+      {/* Studio HUD — channel/format readout top-left, geo + live UTC
+          clock top-right, vertical dB scale beside the equalizer */}
+      <div className="absolute left-6 top-24 hidden items-start gap-5 sm:flex sm:left-10">
+        <span className="hud-reticle">+</span>
+        <div className="hud-meta">
+          <span>CH-01 // BROADCAST</span>
+          <span>48.0 kHz / 24-BIT LINEAR PCM</span>
+        </div>
+      </div>
+
+      <div className="absolute right-6 top-24 hidden items-start gap-5 sm:flex sm:right-10">
+        <div className="hud-meta text-right">
+          <span>LAT. 55.7558° N</span>
+          <HudClock />
+        </div>
+        <span className="hud-reticle hud-reticle-pulse">+</span>
+      </div>
+
+      <div className="hud-axis hidden sm:flex">
+        <span>+6 dB —</span>
+        <span>0 dB —</span>
+        <span>−12 dB —</span>
+        <span>−24 dB —</span>
+        <span>−∞ dB —</span>
+      </div>
+
       <span className="crosshair bottom-16 left-6 hidden sm:block sm:left-10" />
       <span className="crosshair bottom-16 right-6 hidden sm:block sm:right-10" />
 
       <div className="relative z-10 mx-auto flex w-full max-w-[1400px] flex-1 flex-col justify-center px-6 sm:px-10">
         <div className="flex items-baseline gap-3 font-mono text-xs uppercase tracking-[0.2em] text-fg-dim">
-          <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+          <span className="h-1.5 w-1.5 translate-x-[6px] rounded-full bg-accent" />
           est. {SITE.founded}
         </div>
 
@@ -88,10 +115,12 @@ export default function Hero() {
               "linear-gradient(to right, black 80%, transparent 100%)",
           }}
         >
-          {STATS.map((s) => (
+          {STATS.map((s, i) => (
             <span
               key={s}
-              className="shrink-0 snap-start whitespace-nowrap rounded-full border border-line px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-fg-dim"
+              className={`shrink-0 snap-start whitespace-nowrap rounded-full border px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-fg-dim ${
+                i >= STATS.length - 2 ? "pill-warm" : "border-line"
+              }`}
             >
               {s}
             </span>

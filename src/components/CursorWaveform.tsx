@@ -9,6 +9,24 @@ const TOTAL_SLATS_DESKTOP = 22;
 const IDLE_AMPLITUDE = 0.1;
 const SURGE_MAX = 0.35;
 
+// Phosphor persistence — fast cursor flings spawn a lingering amber trail,
+// mimicking analog radar/studio-monitor decay.
+//
+// Velocity is measured once per rAF tick against the ACTUAL elapsed time
+// between ticks (not an assumed 16.7ms), which handles two sources of
+// noise: irregular raw mousemove timing, and dropped/delayed frames under
+// load. But a SINGLE frame's velocity sample still isn't trustworthy on
+// its own — pointer-position interpolation, event coalescing, or one
+// unlucky frame can each produce an isolated spike unrelated to how fast
+// the cursor is actually moving. So the trail only engages once velocity
+// has stayed above threshold for several CONSECUTIVE frames — noise is
+// never sustained across multiple frames, but a genuine fast flick is.
+const VELOCITY_SHEAR_MIN = 2.5; // px/ms — well above ordinary hover pace
+const TRAIL_VELOCITY_MIN = 3.2; // px/ms
+const MIN_CONSECUTIVE_FAST_FRAMES = 4;
+const TRAIL_THROTTLE_MS = 45;
+const TRAIL_LIFETIME_MS = 520;
+
 // The rightmost few bars should dissolve into the ambient background
 // instead of just ending — a per-bar opacity multiplier ramping toward 0
 // as bars approach the true right edge, so the artwork trails off rather
@@ -40,16 +58,19 @@ const SLAT_MASK_STYLE: React.CSSProperties = {
 //   paddedH = EQ_VIEWBOX.h + TOP_PAD = 2515
 //   padFraction = TOP_PAD / paddedH = 25.85%
 //   artwork center = (EQ_VIEWBOX.h/2 + TOP_PAD) / paddedH = 62.92% down the
-//     padded box (was 50% pre-padding) — sm:-translate-y-[62.92%] below
-//     compensates so the artwork still renders in the same screen position.
+//     padded box (was 50% pre-padding) — the -translate-y-[62.92%] below
+//     compensates (both breakpoints: mobile is vertically centered same as
+//     desktop) so the artwork renders centered rather than the padded box.
 //   mask stops remapped: old 55%/92% (of the un-padded artwork) become
-//     padFraction + old% * (100 - padFraction) = 66.63% / 94.07%.
-// Bottom is untouched (viewBox maxY unchanged), so mobile — bottom-anchored,
-// no mask — needs no compensating changes at all.
+//     padFraction + old% * (100 - padFraction) = 66.63% / 94.07% (desktop
+//     mask only — mobile has no mask-image).
 
 export default function CursorWaveform() {
   const rootRef = useRef<HTMLDivElement>(null);
   const barRefs = useRef<(SVGEllipseElement | null)[]>([]);
+  const slatRefsMobile = useRef<(HTMLDivElement | null)[]>([]);
+  const slatRefsDesktop = useRef<(HTMLDivElement | null)[]>([]);
+  const trailContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const root = rootRef.current;
@@ -86,6 +107,8 @@ export default function CursorWaveform() {
     // (interleaved with the transform/opacity writes for other bars)
     // forces a synchronous layout flush on every read, 19 times a frame.
     let barCenters: { x: number; y: number }[] = [];
+    let slatCentersMobile: { x: number; y: number }[] = [];
+    let slatCentersDesktop: { x: number; y: number }[] = [];
 
     const computeBarCenters = () => {
       const svg = barRefs.current[0]?.ownerSVGElement;
@@ -99,11 +122,66 @@ export default function CursorWaveform() {
       }));
     };
 
+    const computeSlatCenters = () => {
+      const toCenters = (refs: (HTMLDivElement | null)[]) =>
+        refs.map((el) => {
+          if (!el) return { x: 0, y: 0 };
+          const r = el.getBoundingClientRect();
+          return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+        });
+      slatCentersMobile = toCenters(slatRefsMobile.current);
+      slatCentersDesktop = toCenters(slatRefsDesktop.current);
+    };
+
     const updateRect = () => {
       rect = root.getBoundingClientRect();
       computeBarCenters();
+      computeSlatCenters();
     };
     computeBarCenters();
+    computeSlatCenters();
+
+    // Reactive slat caustics: each slat picks up the highlight of the
+    // nearest needle beneath it, brightening when that needle surges —
+    // an optical caustic reflection rather than a flat rib.
+    const applySlatGlow = (
+      refs: (HTMLDivElement | null)[],
+      centers: { x: number; y: number }[],
+    ) => {
+      refs.forEach((el, si) => {
+        const c = centers[si];
+        if (!el || !c || !barCenters.length) return;
+        let nearestIdx = 0;
+        let best = Infinity;
+        for (let bi = 0; bi < barCenters.length; bi++) {
+          const d = Math.abs(barCenters[bi].x - c.x);
+          if (d < best) {
+            best = d;
+            nearestIdx = bi;
+          }
+        }
+        const glow = 1 + Math.max(0, bars[nearestIdx].current - 1.05) * 2.2;
+        el.style.filter = `brightness(${Math.min(1.5, glow).toFixed(3)})`;
+      });
+    };
+
+    let prevMouseX = mouseX;
+    let prevMouseY = mouseY;
+    let prevHovering = false;
+    let lastFrameT = 0;
+    let lastTrailT = 0;
+    let fastFrameCount = 0;
+
+    const spawnTrail = (clientX: number, clientY: number) => {
+      const container = trailContainerRef.current;
+      if (!container) return;
+      const dot = document.createElement("div");
+      dot.className = "phosphor-trail";
+      dot.style.left = `${clientX - rect.left}px`;
+      dot.style.top = `${clientY - rect.top}px`;
+      container.appendChild(dot);
+      window.setTimeout(() => dot.remove(), TRAIL_LIFETIME_MS);
+    };
 
     const handleMove = (e: MouseEvent) => {
       if (
@@ -136,6 +214,42 @@ export default function CursorWaveform() {
       const maxDistX = window.innerWidth * 0.24;
       const maxDistY = window.innerHeight * 0.7;
 
+      // Velocity is sampled once per rAF tick (immune to raw mousemove
+      // event-timing noise) against the REAL elapsed time since the last
+      // tick (immune to dropped/delayed frames) — see the constants'
+      // comment above for why both matter.
+      const now = performance.now();
+      if (hovering && prevHovering && lastFrameT) {
+        const dt = Math.max(4, now - lastFrameT);
+        const dx = mouseX - prevMouseX;
+        const dy = mouseY - prevMouseY;
+        const velocity = Math.hypot(dx, dy) / dt; // px/ms
+
+        if (velocity > VELOCITY_SHEAR_MIN) {
+          fastFrameCount++;
+        } else {
+          fastFrameCount = 0;
+        }
+
+        // Only a sustained fast gesture (several frames in a row above
+        // threshold) spawns a trail — a lone spike, however large, is
+        // treated as noise and ignored.
+        if (
+          fastFrameCount >= MIN_CONSECUTIVE_FAST_FRAMES &&
+          velocity > TRAIL_VELOCITY_MIN &&
+          now - lastTrailT > TRAIL_THROTTLE_MS
+        ) {
+          spawnTrail(mouseX, mouseY);
+          lastTrailT = now;
+        }
+      } else {
+        fastFrameCount = 0;
+      }
+      prevMouseX = mouseX;
+      prevMouseY = mouseY;
+      prevHovering = hovering;
+      lastFrameT = now;
+
       bars.forEach((bar, i) => {
         const idle = Math.sin(time + bar.phase) * IDLE_AMPLITUDE;
         const el = barRefs.current[i];
@@ -162,6 +276,9 @@ export default function CursorWaveform() {
           el.style.opacity = opacity.toFixed(3);
         }
       });
+
+      applySlatGlow(slatRefsMobile.current, slatCentersMobile);
+      applySlatGlow(slatRefsDesktop.current, slatCentersDesktop);
 
       rafId = requestAnimationFrame(render);
     };
@@ -201,7 +318,7 @@ export default function CursorWaveform() {
              cursor-reactive instead of the static CSS pulse */}
       <svg
         viewBox={`0 -650 ${EQ_VIEWBOX.w} ${EQ_VIEWBOX.h + 650}`}
-        className="pointer-events-none absolute bottom-16 left-1/2 z-0 w-[126vw] max-w-none -translate-x-1/2 overflow-visible opacity-30 sm:bottom-auto sm:left-auto sm:right-[max(5vw,calc((100vw_-_1400px)/2_+_150px))] sm:top-1/2 sm:w-[435px] sm:max-w-[calc(76vh*1685/2515)] sm:translate-x-0 sm:-translate-y-[62.92%] sm:opacity-90 md:w-[538px] lg:w-[642px] xl:w-[725px] sm:[mask-image:linear-gradient(to_bottom,black_0%,black_78%,rgba(0,0,0,0.3)_98%)] sm:[-webkit-mask-image:linear-gradient(to_bottom,black_0%,black_78%,rgba(0,0,0,0.3)_98%)]"
+        className="pointer-events-none absolute left-1/2 top-1/2 z-0 w-[94vw] max-w-none -translate-x-1/2 -translate-y-[62.92%] overflow-visible opacity-45 sm:left-auto sm:right-[max(5vw,calc((100vw_-_1400px)/2_+_150px))] sm:top-1/2 sm:w-[435px] sm:max-w-[calc(76vh*1685/2515)] sm:translate-x-0 sm:opacity-90 md:w-[538px] lg:w-[642px] xl:w-[725px] sm:[mask-image:linear-gradient(to_bottom,black_0%,black_78%,rgba(0,0,0,0.3)_98%)] sm:[-webkit-mask-image:linear-gradient(to_bottom,black_0%,black_78%,rgba(0,0,0,0.3)_98%)]"
       >
         <defs>
           {/* horizontal "hot core" — a real fluted-glass rib amplifies a
@@ -262,7 +379,13 @@ export default function CursorWaveform() {
         style={SLAT_MASK_STYLE}
       >
         {Array.from({ length: TOTAL_SLATS_MOBILE }).map((_, i) => (
-          <div key={i} className="waveform-slat" />
+          <div
+            key={i}
+            ref={(el) => {
+              slatRefsMobile.current[i] = el;
+            }}
+            className="waveform-slat"
+          />
         ))}
       </div>
       <div
@@ -270,9 +393,22 @@ export default function CursorWaveform() {
         style={SLAT_MASK_STYLE}
       >
         {Array.from({ length: TOTAL_SLATS_DESKTOP }).map((_, i) => (
-          <div key={i} className="waveform-slat" />
+          <div
+            key={i}
+            ref={(el) => {
+              slatRefsDesktop.current[i] = el;
+            }}
+            className="waveform-slat"
+          />
         ))}
       </div>
+
+      {/* phosphor trail dots spawned on fast cursor movement */}
+      <div
+        ref={trailContainerRef}
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-[3]"
+      />
 
       {/* 3. film grain — concentrated near the top, fading toward the middle */}
       <div className="hero-grain z-20" />

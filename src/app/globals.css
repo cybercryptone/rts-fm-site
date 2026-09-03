@@ -113,6 +113,143 @@ body::before {
   will-change: transform;
 }
 
+/* CNC-milled aluminum chassis — a near-invisible brushed texture under
+   the grain layer, sells the background as machined metal rather than
+   a flat gradient. Scoped to the hero section (not viewport-fixed), so
+   it doesn't bleed into sections below on scroll. */
+.hero-brushed-metal {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(
+      ellipse at 50% 20%,
+      rgba(255, 255, 255, 0.12) 0%,
+      rgba(0, 0, 0, 0.02) 80%
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.02) 0px,
+      rgba(255, 255, 255, 0.02) 1px,
+      rgba(0, 0, 0, 0.03) 1px,
+      rgba(0, 0, 0, 0.03) 2px
+    );
+  mix-blend-mode: overlay;
+}
+
+/* Studio broadcast HUD — reticles, channel/format readout, geo + live
+   clock, vertical dB scale. Purely typographic/decorative, positioned
+   via Tailwind utilities on the elements in Hero.tsx. */
+.hud-reticle {
+  font-size: 1.05rem;
+  line-height: 0.8;
+  color: rgba(20, 22, 26, 0.6);
+  font-weight: 300;
+  user-select: none;
+}
+
+.hud-reticle-pulse {
+  animation: crosshair-pulse 1s ease-in-out infinite;
+}
+
+@keyframes crosshair-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+.crosshair-pulse::before,
+.crosshair-pulse::after {
+  animation: crosshair-pulse 1s ease-in-out infinite;
+}
+
+.hud-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(20, 22, 26, 0.48);
+}
+
+.hud-live-clock {
+  color: rgba(20, 22, 26, 0.7);
+  font-weight: 600;
+  animation: hud-clock-pulse 1s steps(1) infinite;
+}
+
+@keyframes hud-clock-pulse {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0.55;
+  }
+}
+
+.hud-axis {
+  position: absolute;
+  right: 1.5vw;
+  top: 50%;
+  transform: translateY(-50%);
+  flex-direction: column;
+  justify-content: space-between;
+  height: 40vh;
+  text-align: right;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  color: rgba(20, 22, 26, 0.32);
+}
+
+/* Ambient light bleed — pills nearer the warm field pick up a faint
+   amber border and a soft amber glow pooling beneath them. */
+.pill-warm {
+  border-color: rgba(255, 100, 30, 0.3);
+  box-shadow: 0 6px 18px -8px rgba(255, 90, 0, 0.35);
+}
+
+/* Phosphor persistence — a lingering amber trail spawned on fast
+   cursor movement across the waveform, dissolving over ~0.5s like
+   analog radar/studio-monitor decay. */
+.phosphor-trail {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  margin-left: -30px;
+  margin-top: -30px;
+  border-radius: 9999px;
+  background: radial-gradient(
+    closest-side,
+    rgba(255, 140, 50, 0.45) 0%,
+    rgba(255, 90, 0, 0.18) 45%,
+    transparent 75%
+  );
+  pointer-events: none;
+  filter: blur(2px);
+  animation: phosphor-fade 0.5s ease-out forwards;
+}
+
+@keyframes phosphor-fade {
+  0% {
+    opacity: 0.55;
+    transform: scale(0.6);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.6);
+  }
+}
+
 .waveform-slat {
   flex: 1;
   height: 100%;
