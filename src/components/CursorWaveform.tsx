@@ -19,7 +19,7 @@ const SURGE_MAX = 0.35;
 // (ry 807) that boosting it wouldn't reliably clear them at all idle
 // phases.
 const CENTER_BOOST_INDICES = [8, 9];
-const CENTER_BOOST = 1.17;
+const CENTER_BOOST = 1.1;
 
 // Phosphor persistence — fast cursor flings spawn a lingering amber trail,
 // mimicking analog radar/studio-monitor decay.
