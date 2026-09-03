@@ -321,13 +321,33 @@ export default function CursorWaveform() {
       applySlatGlow(slatRefsMobile.current, slatCentersMobile);
       applySlatGlow(slatRefsDesktop.current, slatCentersDesktop);
 
-      rafId = requestAnimationFrame(render);
+      if (isVisible) {
+        rafId = requestAnimationFrame(render);
+      } else {
+        rafId = 0;
+      }
     };
+
+    // Pause the rAF loop entirely while the hero is scrolled out of view —
+    // it's a continuous per-frame animation across ~50 elements, no reason
+    // to keep paying for it once the user has scrolled past.
+    let isVisible = true;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+        if (isVisible && !rafId) {
+          rafId = requestAnimationFrame(render);
+        }
+      },
+      { threshold: 0 },
+    );
+    io.observe(root);
 
     rafId = requestAnimationFrame(render);
 
     return () => {
       cancelAnimationFrame(rafId);
+      io.disconnect();
       window.removeEventListener("mousemove", handleMove);
       window.removeEventListener("resize", updateRect);
       root.removeEventListener("mouseleave", handleLeave);
