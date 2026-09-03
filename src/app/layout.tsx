@@ -90,6 +90,7 @@ export const metadata: Metadata = {
     apple: "/apple-icon.png",
   },
   verification: {
+    google: "ResQCGLqgackQ2t2SppMi-vIY840viZwxbVgDujcD84",
     yandex: "6ba88ab1ec73ad70",
   },
 };
