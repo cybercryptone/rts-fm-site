@@ -218,6 +218,29 @@ body::before {
   box-shadow: 0 6px 18px -8px rgba(255, 90, 0, 0.35);
 }
 
+/* Stat pills on narrow phones: the horizontal-scroll row was clipping
+   the last pills against the viewport edge. Switch to a fixed 2x2 grid
+   so all four are visible without scrolling. */
+@media (max-width: 480px) {
+  .stats-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    width: 100%;
+    overflow: visible;
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
+  .stat-pill {
+    display: flex;
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    padding: 0.5rem 0.4rem;
+  }
+}
+
 /* Phosphor persistence — a lingering amber trail spawned on fast
    cursor movement across the waveform, dissolving over ~0.5s like
    analog radar/studio-monitor decay. */

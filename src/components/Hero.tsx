@@ -96,7 +96,7 @@ export default function Hero() {
         </h1>
 
         <div className="mt-8 flex max-w-xl flex-col gap-4 sm:mt-10">
-          <p className="max-w-[240px] font-headline text-lg font-bold uppercase leading-tight tracking-[-0.02em] text-fg sm:max-w-none sm:text-2xl">
+          <p className="max-w-[240px] font-headline text-[16px] font-bold uppercase leading-tight tracking-[-0.02em] text-fg sm:max-w-none sm:text-2xl">
             {SITE.tagline}
           </p>
           <p className="text-sm leading-relaxed text-fg sm:text-base">
@@ -107,7 +107,7 @@ export default function Hero() {
         </div>
 
         <div
-          className="no-scrollbar mt-8 flex snap-x gap-2 overflow-x-auto overscroll-x-contain sm:mt-10 sm:flex-wrap sm:overflow-visible sm:[mask-image:none]"
+          className="stats-row no-scrollbar mt-8 flex snap-x gap-2 overflow-x-auto overscroll-x-contain sm:mt-10 sm:flex-wrap sm:overflow-visible sm:[mask-image:none]"
           style={{
             WebkitMaskImage:
               "linear-gradient(to right, black 80%, transparent 100%)",
@@ -118,7 +118,7 @@ export default function Hero() {
           {STATS.map((s, i) => (
             <span
               key={s}
-              className={`shrink-0 snap-start whitespace-nowrap rounded-full border px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-fg-dim ${
+              className={`stat-pill shrink-0 snap-start whitespace-nowrap rounded-full border px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-fg-dim ${
                 i >= STATS.length - 2 ? "pill-warm" : "border-line"
               }`}
             >
@@ -129,7 +129,7 @@ export default function Hero() {
       </div>
 
       <div
-        className="relative z-10 mx-auto flex w-full max-w-[1400px] items-end justify-between px-6 sm:px-10"
+        className="relative z-10 mx-auto mb-5 flex w-full max-w-[1400px] items-end justify-between px-6 sm:mb-0 sm:px-10"
         style={{ paddingBottom: "calc(64px + env(safe-area-inset-bottom))" }}
       >
         <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-fg-dim">
