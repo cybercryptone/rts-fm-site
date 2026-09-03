@@ -3,9 +3,60 @@
 import { usePlayer } from "@/lib/PlayerProvider";
 import { formatTime } from "@/lib/format";
 
+function SkipIcon({ direction }: { direction: "back" | "forward" }) {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+      <g transform={direction === "back" ? "matrix(-1 0 0 1 24 0)" : undefined}>
+        <path
+          d="M12 3A9 9 0 1 1 3 12"
+          stroke="currentColor"
+          strokeWidth="1.6"
+          strokeLinecap="round"
+        />
+        <polygon points="0,14 6,14 3,8" fill="currentColor" />
+      </g>
+      <text
+        x="12"
+        y="15.5"
+        textAnchor="middle"
+        fontSize="8"
+        fontWeight="700"
+        fill="currentColor"
+        fontFamily="var(--font-mono)"
+      >
+        30
+      </text>
+    </svg>
+  );
+}
+
+function SoundCloudIcon() {
+  return (
+    <svg width="20" height="15" viewBox="0 0 44 32" fill="currentColor">
+      <rect x="0" y="18" width="2.5" height="10" rx="1" />
+      <rect x="4" y="12" width="2.5" height="16" rx="1" />
+      <rect x="8" y="16" width="2.5" height="12" rx="1" />
+      <rect x="12" y="8" width="2.5" height="20" rx="1" />
+      <rect x="16" y="18" width="24" height="10" rx="5" />
+      <circle cx="22" cy="17" r="6" />
+      <circle cx="30" cy="13" r="8" />
+      <circle cx="37" cy="17" r="6" />
+    </svg>
+  );
+}
+
 export default function PlayerDock() {
-  const { episodes, loading, currentEpisode, isPlaying, currentTime, duration, togglePlay, next } =
-    usePlayer();
+  const {
+    episodes,
+    loading,
+    currentEpisode,
+    isPlaying,
+    currentTime,
+    duration,
+    togglePlay,
+    next,
+    skip,
+  } = usePlayer();
 
   const label = currentEpisode
     ? currentEpisode.title
@@ -19,6 +70,16 @@ export default function PlayerDock() {
       style={{ paddingBottom: "calc(0.75rem + env(safe-area-inset-bottom))" }}
     >
       <div className="glass-dark mx-auto flex max-w-[1400px] items-center gap-3 rounded-xl px-3 py-2.5 sm:gap-4 sm:px-5 sm:py-3">
+        <button
+          type="button"
+          onClick={() => skip(-30)}
+          disabled={!currentEpisode}
+          aria-label="Rewind 30 seconds"
+          className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-white/70 transition-colors hover:text-accent disabled:opacity-40"
+        >
+          <SkipIcon direction="back" />
+        </button>
+
         <button
           type="button"
           onClick={togglePlay}
@@ -36,6 +97,16 @@ export default function PlayerDock() {
               <path d="M0 0L10 5.5L0 11V0Z" />
             </svg>
           )}
+        </button>
+
+        <button
+          type="button"
+          onClick={() => skip(30)}
+          disabled={!currentEpisode}
+          aria-label="Forward 30 seconds"
+          className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-white/70 transition-colors hover:text-accent disabled:opacity-40"
+        >
+          <SkipIcon direction="forward" />
         </button>
 
         <div className="flex items-end gap-[2px]" aria-hidden="true">
@@ -59,6 +130,18 @@ export default function PlayerDock() {
         <span className="ml-auto hidden shrink-0 font-mono text-[11px] tabular-nums text-white/40 sm:block">
           {currentEpisode ? `${formatTime(currentTime)} / ${formatTime(duration)}` : "--:--"}
         </span>
+
+        {currentEpisode?.link && (
+          <a
+            href={currentEpisode.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Open this mix on SoundCloud"
+            className="ml-auto flex shrink-0 items-center justify-center text-white/70 transition-colors hover:text-accent sm:ml-0"
+          >
+            <SoundCloudIcon />
+          </a>
+        )}
 
         <button
           type="button"

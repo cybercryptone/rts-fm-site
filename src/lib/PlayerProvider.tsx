@@ -24,6 +24,7 @@ type PlayerContextValue = {
   next: () => void;
   prev: () => void;
   seekTo: (fraction: number) => void;
+  skip: (seconds: number) => void;
 };
 
 const PlayerContext = createContext<PlayerContextValue | null>(null);
@@ -101,6 +102,13 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
     audio.currentTime = fraction * audio.duration;
   }, []);
 
+  const skip = useCallback((seconds: number) => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    const max = audio.duration || Infinity;
+    audio.currentTime = Math.min(Math.max(0, audio.currentTime + seconds), max);
+  }, []);
+
   return (
     <PlayerContext.Provider
       value={{
@@ -117,6 +125,7 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
         next,
         prev,
         seekTo,
+        skip,
       }}
     >
       {children}
