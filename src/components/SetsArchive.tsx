@@ -25,37 +25,38 @@ export default function SetsArchive() {
             href={youtubeWatchUrl(s)}
             target="_blank"
             rel="noopener noreferrer"
-            className="group relative aspect-video overflow-hidden rounded-xl border border-line bg-bg-elevated transition-colors hover:border-accent/60"
+            className="group overflow-hidden rounded-xl border border-line bg-bg-elevated transition-colors hover:border-accent/60"
           >
-            <Image
-              src={youtubeThumbnail(s)}
-              alt={`${s.artist} — ${s.context}, ${s.date}`}
-              fill
-              sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-              className="object-cover text-[0px] transition-transform duration-500 group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/10 to-black/10" />
+            <div className="relative aspect-video overflow-hidden">
+              <Image
+                src={youtubeThumbnail(s)}
+                alt={`${s.artist} — ${s.context}, ${s.date}`}
+                fill
+                sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                className="object-cover text-[0px] transition-transform duration-500 group-hover:scale-105"
+              />
 
-            <span className="absolute left-2 top-2 rounded-full bg-black/50 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.1em] text-white/90 backdrop-blur-sm">
-              {s.views} views
-            </span>
-            <span className="absolute bottom-2 right-2 rounded bg-black/70 px-1.5 py-0.5 font-mono text-[10px] text-white">
-              {s.duration}
-            </span>
+              <span className="absolute left-2 top-2 rounded-full bg-black/50 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.1em] text-white/90 backdrop-blur-sm">
+                {s.views} views
+              </span>
+              <span className="absolute bottom-2 right-2 rounded bg-black/70 px-1.5 py-0.5 font-mono text-[10px] text-white">
+                {s.duration}
+              </span>
 
-            <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity group-hover:opacity-100">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-black/60 backdrop-blur-sm">
-                <svg width="14" height="16" viewBox="0 0 14 16" fill="white">
-                  <path d="M0 0L14 8L0 16V0Z" />
-                </svg>
+              <div className="absolute inset-0 flex items-center justify-center bg-ink/0 opacity-0 transition-opacity group-hover:bg-ink/20 group-hover:opacity-100">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-black/60 backdrop-blur-sm">
+                  <svg width="14" height="16" viewBox="0 0 14 16" fill="white">
+                    <path d="M0 0L14 8L0 16V0Z" />
+                  </svg>
+                </div>
               </div>
             </div>
 
-            <div className="absolute inset-x-0 bottom-0 px-3 pb-2 pt-8">
-              <p className="font-display text-sm font-bold uppercase leading-tight tracking-[-0.01em] text-white">
+            <div className="px-3 py-2.5">
+              <p className="font-display text-sm font-bold uppercase leading-tight tracking-[-0.01em] text-fg">
                 {s.artist}
               </p>
-              <p className="mt-0.5 truncate font-mono text-[10px] uppercase tracking-[0.08em] text-white/70">
+              <p className="mt-1 truncate font-mono text-[10px] uppercase tracking-[0.08em] text-fg-dim">
                 {s.context} · {s.date}
               </p>
             </div>
