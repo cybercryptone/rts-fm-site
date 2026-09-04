@@ -116,11 +116,23 @@ export default function CursorWaveform() {
 
     const applyStatic = () => {
       bars.forEach((bar, i) => {
+        const scale = CENTER_BOOST_INDICES.includes(i) ? CENTER_BOOST : 1;
+        // Also reset the interpolation state, not just the DOM — otherwise
+        // one more rAF frame already in flight when this runs would ease
+        // from the old (possibly mid-surge) value back toward baseline
+        // instead of landing on it immediately.
+        bar.current = scale;
+        bar.target = scale;
         const el = barRefs.current[i];
         if (!el) return;
-        const scale = CENTER_BOOST_INDICES.includes(i) ? CENTER_BOOST : 1;
         el.style.transform = `scaleY(${scale})`;
         el.style.opacity = (0.95 * bar.edgeFade).toFixed(3);
+      });
+    };
+
+    const resetSlatGlow = () => {
+      [...slatRefsMobile.current, ...slatRefsDesktop.current].forEach((el) => {
+        if (el) el.style.filter = "brightness(1)";
       });
     };
 
@@ -348,6 +360,13 @@ export default function CursorWaveform() {
           if (!rafId) rafId = requestAnimationFrame(render);
         } else if (hasBeenVisible) {
           isVisible = false;
+          // Snap to the calm resting look instead of freezing on whatever
+          // frame happened to be current — otherwise scrolling away mid-surge
+          // (or mid-peak of the idle sine wave) leaves the artwork paused in
+          // an oversaturated state that's still visible the moment the hero
+          // scrolls back into view, until the next rAF tick corrects it.
+          applyStatic();
+          resetSlatGlow();
         }
       },
       { threshold: 0 },
