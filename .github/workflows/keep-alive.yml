@@ -12,7 +12,10 @@ jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping rts-fm-site.onrender.com
+      # Ping the actual custom domain, not the bare onrender.com one — the
+      # latter returns 503 once a custom domain is attached (confirmed by
+      # hand), so it was never reliably reaching or waking the live service.
+      - name: Ping rts.fm
         run: |
-          curl -sS --max-time 90 -o /dev/null -w "HTTP %{http_code} in %{time_total}s\n" \
-            https://rts-fm-site.onrender.com
+          curl -sS --fail --max-time 90 -o /dev/null -w "HTTP %{http_code} in %{time_total}s\n" \
+            https://rts.fm
