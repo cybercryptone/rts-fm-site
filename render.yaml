@@ -14,3 +14,23 @@ services:
         value: production
       - key: NEXT_PUBLIC_SITE_URL
         value: https://rts.fm
+
+  # Keeps the free-tier web service above from spinning down after 15 min
+  # idle (a cold instance is slow enough that Google's crawler has timed
+  # out fetching robots.txt and treated the whole site as disallowed).
+  # Hits the real custom domain, not the bare onrender.com one — that
+  # returns 503 once a custom domain is attached and never reliably
+  # reaches or wakes the live instance.
+  - type: cron
+    name: rts-fm-keep-alive
+    runtime: node
+    plan: free
+    region: oregon
+    branch: main
+    schedule: "*/10 * * * *"
+    buildCommand: "true"
+    startCommand: >-
+      node -e "fetch('https://rts.fm').then(r => { console.log('HTTP', r.status); if (!r.ok) process.exit(1); }).catch(e => { console.error(e); process.exit(1); })"
+    envVars:
+      - key: NODE_VERSION
+        value: 22.22.0
