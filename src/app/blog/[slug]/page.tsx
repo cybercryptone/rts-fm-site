@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Children, isValidElement } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
@@ -39,6 +40,31 @@ export async function generateMetadata({
   };
 }
 
+// Markdown always wraps a standalone `![alt](src)` in its own paragraph, but
+// figure/figcaption are block content and invalid inside a <p> (silent
+// hydration mismatch, not just a lint nit). `p` below unwraps to just the
+// figure when that's effectively its only content, so no <figure> ever ends
+// up nested inside a <p> in the rendered HTML.
+function MdxFigureImg({ alt, ...props }: React.ComponentProps<"img">) {
+  return (
+    /* eslint-disable-next-line @next/next/no-img-element -- external, CC-licensed editorial images; not worth Next/Image's remote-domain allowlisting for one-off blog credits */
+    <img alt={alt} loading="lazy" className="w-full rounded-xl border border-line object-cover" {...props} />
+  );
+}
+
+function MdxImage(props: React.ComponentProps<"img">) {
+  return (
+    <figure className="mt-7">
+      <MdxFigureImg {...props} />
+      {props.alt && (
+        <figcaption className="mt-2 font-mono text-[11px] uppercase tracking-[0.1em] text-fg-dim">
+          {props.alt}
+        </figcaption>
+      )}
+    </figure>
+  );
+}
+
 const mdxComponents = {
   h2: (props: React.ComponentProps<"h2">) => (
     <h2
@@ -52,9 +78,45 @@ const mdxComponents = {
       {...props}
     />
   ),
-  p: (props: React.ComponentProps<"p">) => (
-    <p className="mt-5 text-sm leading-relaxed text-fg-dim sm:text-base" {...props} />
-  ),
+  p: (props: React.ComponentProps<"p">) => {
+    // Remark wraps a standalone image in a paragraph alongside stray
+    // whitespace-only text nodes (newlines from the source), so a plain
+    // Children.count check for "just the image" undercounts by treating
+    // those as real siblings. Filter them out before deciding.
+    const realChildren = Children.toArray(props.children).filter(
+      (child) => !(typeof child === "string" && child.trim() === ""),
+    );
+
+    // Plain `![alt](src)` on its own line.
+    if (realChildren.length === 1 && isValidElement(realChildren[0]) && realChildren[0].type === MdxImage) {
+      return realChildren[0];
+    }
+
+    // `![alt](src)` immediately followed by an `*italic credit line*`, a
+    // common manual-caption convention our writers use. The italic line is
+    // the richer, human-written caption, so it replaces (not duplicates)
+    // the alt-derived figcaption from the plain-image case above.
+    if (
+      realChildren.length === 2 &&
+      isValidElement(realChildren[0]) &&
+      realChildren[0].type === MdxImage &&
+      isValidElement(realChildren[1]) &&
+      realChildren[1].type === "em"
+    ) {
+      const imgEl = realChildren[0] as React.ReactElement<React.ComponentProps<"img">>;
+      const emEl = realChildren[1] as React.ReactElement<{ children?: React.ReactNode }>;
+      return (
+        <figure className="mt-7">
+          <MdxFigureImg {...imgEl.props} />
+          <figcaption className="mt-2 font-mono text-[11px] uppercase tracking-[0.1em] text-fg-dim">
+            {emEl.props.children}
+          </figcaption>
+        </figure>
+      );
+    }
+
+    return <p className="mt-5 text-sm leading-relaxed text-fg-dim sm:text-base" {...props} />;
+  },
   a: (props: React.ComponentProps<"a">) => (
     <a
       className="text-accent underline decoration-accent/40 underline-offset-4 transition-colors hover:text-accent-soft"
@@ -73,6 +135,7 @@ const mdxComponents = {
       {...props}
     />
   ),
+  img: MdxImage,
   QuickWins,
 };
 
