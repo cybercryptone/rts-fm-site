@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { SITE, SOCIALS } from "@/lib/data";
 
 export default function AboutFooter() {
@@ -23,6 +24,12 @@ export default function AboutFooter() {
               genre gatekeeping beyond that. If it moves a room after
               midnight, it belongs here.
             </p>
+            <Link
+              href="/about"
+              className="mt-4 inline-block font-mono text-[11px] uppercase tracking-[0.18em] text-fg-dim transition-colors hover:text-accent"
+            >
+              editorial standards &amp; contact →
+            </Link>
           </div>
 
           <div className="flex flex-col justify-between">

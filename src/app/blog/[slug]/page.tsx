@@ -148,17 +148,30 @@ export default async function BlogPost({
   const post = getPostBySlug(slug);
   if (!post) notFound();
 
+  // Google's NewsArticle guidance recommends an image; use the first real
+  // image embedded in the post body (most posts now carry CC-licensed
+  // photos) and fall back to the site's default OG image for posts that
+  // don't have one, so the field is never empty.
+  const firstImageMatch = post.content.match(/!\[[^\]]*\]\((https?:\/\/[^\s)]+)\)/);
+  const articleImage = firstImageMatch ? firstImageMatch[1] : `${SITE.url}/og-image.jpg`;
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "NewsArticle",
     headline: post.title,
     description: post.excerpt,
+    image: [articleImage],
     datePublished: post.date,
     dateModified: post.date,
     url: `${SITE.url}/blog/${post.slug}`,
     mainEntityOfPage: `${SITE.url}/blog/${post.slug}`,
     author: { "@type": "Organization", name: SITE.name, url: SITE.url },
-    publisher: { "@type": "Organization", name: SITE.name, url: SITE.url },
+    publisher: {
+      "@type": "Organization",
+      name: SITE.name,
+      url: SITE.url,
+      logo: { "@type": "ImageObject", url: `${SITE.url}/icon.png` },
+    },
   };
 
   return (
