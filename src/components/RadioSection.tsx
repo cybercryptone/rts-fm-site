@@ -1,6 +1,7 @@
 import { CITIES } from "@/lib/data";
 import SetsArchive from "./SetsArchive";
 import PlayerCard from "./PlayerCard";
+import VideoChannel from "./VideoChannel";
 
 export default function RadioSection() {
   return (
@@ -28,16 +29,18 @@ export default function RadioSection() {
             <PlayerCard />
           </div>
 
-          {/* studios */}
+          {/* studios + virtual channel */}
           <div className="rounded-2xl border border-line p-8 sm:p-10">
-            <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-fg-dim">
+            <VideoChannel />
+
+            <p className="mt-8 font-mono text-[11px] uppercase tracking-[0.18em] text-fg-dim">
               broadcasting from
             </p>
-            <ul className="mt-8 flex flex-col divide-y divide-line">
+            <ul className="mt-4 flex flex-col divide-y divide-line">
               {CITIES.map((s) => (
                 <li
                   key={s}
-                  className="flex items-center justify-between py-5 font-display text-lg font-bold uppercase tracking-[-0.02em] text-fg"
+                  className="flex items-center justify-between py-2.5 font-display text-base font-bold uppercase tracking-[-0.02em] text-fg"
                 >
                   {s}
                   <span className="font-mono text-[11px] normal-case tracking-[0.14em] text-fg-dim">
