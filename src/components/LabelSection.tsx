@@ -25,7 +25,7 @@ export default function LabelSection() {
         </p>
 
         <div className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
-          {RELEASES.map((r) => (
+          {RELEASES.slice(0, 8).map((r) => (
             <a
               key={r.cat}
               href={r.href}
