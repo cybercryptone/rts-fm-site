@@ -11,7 +11,14 @@ const TOTAL_SLATS_DESKTOP = 22;
 
 const IDLE_AMPLITUDE = 0.22;
 const MOBILE_IDLE_AMPLITUDE = 0.32;
-const SURGE_MAX = 0.35;
+const SURGE_MAX = 0.6;
+
+// How fast bar.current chases bar.target, per frame. The old 0.09 took
+// roughly half a second to reach a new target — long enough that a cursor
+// passing over the needles rarely let the surge fully develop before the
+// target shifted again, reading as "idle wobble" rather than a response to
+// the cursor. Bumped so the surge is clearly, quickly tied to the pointer.
+const RESPONSE_RATE = 0.18;
 
 // Keep the center needles permanently taller than their neighbors — a
 // persistent peak rather than something idle phase drift could wash
@@ -321,7 +328,7 @@ export default function CursorWaveform() {
           bar.target *= CENTER_BOOST;
         }
 
-        bar.current += (bar.target - bar.current) * 0.09;
+        bar.current += (bar.target - bar.current) * RESPONSE_RATE;
 
         if (el) {
           el.style.transform = `scaleY(${bar.current.toFixed(4)})`;
