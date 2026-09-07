@@ -166,7 +166,7 @@ export default function VideoChannel() {
     <div className="glass-dark relative aspect-video overflow-hidden rounded-xl">
       <div ref={containerRef} className="pointer-events-none h-full w-full" />
 
-      <div className="absolute inset-x-0 top-0 flex items-center justify-between p-2.5">
+      <div className="absolute inset-x-0 top-0 z-10 flex items-center justify-between p-2.5">
         <span className="flex items-center gap-1.5 rounded-full bg-black/60 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-white backdrop-blur-sm">
           <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent" />
           on air
