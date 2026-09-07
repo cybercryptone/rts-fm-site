@@ -73,6 +73,7 @@ export default function VideoChannel() {
   const containerRef = useRef<HTMLDivElement>(null);
   const playerRef = useRef<YTPlayer | null>(null);
   const [muted, setMuted] = useState(true);
+  const [volume, setVolume] = useState(100);
   const [isPlaying, setIsPlaying] = useState(false);
   const [title, setTitle] = useState<string | null>(null);
   const [currentTime, setCurrentTime] = useState(0);
@@ -151,12 +152,27 @@ export default function VideoChannel() {
   const toggleMute = () => {
     if (!playerRef.current) return;
     if (muted) {
+      const v = volume > 0 ? volume : 100;
       playerRef.current.unMute();
-      playerRef.current.setVolume(100);
+      playerRef.current.setVolume(v);
+      setVolume(v);
       setMuted(false);
     } else {
       playerRef.current.mute();
       setMuted(true);
+    }
+  };
+
+  const handleVolumeChange = (v: number) => {
+    if (!playerRef.current) return;
+    setVolume(v);
+    playerRef.current.setVolume(v);
+    if (v === 0) {
+      playerRef.current.mute();
+      setMuted(true);
+    } else {
+      playerRef.current.unMute();
+      setMuted(false);
     }
   };
 
@@ -171,26 +187,40 @@ export default function VideoChannel() {
           <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent" />
           on air
         </span>
-        <button
-          type="button"
-          onClick={toggleMute}
-          aria-label={muted ? "Unmute" : "Mute"}
-          className="flex h-7 w-7 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-sm transition-colors hover:bg-accent hover:text-bg"
-        >
-          {muted ? (
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M11 5 6 9H2v6h4l5 4V5Z" />
-              <line x1="23" y1="9" x2="17" y2="15" />
-              <line x1="17" y1="9" x2="23" y2="15" />
-            </svg>
-          ) : (
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M11 5 6 9H2v6h4l5 4V5Z" />
-              <path d="M15.5 8.5a5 5 0 0 1 0 7" />
-              <path d="M18.5 5.5a9 9 0 0 1 0 13" />
-            </svg>
-          )}
-        </button>
+        <div className="group/vol flex items-center gap-1.5">
+          <div className="flex w-0 items-center overflow-hidden opacity-0 transition-all duration-200 group-hover/vol:w-14 group-hover/vol:opacity-100 group-focus-within/vol:w-14 group-focus-within/vol:opacity-100">
+            <input
+              type="range"
+              min={0}
+              max={100}
+              step={1}
+              value={muted ? 0 : volume}
+              onChange={(e) => handleVolumeChange(Number(e.target.value))}
+              aria-label="Volume"
+              className="h-1 w-12 accent-accent"
+            />
+          </div>
+          <button
+            type="button"
+            onClick={toggleMute}
+            aria-label={muted ? "Unmute" : "Mute"}
+            className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-sm transition-colors hover:bg-accent hover:text-bg"
+          >
+            {muted ? (
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M11 5 6 9H2v6h4l5 4V5Z" />
+                <line x1="23" y1="9" x2="17" y2="15" />
+                <line x1="17" y1="9" x2="23" y2="15" />
+              </svg>
+            ) : (
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M11 5 6 9H2v6h4l5 4V5Z" />
+                <path d="M15.5 8.5a5 5 0 0 1 0 7" />
+                <path d="M18.5 5.5a9 9 0 0 1 0 13" />
+              </svg>
+            )}
+          </button>
+        </div>
       </div>
 
       <button
