@@ -10,6 +10,15 @@ export function formatTime(seconds: number) {
   return `${m}:${String(s).padStart(2, "0")}`;
 }
 
+export function formatWait(seconds: number) {
+  const totalMinutes = Math.round(seconds / 60);
+  if (totalMinutes < 1) return "now";
+  if (totalMinutes < 60) return `${totalMinutes}m`;
+  const h = Math.floor(totalMinutes / 60);
+  const m = totalMinutes % 60;
+  return m > 0 ? `${h}h ${m}m` : `${h}h`;
+}
+
 export function formatDate(iso: string) {
   const d = new Date(iso);
   return d

@@ -2,11 +2,17 @@
 
 import { useEffect, useRef, useState } from "react";
 
+export type UpcomingEntry = {
+  title: string;
+  startsInSeconds: number;
+};
+
 type BroadcastPosition = {
   videoId: string;
   title: string;
   offsetSeconds: number;
   remainingSeconds: number;
+  upNext: UpcomingEntry[];
 };
 
 type YTPlayerEvent = { data: number };
@@ -65,14 +71,22 @@ function loadYouTubeIframeApi(): Promise<void> {
   return apiLoadPromise;
 }
 
-async function fetchPosition(): Promise<BroadcastPosition> {
-  const res = await fetch("/api/broadcast-position", { cache: "no-store" });
+async function fetchPosition(afterVideoId?: string): Promise<BroadcastPosition> {
+  const url = afterVideoId
+    ? `/api/broadcast-position?after=${encodeURIComponent(afterVideoId)}`
+    : "/api/broadcast-position";
+  const res = await fetch(url, { cache: "no-store" });
   return res.json();
 }
 
-export default function VideoChannel() {
+export default function VideoChannel({
+  onUpNextChange,
+}: {
+  onUpNextChange?: (upNext: UpcomingEntry[]) => void;
+}) {
   const containerRef = useRef<HTMLDivElement>(null);
   const playerRef = useRef<YTPlayer | null>(null);
+  const currentVideoIdRef = useRef<string | null>(null);
   const [muted, setMuted] = useState(true);
   const [volume, setVolume] = useState(100);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -80,14 +94,24 @@ export default function VideoChannel() {
   const [currentTime, setCurrentTime] = useState(0);
   const [totalSeconds, setTotalSeconds] = useState(0);
 
+  // Latest-callback ref: the player-setup effect below only ever runs once
+  // (it owns the YT.Player instance), so it can't have onUpNextChange in its
+  // dependency array without recreating the player on every parent render.
+  const onUpNextChangeRef = useRef(onUpNextChange);
+  useEffect(() => {
+    onUpNextChangeRef.current = onUpNextChange;
+  }, [onUpNextChange]);
+
   useEffect(() => {
     let cancelled = false;
 
     Promise.all([loadYouTubeIframeApi(), fetchPosition()]).then(([, position]) => {
       if (cancelled || !containerRef.current) return;
+      currentVideoIdRef.current = position.videoId;
       setTitle(position.title);
       setTotalSeconds(position.offsetSeconds + position.remainingSeconds);
       setCurrentTime(position.offsetSeconds);
+      onUpNextChangeRef.current?.(position.upNext);
 
       playerRef.current = new window.YT!.Player(containerRef.current, {
         videoId: position.videoId,
@@ -109,11 +133,13 @@ export default function VideoChannel() {
           onReady: () => setIsPlaying(true),
           onStateChange: (e) => {
             if (e.data === YT_STATE_ENDED) {
-              fetchPosition().then((next) => {
+              fetchPosition(currentVideoIdRef.current ?? undefined).then((next) => {
                 if (cancelled) return;
+                currentVideoIdRef.current = next.videoId;
                 setTitle(next.title);
                 setTotalSeconds(next.offsetSeconds + next.remainingSeconds);
                 setCurrentTime(next.offsetSeconds);
+                onUpNextChangeRef.current?.(next.upNext);
                 playerRef.current?.loadVideoById({
                   videoId: next.videoId,
                   startSeconds: next.offsetSeconds,

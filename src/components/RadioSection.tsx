@@ -1,9 +1,14 @@
-import { CITIES } from "@/lib/data";
+"use client";
+
+import { useState } from "react";
 import SetsArchive from "./SetsArchive";
 import PlayerCard from "./PlayerCard";
-import VideoChannel from "./VideoChannel";
+import VideoChannel, { type UpcomingEntry } from "./VideoChannel";
+import { formatWait } from "@/lib/format";
 
 export default function RadioSection() {
+  const [upNext, setUpNext] = useState<UpcomingEntry[]>([]);
+
   return (
     <section id="radio" className="border-b border-line px-6 py-24 sm:px-10 sm:py-32">
       <div className="mx-auto max-w-[1400px]">
@@ -29,22 +34,24 @@ export default function RadioSection() {
             <PlayerCard />
           </div>
 
-          {/* studios + virtual channel */}
+          {/* virtual channel + up next queue */}
           <div className="rounded-2xl border border-line p-8 sm:p-10">
-            <VideoChannel />
+            <VideoChannel onUpNextChange={setUpNext} />
 
             <p className="mt-8 font-mono text-[11px] uppercase tracking-[0.18em] text-fg-dim">
-              broadcasting from
+              up next
             </p>
             <ul className="mt-4 flex flex-col divide-y divide-line">
-              {CITIES.map((s) => (
+              {upNext.map((item, i) => (
                 <li
-                  key={s}
-                  className="flex items-center justify-between py-2.5 font-display text-base font-bold uppercase tracking-[-0.02em] text-fg"
+                  key={i}
+                  className="flex items-center justify-between gap-4 py-2.5"
                 >
-                  {s}
-                  <span className="font-mono text-[11px] normal-case tracking-[0.14em] text-fg-dim">
-                    studio
+                  <span className="min-w-0 truncate font-display text-base font-bold uppercase tracking-[-0.02em] text-fg">
+                    {item.title}
+                  </span>
+                  <span className="shrink-0 font-mono text-[11px] normal-case tracking-[0.14em] text-fg-dim">
+                    in {formatWait(item.startsInSeconds)}
                   </span>
                 </li>
               ))}
