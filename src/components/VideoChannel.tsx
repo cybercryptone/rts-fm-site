@@ -18,6 +18,7 @@ type YTPlayer = {
   unMute: () => void;
   setVolume: (volume: number) => void;
   getCurrentTime: () => number;
+  seekTo: (seconds: number, allowSeekAhead: boolean) => void;
   loadVideoById: (options: { videoId: string; startSeconds?: number }) => void;
 };
 type YTPlayerConstructorOptions = {
@@ -176,7 +177,11 @@ export default function VideoChannel() {
     }
   };
 
-  const progress = totalSeconds > 0 ? Math.min(1, currentTime / totalSeconds) : 0;
+  const handleSeek = (seconds: number) => {
+    if (!playerRef.current) return;
+    playerRef.current.seekTo(seconds, true);
+    setCurrentTime(seconds);
+  };
 
   return (
     <div className="glass-dark relative aspect-video overflow-hidden rounded-xl">
@@ -243,15 +248,23 @@ export default function VideoChannel() {
         </span>
       </button>
 
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-3 pb-2.5 pt-8">
+      <div className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black/80 to-transparent px-3 pb-2 pt-8">
         {title && (
-          <p className="truncate font-mono text-[10px] uppercase tracking-[0.08em] text-white/85">
+          <p className="pointer-events-none truncate font-mono text-[10px] uppercase tracking-[0.08em] text-white/85">
             {title}
           </p>
         )}
-        <div className="mt-1.5 h-[3px] w-full overflow-hidden rounded-full bg-white/20">
-          <div className="h-full rounded-full bg-accent" style={{ width: `${progress * 100}%` }} />
-        </div>
+        <input
+          type="range"
+          min={0}
+          max={totalSeconds || 0}
+          step={1}
+          value={Math.min(currentTime, totalSeconds || 0)}
+          onChange={(e) => handleSeek(Number(e.target.value))}
+          disabled={!totalSeconds}
+          aria-label="Seek"
+          className="mt-1.5 w-full accent-accent disabled:opacity-30"
+        />
       </div>
     </div>
   );
