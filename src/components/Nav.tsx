@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import EqualizerLogo from "./EqualizerLogo";
 
 const LINKS = [
   { href: "/#radio", label: "radio" },
@@ -32,8 +33,13 @@ export default function Nav() {
       <div className="mx-auto flex max-w-[1400px] items-center justify-between px-6 py-5 sm:px-10">
         <Link
           href="/"
-          className="font-display text-lg tracking-tight text-fg"
+          className="flex items-center gap-2 font-display text-lg tracking-tight text-fg"
         >
+          <EqualizerLogo
+            className="h-5 w-auto aspect-[1685/1865]"
+            fill="currentColor"
+            animated={false}
+          />
           RTS.FM
         </Link>
 

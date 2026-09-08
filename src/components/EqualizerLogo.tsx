@@ -9,11 +9,17 @@ function seeded(i: number) {
 export default function EqualizerLogo({
   className,
   style,
+  fill,
+  animated = true,
 }: {
   className?: string;
   style?: React.CSSProperties;
+  /** Solid fill (e.g. "currentColor") instead of the default accent gradient. */
+  fill?: string;
+  animated?: boolean;
 }) {
   const gradientId = `eq-fill-${useId()}`;
+  const resolvedFill = fill ?? `url(#${gradientId})`;
 
   return (
     <svg
@@ -22,12 +28,14 @@ export default function EqualizerLogo({
       style={style}
       aria-hidden="true"
     >
-      <defs>
-        <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="var(--accent)" />
-          <stop offset="100%" stopColor="var(--accent-soft)" />
-        </linearGradient>
-      </defs>
+      {!fill && (
+        <defs>
+          <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="var(--accent)" />
+            <stop offset="100%" stopColor="var(--accent-soft)" />
+          </linearGradient>
+        </defs>
+      )}
       {EQ_BARS.map((b, i) => {
         const dur = 0.9 + seeded(i) * 0.9;
         const delay = seeded(i + 100) * -2;
@@ -38,11 +46,15 @@ export default function EqualizerLogo({
             cy={b.cy}
             rx={b.rx}
             ry={b.ry}
-            fill={`url(#${gradientId})`}
-            style={{
-              transformOrigin: `${b.cx}px ${b.cy}px`,
-              animation: `eq-bar-pulse ${dur}s ease-in-out ${delay}s infinite alternate`,
-            }}
+            fill={resolvedFill}
+            style={
+              animated
+                ? {
+                    transformOrigin: `${b.cx}px ${b.cy}px`,
+                    animation: `eq-bar-pulse ${dur}s ease-in-out ${delay}s infinite alternate`,
+                  }
+                : undefined
+            }
           />
         );
       })}
