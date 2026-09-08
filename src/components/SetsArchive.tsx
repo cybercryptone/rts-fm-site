@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { ARCHIVE_SETS, youtubeThumbnail, youtubeWatchUrl } from "@/lib/data";
 
 export default function SetsArchive() {
@@ -28,12 +27,12 @@ export default function SetsArchive() {
             className="group overflow-hidden rounded-xl border border-line bg-bg-elevated transition-colors hover:border-accent/60"
           >
             <div className="relative aspect-video overflow-hidden">
-              <Image
+              {/* eslint-disable-next-line @next/next/no-img-element -- hotlinked YouTube thumbnail; proxying through next/image's optimizer would route every visitor's load through our own server for no visual benefit (YouTube's hqdefault.jpg is already a fixed, reasonable size) */}
+              <img
                 src={youtubeThumbnail(s)}
                 alt={`${s.artist} — ${s.context}, ${s.date}`}
-                fill
-                sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                className="object-cover text-[0px] transition-transform duration-500 group-hover:scale-105"
+                loading="lazy"
+                className="absolute inset-0 h-full w-full object-cover text-[0px] transition-transform duration-500 group-hover:scale-105"
               />
 
               <span className="absolute left-2 top-2 rounded-full bg-black/50 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.1em] text-white/90 backdrop-blur-sm">

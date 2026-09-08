@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { RELEASES } from "@/lib/data";
 
 export default function LabelSection() {
@@ -33,12 +32,12 @@ export default function LabelSection() {
               rel="noopener noreferrer"
               className="group relative flex aspect-square flex-col justify-between overflow-hidden rounded-xl border border-line bg-bg-elevated transition-colors hover:border-accent/60"
             >
-              <Image
+              {/* eslint-disable-next-line @next/next/no-img-element -- hotlinked Bandcamp cover art; see the same note on SetsArchive's thumbnails */}
+              <img
                 src={r.cover}
                 alt={`${r.artist} — ${r.cat} cover art`}
-                fill
-                sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
-                className="object-cover text-[0px] transition-transform duration-500 group-hover:scale-105"
+                loading="lazy"
+                className="absolute inset-0 h-full w-full object-cover text-[0px] transition-transform duration-500 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/5 to-transparent" />
 
