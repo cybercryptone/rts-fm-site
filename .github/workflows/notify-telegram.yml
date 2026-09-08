@@ -1,0 +1,33 @@
+name: Notify Telegram on new blog post
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/content/blog/**.mdx"
+  workflow_dispatch: {}
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history — the notify script diffs against the commit
+          # before this push to find newly ADDED posts, which needs more
+          # than the default single-commit shallow clone.
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - run: npm ci
+
+      - name: Post new articles to Telegram
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHANNEL: "@rtsfm"
+          SITE_URL: "https://rts.fm"
+          GITHUB_EVENT_BEFORE: ${{ github.event.before }}
+        run: node scripts/notify-telegram.mjs
