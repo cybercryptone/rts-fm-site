@@ -24,12 +24,20 @@ export default function AboutFooter() {
               genre gatekeeping beyond that. If it moves a room after
               midnight, it belongs here.
             </p>
-            <Link
-              href="/about"
-              className="mt-4 inline-block font-mono text-[11px] uppercase tracking-[0.18em] text-fg-dim transition-colors hover:text-accent"
-            >
-              editorial standards &amp; contact →
-            </Link>
+            <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2">
+              <Link
+                href="/about"
+                className="font-mono text-[11px] uppercase tracking-[0.18em] text-fg-dim transition-colors hover:text-accent"
+              >
+                editorial standards &amp; contact →
+              </Link>
+              <Link
+                href="/artists"
+                className="font-mono text-[11px] uppercase tracking-[0.18em] text-fg-dim transition-colors hover:text-accent"
+              >
+                artist profiles →
+              </Link>
+            </div>
           </div>
 
           <div className="flex flex-col justify-between">
