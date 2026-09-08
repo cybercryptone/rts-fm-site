@@ -15,7 +15,12 @@ jobs:
       # Ping the actual custom domain, not the bare onrender.com one — the
       # latter returns 503 once a custom domain is attached (confirmed by
       # hand), so it was never reliably reaching or waking the live service.
+      #
+      # --compressed asks for (and transparently decodes) gzip, so this pulls
+      # the same ~19KB the server sends real visitors instead of the ~145KB
+      # uncompressed page — at every-10-minutes this alone was ~600MB/month
+      # against Render's 5GB Hobby-plan bandwidth allowance.
       - name: Ping rts.fm
         run: |
-          curl -sS --fail --max-time 90 -o /dev/null -w "HTTP %{http_code} in %{time_total}s\n" \
+          curl -sS --fail --compressed --max-time 90 -o /dev/null -w "HTTP %{http_code} in %{time_total}s\n" \
             https://rts.fm
