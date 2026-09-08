@@ -50,3 +50,12 @@ export function getPostBySlug(slug: string): Post | null {
     content,
   };
 }
+
+// The first real image embedded in a post's body, used as the og:image /
+// NewsArticle image so social and chat-app link previews (Telegram, etc.)
+// always have a cover — most posts carry a CC-licensed photo, but posts
+// without one fall back to the site default at the call site.
+export function getArticleImage(post: Post): string | null {
+  const match = post.content.match(/!\[[^\]]*\]\((https?:\/\/[^\s)]+)\)/);
+  return match ? match[1] : null;
+}

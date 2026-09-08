@@ -6,7 +6,7 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import Nav from "@/components/Nav";
 import AboutFooter from "@/components/AboutFooter";
 import QuickWins from "@/components/QuickWins";
-import { getAllPosts, getPostBySlug } from "@/lib/blog";
+import { getAllPosts, getArticleImage, getPostBySlug } from "@/lib/blog";
 import { formatDate } from "@/lib/format";
 import { SITE } from "@/lib/data";
 
@@ -22,6 +22,7 @@ export async function generateMetadata({
   const { slug } = await params;
   const post = getPostBySlug(slug);
   if (!post) return {};
+  const articleImage = getArticleImage(post) ?? `${SITE.url}/og-image.jpg`;
   return {
     title: { absolute: post.title },
     description: post.excerpt,
@@ -31,11 +32,13 @@ export async function generateMetadata({
       title: post.title,
       description: post.excerpt,
       publishedTime: post.date,
+      images: [articleImage],
     },
     twitter: {
       card: "summary_large_image",
       title: post.title,
       description: post.excerpt,
+      images: [articleImage],
     },
   };
 }
@@ -152,8 +155,7 @@ export default async function BlogPost({
   // image embedded in the post body (most posts now carry CC-licensed
   // photos) and fall back to the site's default OG image for posts that
   // don't have one, so the field is never empty.
-  const firstImageMatch = post.content.match(/!\[[^\]]*\]\((https?:\/\/[^\s)]+)\)/);
-  const articleImage = firstImageMatch ? firstImageMatch[1] : `${SITE.url}/og-image.jpg`;
+  const articleImage = getArticleImage(post) ?? `${SITE.url}/og-image.jpg`;
 
   const jsonLd = {
     "@context": "https://schema.org",
