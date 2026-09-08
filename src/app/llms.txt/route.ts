@@ -1,10 +1,12 @@
 import { SITE, RELEASES, CITIES, SOCIALS } from "@/lib/data";
 import { getAllPosts } from "@/lib/blog";
+import { getAllArtists } from "@/lib/artists";
 
 export const revalidate = 3600; // 1 hour
 
 export async function GET() {
   const posts = getAllPosts();
+  const artists = getAllArtists();
 
   const lines: string[] = [
     `# ${SITE.name}`,
@@ -30,6 +32,11 @@ export async function GET() {
     "",
     `- [Blog index](${SITE.url}/blog): editorial writing on underground electronic music, club culture, and the industry.`,
     ...posts.map((p) => `- [${p.title}](${SITE.url}/blog/${p.slug}): ${p.excerpt}`),
+    "",
+    "## Artists",
+    "",
+    `- [Artist index](${SITE.url}/artists): biography pages for DJs and producers shaping tech house, minimal house, and minimal techno.`,
+    ...artists.map((a) => `- [${a.name}](${SITE.url}/artists/${a.slug}): ${a.excerpt}`),
     "",
     "## Optional",
     "",
