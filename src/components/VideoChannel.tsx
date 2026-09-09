@@ -33,6 +33,7 @@ type YTPlayerConstructorOptions = {
   events?: {
     onReady?: (event: YTPlayerEvent) => void;
     onStateChange?: (event: YTPlayerEvent) => void;
+    onError?: (event: YTPlayerEvent) => void;
   };
 };
 
@@ -104,6 +105,27 @@ export default function VideoChannel({
 
   useEffect(() => {
     let cancelled = false;
+    // Guards against a pathological run of consecutive broken videos (e.g.
+    // several back-to-back Content ID blocks) hammering the API in a tight
+    // loop — onError is a real player callback, not a while(true), but this
+    // caps how many auto-skips can chain in one go regardless.
+    let consecutiveErrors = 0;
+    const MAX_CONSECUTIVE_ERRORS = 5;
+
+    const advanceToNext = () => {
+      fetchPosition(currentVideoIdRef.current ?? undefined).then((next) => {
+        if (cancelled) return;
+        currentVideoIdRef.current = next.videoId;
+        setTitle(next.title);
+        setTotalSeconds(next.offsetSeconds + next.remainingSeconds);
+        setCurrentTime(next.offsetSeconds);
+        onUpNextChangeRef.current?.(next.upNext);
+        playerRef.current?.loadVideoById({
+          videoId: next.videoId,
+          startSeconds: next.offsetSeconds,
+        });
+      });
+    };
 
     Promise.all([loadYouTubeIframeApi(), fetchPosition()]).then(([, position]) => {
       if (cancelled || !containerRef.current) return;
@@ -133,23 +155,23 @@ export default function VideoChannel({
           onReady: () => setIsPlaying(true),
           onStateChange: (e) => {
             if (e.data === YT_STATE_ENDED) {
-              fetchPosition(currentVideoIdRef.current ?? undefined).then((next) => {
-                if (cancelled) return;
-                currentVideoIdRef.current = next.videoId;
-                setTitle(next.title);
-                setTotalSeconds(next.offsetSeconds + next.remainingSeconds);
-                setCurrentTime(next.offsetSeconds);
-                onUpNextChangeRef.current?.(next.upNext);
-                playerRef.current?.loadVideoById({
-                  videoId: next.videoId,
-                  startSeconds: next.offsetSeconds,
-                });
-              });
+              consecutiveErrors = 0;
+              advanceToNext();
             } else if (e.data === YT_STATE_PLAYING) {
               setIsPlaying(true);
             } else if (e.data === YT_STATE_PAUSED) {
               setIsPlaying(false);
             }
+          },
+          // Fires for private/deleted videos and, most commonly here,
+          // Content ID claims with a "block" policy that disables embedding
+          // (error codes 100, 101, 150) — rather than leaving the visitor
+          // staring at YouTube's own "video unavailable" screen, skip ahead
+          // exactly like a natural ENDED transition.
+          onError: () => {
+            consecutiveErrors += 1;
+            if (consecutiveErrors > MAX_CONSECUTIVE_ERRORS) return;
+            advanceToNext();
           },
         },
       });
