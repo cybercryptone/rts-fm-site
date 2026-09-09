@@ -38,6 +38,25 @@ function escapeHtml(text) {
   return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
+// The workflow fires on `push`, but Render's deploy takes a minute or two
+// to actually go live — posting immediately meant Telegram tried to build
+// the link-preview card against a still-404 URL and gave up, leaving the
+// message with no title card or image. Block until the URL is really live
+// (or a generous timeout elapses) before handing it to sendMessage.
+async function waitForLive(url, { timeoutMs = 5 * 60 * 1000, intervalMs = 10 * 1000 } = {}) {
+  const deadline = Date.now() + timeoutMs;
+  while (Date.now() < deadline) {
+    try {
+      const res = await fetch(url, { method: "GET", cache: "no-store" });
+      if (res.ok) return true;
+    } catch {
+      // network hiccup during deploy — keep polling
+    }
+    await new Promise((resolve) => setTimeout(resolve, intervalMs));
+  }
+  return false;
+}
+
 async function sendMessage(text) {
   const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
     method: "POST",
@@ -71,6 +90,12 @@ for (const file of files) {
   const url = `${SITE_URL}/blog/${slug}`;
 
   const text = [`<b>${escapeHtml(title)}</b>`, "", escapeHtml(excerpt), "", url].join("\n");
+
+  console.log(`Waiting for ${url} to go live...`);
+  const isLive = await waitForLive(url);
+  if (!isLive) {
+    console.warn(`  ${url} still not returning 200 after the timeout — posting anyway, preview may be missing.`);
+  }
 
   console.log(`Posting to ${CHANNEL}: ${title}`);
   await sendMessage(text);
