@@ -9,8 +9,15 @@ const LINKS = [
   { href: "/#radio", label: "radio" },
   { href: "/#label", label: "label" },
   { href: "/blog", label: "blog" },
+  { href: "/artists", label: "artists" },
   { href: "/#about", label: "about" },
 ];
+
+// Only /blog and /artists are real routes (the rest are homepage anchors),
+// so this is the one place "active" means anything beyond a same-page jump.
+function isLinkActive(href: string, pathname: string | null): boolean {
+  return (href === "/blog" || href === "/artists") && !!pathname?.startsWith(href);
+}
 
 export default function Nav() {
   const [open, setOpen] = useState(false);
@@ -45,7 +52,7 @@ export default function Nav() {
 
         <nav className="hidden items-center gap-8 font-mono text-xs uppercase tracking-[0.18em] text-fg-dim sm:flex">
           {LINKS.map((l) => {
-            const isActive = l.href === "/blog" && pathname?.startsWith("/blog");
+            const isActive = isLinkActive(l.href, pathname);
             return (
               <Link
                 key={l.href}
@@ -92,7 +99,7 @@ export default function Nav() {
         <div className="border-t border-line bg-bg px-6 py-6 font-mono text-sm uppercase tracking-[0.18em] text-fg-dim sm:hidden">
           <div className="flex flex-col gap-5">
             {LINKS.map((l) => {
-              const isActive = l.href === "/blog" && pathname?.startsWith("/blog");
+              const isActive = isLinkActive(l.href, pathname);
               return (
                 <Link
                   key={l.href}
