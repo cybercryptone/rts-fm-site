@@ -512,6 +512,10 @@ body::before {
   color: var(--fg);
 }
 
+.cta-body p {
+  margin-top: 0;
+}
+
 /* Blog index rows — soft dividers instead of the site-wide --line,
    plus a faint hover tint and a headline nudge that reads as an
    editorial list rather than static text. */

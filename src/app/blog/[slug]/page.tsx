@@ -7,6 +7,10 @@ import remarkGfm from "remark-gfm";
 import Nav from "@/components/Nav";
 import AboutFooter from "@/components/AboutFooter";
 import QuickWins from "@/components/QuickWins";
+import Cta from "@/components/Cta";
+import YouTubeEmbed from "@/components/YouTubeEmbed";
+import SoundCloudEmbed from "@/components/SoundCloudEmbed";
+import BandcampEmbed from "@/components/BandcampEmbed";
 import { getAllPosts, getArticleImage, getPostBySlug } from "@/lib/blog";
 import { formatDate } from "@/lib/format";
 import { SITE } from "@/lib/data";
@@ -156,6 +160,10 @@ const mdxComponents = {
   ),
   tr: (props: React.ComponentProps<"tr">) => <tr className="last:[&>td]:border-b-0" {...props} />,
   QuickWins,
+  Cta,
+  YouTubeEmbed,
+  SoundCloudEmbed,
+  BandcampEmbed,
 };
 
 export default async function BlogPost({
