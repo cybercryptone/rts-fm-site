@@ -11,8 +11,11 @@ export const SITE = {
 export const FEED_URL =
   "https://feeds.soundcloud.com/users/soundcloud:users:1302198/sounds.rss";
 
-// Real numbers, not genre words — shown as the hero stat chips.
+// Real numbers, not genre words — shown as the hero stat chips. The years
+// figure is computed at build time (rebuilt on every deploy), same as the
+// rest of the site's date-dependent content.
 export const STATS = [
+  `${new Date().getFullYear() - SITE.founded} Years Broadcasting`,
   "3.8K Sets Archived",
   "10,640,365 Views",
   "30+ Studios Worldwide",

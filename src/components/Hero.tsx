@@ -88,7 +88,7 @@ export default function Hero() {
       <div className="relative z-10 mx-auto flex w-full max-w-[1400px] flex-1 flex-col justify-center px-6 sm:px-10">
         <div className="flex items-baseline gap-3 font-mono text-xs uppercase tracking-[0.2em] text-fg-dim">
           <span className="h-1.5 w-1.5 translate-x-[11px] rounded-full bg-accent" />
-          est. {SITE.founded}
+          {new Date().getFullYear() - SITE.founded} years · est. {SITE.founded}
         </div>
 
         <h1 className="mt-6 select-none font-headline text-[clamp(3.5rem,16vw,5rem)] leading-[0.85] text-fg sm:text-[13vw] md:text-[130px] lg:text-[165px]">
@@ -119,7 +119,7 @@ export default function Hero() {
             <span
               key={s}
               className={`stat-pill shrink-0 snap-start whitespace-nowrap rounded-full border px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-fg-dim ${
-                i >= STATS.length - 2 ? "pill-warm" : "border-line"
+                i === 0 || i === STATS.length - 1 ? "pill-warm" : "border-line"
               }`}
             >
               {s}
