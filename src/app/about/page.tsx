@@ -2,16 +2,61 @@ import type { Metadata } from "next";
 import Nav from "@/components/Nav";
 import AboutFooter from "@/components/AboutFooter";
 import { SITE } from "@/lib/data";
+import { breadcrumbJsonLd } from "@/lib/schema";
+
+const description =
+  "Who runs RTS.FM, how the editorial team sources and corrects the blog, and how to reach us.";
 
 export const metadata: Metadata = {
   title: "About & Editorial Standards",
-  description: "Who runs RTS.FM, how the editorial team sources and corrects the blog, and how to reach us.",
+  description,
   alternates: { canonical: "/about" },
+  openGraph: {
+    type: "website",
+    url: "/about",
+    title: "About & Editorial Standards — RTS.FM",
+    description,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "About & Editorial Standards — RTS.FM",
+    description,
+  },
 };
+
+const contactJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  name: "Contact RTS.FM",
+  url: `${SITE.url}/about`,
+  mainEntity: {
+    "@type": "Organization",
+    name: SITE.name,
+    url: SITE.url,
+    contactPoint: {
+      "@type": "ContactPoint",
+      contactType: "customer support",
+      url: "https://t.me/rtsfm",
+    },
+  },
+};
+
+const breadcrumb = breadcrumbJsonLd([
+  { name: "Home", path: "/" },
+  { name: "About", path: "/about" },
+]);
 
 export default function AboutPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(contactJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }}
+      />
       <Nav />
       <main
         className="flex-1 px-6 pb-24 sm:px-10 sm:pb-32"

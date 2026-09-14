@@ -114,3 +114,28 @@ export function youtubeWatchUrl(set: ArchiveSet) {
 export function youtubeThumbnail(set: ArchiveSet) {
   return `https://i.ytimg.com/vi/${set.videoId}/hqdefault.jpg`;
 }
+
+// The three parsers below convert ARCHIVE_SETS' display-formatted fields
+// into the ISO 8601 / integer shapes schema.org's VideoObject expects.
+
+// "31.10.2009" -> "2009-10-31"
+export function archiveSetIsoDate(set: ArchiveSet): string {
+  const [d, m, y] = set.date.split(".");
+  return `${y}-${m}-${d}`;
+}
+
+// "1:04:17" -> "PT1H4M17S", "58:12" -> "PT58M12S"
+export function archiveSetIsoDuration(set: ArchiveSet): string {
+  const parts = set.duration.split(":").map(Number);
+  const [h, m, s] = parts.length === 3 ? parts : [0, parts[0], parts[1]];
+  const body = `${h ? `${h}H` : ""}${m ? `${m}M` : ""}${s ? `${s}S` : ""}`;
+  return `PT${body || "0S"}`;
+}
+
+// "1M" -> 1000000, "185K" -> 185000
+export function archiveSetViewCount(set: ArchiveSet): number {
+  const n = parseFloat(set.views);
+  if (set.views.includes("M")) return Math.round(n * 1_000_000);
+  if (set.views.includes("K")) return Math.round(n * 1_000);
+  return Math.round(n);
+}

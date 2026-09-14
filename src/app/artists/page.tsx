@@ -3,11 +3,17 @@ import Link from "next/link";
 import Nav from "@/components/Nav";
 import AboutFooter from "@/components/AboutFooter";
 import { getAllArtists, type ArtistMeta } from "@/lib/artists";
+import { breadcrumbJsonLd } from "@/lib/schema";
+
+const description =
+  "Biographies and profiles of the DJs and producers shaping tech house, minimal house, and minimal techno.";
 
 export const metadata: Metadata = {
   title: "Artists",
-  description: "Biographies and profiles of the DJs and producers shaping tech house, minimal house, and minimal techno.",
+  description,
   alternates: { canonical: "/artists" },
+  openGraph: { type: "website", url: "/artists", title: "Artists — RTS.FM", description },
+  twitter: { card: "summary_large_image", title: "Artists — RTS.FM", description },
 };
 
 const ALPHABET = Array.from({ length: 26 }, (_, i) => String.fromCharCode(65 + i));
@@ -38,9 +44,17 @@ export default function ArtistsIndex() {
   const groups = groupByLetter(artists);
   const availableLetters = new Set(groups.map((g) => g.letter));
   const indexBySlug = new Map(artists.map((a, i) => [a.slug, i + 1]));
+  const breadcrumb = breadcrumbJsonLd([
+    { name: "Home", path: "/" },
+    { name: "Artists", path: "/artists" },
+  ]);
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }}
+      />
       <Nav />
       <main
         className="flex-1 px-6 pb-24 sm:px-10 sm:pb-32"

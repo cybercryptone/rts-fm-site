@@ -14,6 +14,7 @@ import BandcampEmbed from "@/components/BandcampEmbed";
 import { getAllPosts, getArticleImage, getPostBySlug } from "@/lib/blog";
 import { formatDate } from "@/lib/format";
 import { SITE } from "@/lib/data";
+import { breadcrumbJsonLd } from "@/lib/schema";
 
 export function generateStaticParams() {
   return getAllPosts().map((post) => ({ slug: post.slug }));
@@ -34,6 +35,7 @@ export async function generateMetadata({
     alternates: { canonical: `/blog/${slug}` },
     openGraph: {
       type: "article",
+      url: `/blog/${slug}`,
       title: post.title,
       description: post.excerpt,
       publishedTime: post.date,
@@ -200,11 +202,21 @@ export default async function BlogPost({
     },
   };
 
+  const breadcrumb = breadcrumbJsonLd([
+    { name: "Home", path: "/" },
+    { name: "Blog", path: "/blog" },
+    { name: post.title, path: `/blog/${post.slug}` },
+  ]);
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }}
       />
       <Nav />
       <main className="flex-1 px-6 pb-24 pt-32 sm:px-10 sm:pb-32 sm:pt-40">

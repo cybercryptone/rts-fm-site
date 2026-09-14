@@ -4,18 +4,31 @@ import Nav from "@/components/Nav";
 import AboutFooter from "@/components/AboutFooter";
 import { getAllPosts } from "@/lib/blog";
 import { formatDateCompact } from "@/lib/format";
+import { breadcrumbJsonLd } from "@/lib/schema";
+
+const description = "Notes, releases, and studio updates from RTS.FM.";
 
 export const metadata: Metadata = {
   title: "Blog",
-  description: "Notes, releases, and studio updates from RTS.FM.",
+  description,
   alternates: { canonical: "/blog" },
+  openGraph: { type: "website", url: "/blog", title: "Blog — RTS.FM", description },
+  twitter: { card: "summary_large_image", title: "Blog — RTS.FM", description },
 };
 
 export default function BlogIndex() {
   const posts = getAllPosts();
+  const breadcrumb = breadcrumbJsonLd([
+    { name: "Home", path: "/" },
+    { name: "Blog", path: "/blog" },
+  ]);
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }}
+      />
       <Nav />
       <main
         className="flex-1 px-6 pb-24 sm:px-10 sm:pb-32"

@@ -8,6 +8,7 @@ import AboutFooter from "@/components/AboutFooter";
 import { getAllArtists, getArtistBySlug } from "@/lib/artists";
 import { getAllPosts } from "@/lib/blog";
 import { SITE } from "@/lib/data";
+import { breadcrumbJsonLd } from "@/lib/schema";
 
 export function generateStaticParams() {
   return getAllArtists().map((artist) => ({ slug: artist.slug }));
@@ -27,6 +28,7 @@ export async function generateMetadata({
     alternates: { canonical: `/artists/${slug}` },
     openGraph: {
       type: "profile",
+      url: `/artists/${slug}`,
       title: artist.title,
       description: artist.excerpt,
       images: [artist.image],
@@ -150,11 +152,21 @@ export default async function ArtistPage({
     },
   };
 
+  const breadcrumb = breadcrumbJsonLd([
+    { name: "Home", path: "/" },
+    { name: "Artists", path: "/artists" },
+    { name: artist.name, path: `/artists/${artist.slug}` },
+  ]);
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }}
       />
       <Nav />
       <main className="flex-1 px-6 pb-24 pt-32 sm:px-10 sm:pb-32 sm:pt-40">
