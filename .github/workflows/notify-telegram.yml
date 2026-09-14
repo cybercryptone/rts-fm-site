@@ -1,10 +1,9 @@
 name: Notify Telegram on new blog post
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - "src/content/blog/**.mdx"
+  # Automatic push trigger disabled — new blog posts no longer auto-post to
+  # Telegram. Run this workflow manually (workflow_dispatch) to post one by
+  # hand when wanted.
   workflow_dispatch: {}
 
 jobs:
