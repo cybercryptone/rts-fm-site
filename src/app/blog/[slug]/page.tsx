@@ -39,6 +39,7 @@ export async function generateMetadata({
       title: post.title,
       description: post.excerpt,
       publishedTime: post.date,
+      modifiedTime: post.updated ?? post.date,
       images: [articleImage],
     },
     twitter: {
@@ -190,7 +191,7 @@ export default async function BlogPost({
     description: post.excerpt,
     image: [articleImage],
     datePublished: post.date,
-    dateModified: post.date,
+    dateModified: post.updated ?? post.date,
     url: `${SITE.url}/blog/${post.slug}`,
     mainEntityOfPage: `${SITE.url}/blog/${post.slug}`,
     author: { "@type": "Organization", name: SITE.name, url: SITE.url },
@@ -230,6 +231,9 @@ export default async function BlogPost({
 
           <p className="mt-8 font-mono text-[11px] uppercase tracking-[0.18em] text-fg-dim">
             {formatDate(post.date)} · rts.fm editorial
+            {post.updated && post.updated !== post.date && (
+              <> · updated {formatDate(post.updated)}</>
+            )}
           </p>
           <h1 className="mt-3 font-display text-3xl font-bold uppercase tracking-[-0.02em] text-fg sm:text-4xl">
             {post.title}

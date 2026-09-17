@@ -8,6 +8,11 @@ export type PostMeta = {
   slug: string;
   title: string;
   date: string;
+  // Optional — only set when a post gets a real post-publish edit (new
+  // interlinks, a factual correction, added data). Absent means the post
+  // has never been touched since it went live, so dateModified should just
+  // mirror date rather than claim an update that didn't happen.
+  updated?: string;
   excerpt: string;
 };
 
@@ -31,6 +36,7 @@ export function getAllPosts(): PostMeta[] {
         slug,
         title: data.title as string,
         date: data.date as string,
+        updated: data.updated as string | undefined,
         excerpt: data.excerpt as string,
       };
     })
@@ -46,6 +52,7 @@ export function getPostBySlug(slug: string): Post | null {
     slug,
     title: data.title as string,
     date: data.date as string,
+    updated: data.updated as string | undefined,
     excerpt: data.excerpt as string,
     content,
   };
