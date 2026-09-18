@@ -118,10 +118,12 @@ export function youtubeThumbnail(set: ArchiveSet) {
 // The three parsers below convert ARCHIVE_SETS' display-formatted fields
 // into the ISO 8601 / integer shapes schema.org's VideoObject expects.
 
-// "31.10.2009" -> "2009-10-31"
+// "31.10.2009" -> "2009-10-31T00:00:00+00:00"
+// Google's VideoObject validator flags a bare date as missing a timezone,
+// so uploadDate needs a full ISO 8601 datetime with an explicit offset.
 export function archiveSetIsoDate(set: ArchiveSet): string {
   const [d, m, y] = set.date.split(".");
-  return `${y}-${m}-${d}`;
+  return `${y}-${m}-${d}T00:00:00+00:00`;
 }
 
 // "1:04:17" -> "PT1H4M17S", "58:12" -> "PT58M12S"
