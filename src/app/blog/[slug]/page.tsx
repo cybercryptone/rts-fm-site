@@ -14,7 +14,7 @@ import BandcampEmbed from "@/components/BandcampEmbed";
 import { getAllPosts, getArticleImage, getPostBySlug } from "@/lib/blog";
 import { formatDate } from "@/lib/format";
 import { SITE } from "@/lib/data";
-import { breadcrumbJsonLd } from "@/lib/schema";
+import { breadcrumbJsonLd, extractFaqItems, faqJsonLd } from "@/lib/schema";
 
 export function generateStaticParams() {
   return getAllPosts().map((post) => ({ slug: post.slug }));
@@ -209,12 +209,20 @@ export default async function BlogPost({
     { name: post.title, path: `/blog/${post.slug}` },
   ]);
 
+  const faqItems = extractFaqItems(post.content);
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      {faqItems.length > 0 && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd(faqItems)) }}
+        />
+      )}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }}

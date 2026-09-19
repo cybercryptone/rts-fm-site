@@ -1,0 +1,307 @@
+{
+ "date": "2026-09-19",
+ "gsc_28d": {
+  "/": {
+   "clicks": 33,
+   "impressions": 286,
+   "position": 7.1
+  },
+  "/about": {
+   "clicks": 0,
+   "impressions": 2,
+   "position": 9
+  },
+  "/artists/amelie-lens": {
+   "clicks": 0,
+   "impressions": 7,
+   "position": 12.1
+  },
+  "/artists/topdown-dialectic": {
+   "clicks": 0,
+   "impressions": 6,
+   "position": 8.7
+  },
+  "/blog": {
+   "clicks": 0,
+   "impressions": 1,
+   "position": 8
+  },
+  "/blog/ai-stem-separation-dj-tools": {
+   "clicks": 0,
+   "impressions": 1,
+   "position": 6
+  },
+  "/blog/amelie-lens-charlotte-de-witte-one-mind": {
+   "clicks": 0,
+   "impressions": 6,
+   "position": 8.8
+  },
+  "/blog/bandcamp-ai-ban-six-months-on": {
+   "clicks": 0,
+   "impressions": 6,
+   "position": 3.7
+  },
+  "/blog/berghain-hollywood-comedy-film": {
+   "clicks": 0,
+   "impressions": 3,
+   "position": 9
+  },
+  "/blog/best-techno-albums-summer-2026": {
+   "clicks": 1,
+   "impressions": 35,
+   "position": 6.5
+  },
+  "/blog/blitz-munich-closure": {
+   "clicks": 0,
+   "impressions": 12,
+   "position": 34.2
+  },
+  "/blog/boiler-room-kkr-boycott": {
+   "clicks": 0,
+   "impressions": 22,
+   "position": 17.6
+  },
+  "/blog/burning-man-2026-decorated-porta-potties": {
+   "clicks": 0,
+   "impressions": 38,
+   "position": 10.2
+  },
+  "/blog/burning-man-2026-livestream-webcam-dashboard": {
+   "clicks": 0,
+   "impressions": 72,
+   "position": 16.1
+  },
+  "/blog/burning-man-2026-sound-camps-art-cars": {
+   "clicks": 0,
+   "impressions": 100,
+   "position": 7.8
+  },
+  "/blog/cocoon-recordings-25-years": {
+   "clicks": 0,
+   "impressions": 13,
+   "position": 9.8
+  },
+  "/blog/deezer-ai-uploads-streaming-flood": {
+   "clicks": 0,
+   "impressions": 2,
+   "position": 7.5
+  },
+  "/blog/detroit-movement-festival-20-years": {
+   "clicks": 0,
+   "impressions": 1,
+   "position": 4
+  },
+  "/blog/electronic-music-fastest-growing-genre-us": {
+   "clicks": 0,
+   "impressions": 13,
+   "position": 28.2
+  },
+  "/blog/independent-labels-market-share-2026": {
+   "clicks": 1,
+   "impressions": 23,
+   "position": 12.6
+  },
+  "/blog/nina-kraviz-2026-world-tour-dates": {
+   "clicks": 0,
+   "impressions": 39,
+   "position": 8.0
+  },
+  "/blog/nina-kraviz-dj-mag-top-100-2026-poll": {
+   "clicks": 0,
+   "impressions": 15,
+   "position": 6.6
+  },
+  "/blog/nina-kraviz-jeff-mills-fabric-junction-2": {
+   "clicks": 0,
+   "impressions": 11,
+   "position": 6.1
+  },
+  "/blog/rawax-records-robert-drewek": {
+   "clicks": 0,
+   "impressions": 17,
+   "position": 7.2
+  },
+  "/blog/uk-nightclub-closures-licensing-reform": {
+   "clicks": 0,
+   "impressions": 5,
+   "position": 8.2
+  },
+  "/blog/vinyl-pressing-plant-capacity-crisis": {
+   "clicks": 0,
+   "impressions": 6,
+   "position": 5.5
+  },
+  "/blog/wet-playa-protocol-burning-man-2026-gate-closures": {
+   "clicks": 1,
+   "impressions": 20,
+   "position": 6.1
+  },
+  "/blog/what-is-burning-man-2026-guide": {
+   "clicks": 0,
+   "impressions": 21,
+   "position": 5.2
+  },
+  "/blog/wilde-renate-berlin-club-history": {
+   "clicks": 0,
+   "impressions": 30,
+   "position": 7.1
+  },
+  "/blog/yougov-britons-listening-more-music-2026": {
+   "clicks": 0,
+   "impressions": 10,
+   "position": 6.3
+  }
+ },
+ "gsc_90d": {
+  "/": {
+   "clicks": 33,
+   "impressions": 286,
+   "position": 7.1
+  },
+  "/about": {
+   "clicks": 0,
+   "impressions": 2,
+   "position": 9
+  },
+  "/artists/amelie-lens": {
+   "clicks": 0,
+   "impressions": 7,
+   "position": 12.1
+  },
+  "/artists/topdown-dialectic": {
+   "clicks": 0,
+   "impressions": 6,
+   "position": 8.7
+  },
+  "/blog": {
+   "clicks": 0,
+   "impressions": 1,
+   "position": 8
+  },
+  "/blog/ai-stem-separation-dj-tools": {
+   "clicks": 0,
+   "impressions": 1,
+   "position": 6
+  },
+  "/blog/amelie-lens-charlotte-de-witte-one-mind": {
+   "clicks": 0,
+   "impressions": 6,
+   "position": 8.8
+  },
+  "/blog/bandcamp-ai-ban-six-months-on": {
+   "clicks": 0,
+   "impressions": 6,
+   "position": 3.7
+  },
+  "/blog/berghain-hollywood-comedy-film": {
+   "clicks": 0,
+   "impressions": 3,
+   "position": 9
+  },
+  "/blog/best-techno-albums-summer-2026": {
+   "clicks": 1,
+   "impressions": 35,
+   "position": 6.5
+  },
+  "/blog/blitz-munich-closure": {
+   "clicks": 0,
+   "impressions": 12,
+   "position": 34.2
+  },
+  "/blog/boiler-room-kkr-boycott": {
+   "clicks": 0,
+   "impressions": 22,
+   "position": 17.6
+  },
+  "/blog/burning-man-2026-decorated-porta-potties": {
+   "clicks": 0,
+   "impressions": 38,
+   "position": 10.2
+  },
+  "/blog/burning-man-2026-livestream-webcam-dashboard": {
+   "clicks": 0,
+   "impressions": 72,
+   "position": 16.1
+  },
+  "/blog/burning-man-2026-sound-camps-art-cars": {
+   "clicks": 0,
+   "impressions": 100,
+   "position": 7.8
+  },
+  "/blog/cocoon-recordings-25-years": {
+   "clicks": 0,
+   "impressions": 13,
+   "position": 9.8
+  },
+  "/blog/deezer-ai-uploads-streaming-flood": {
+   "clicks": 0,
+   "impressions": 2,
+   "position": 7.5
+  },
+  "/blog/detroit-movement-festival-20-years": {
+   "clicks": 0,
+   "impressions": 1,
+   "position": 4
+  },
+  "/blog/electronic-music-fastest-growing-genre-us": {
+   "clicks": 0,
+   "impressions": 13,
+   "position": 28.2
+  },
+  "/blog/independent-labels-market-share-2026": {
+   "clicks": 1,
+   "impressions": 23,
+   "position": 12.6
+  },
+  "/blog/nina-kraviz-2026-world-tour-dates": {
+   "clicks": 0,
+   "impressions": 39,
+   "position": 8.0
+  },
+  "/blog/nina-kraviz-dj-mag-top-100-2026-poll": {
+   "clicks": 0,
+   "impressions": 15,
+   "position": 6.6
+  },
+  "/blog/nina-kraviz-jeff-mills-fabric-junction-2": {
+   "clicks": 0,
+   "impressions": 11,
+   "position": 6.1
+  },
+  "/blog/rawax-records-robert-drewek": {
+   "clicks": 0,
+   "impressions": 17,
+   "position": 7.2
+  },
+  "/blog/uk-nightclub-closures-licensing-reform": {
+   "clicks": 0,
+   "impressions": 5,
+   "position": 8.2
+  },
+  "/blog/vinyl-pressing-plant-capacity-crisis": {
+   "clicks": 0,
+   "impressions": 6,
+   "position": 5.5
+  },
+  "/blog/wet-playa-protocol-burning-man-2026-gate-closures": {
+   "clicks": 1,
+   "impressions": 20,
+   "position": 6.1
+  },
+  "/blog/what-is-burning-man-2026-guide": {
+   "clicks": 0,
+   "impressions": 21,
+   "position": 5.2
+  },
+  "/blog/wilde-renate-berlin-club-history": {
+   "clicks": 0,
+   "impressions": 30,
+   "position": 7.1
+  },
+  "/blog/yougov-britons-listening-more-music-2026": {
+   "clicks": 0,
+   "impressions": 10,
+   "position": 6.3
+  }
+ }
+}
