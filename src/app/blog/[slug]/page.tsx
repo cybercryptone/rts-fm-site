@@ -14,7 +14,7 @@ import BandcampEmbed from "@/components/BandcampEmbed";
 import { getAllPosts, getArticleImage, getPostBySlug } from "@/lib/blog";
 import { formatDate } from "@/lib/format";
 import { SITE } from "@/lib/data";
-import { breadcrumbJsonLd, extractFaqItems, faqJsonLd } from "@/lib/schema";
+import { breadcrumbJsonLd, extractFaqItems, faqJsonLd, isoDateTime } from "@/lib/schema";
 
 export function generateStaticParams() {
   return getAllPosts().map((post) => ({ slug: post.slug }));
@@ -38,8 +38,8 @@ export async function generateMetadata({
       url: `/blog/${slug}`,
       title: post.title,
       description: post.excerpt,
-      publishedTime: post.date,
-      modifiedTime: post.updated ?? post.date,
+      publishedTime: isoDateTime(post.date),
+      modifiedTime: isoDateTime(post.updated ?? post.date),
       images: [articleImage],
     },
     twitter: {
@@ -190,8 +190,8 @@ export default async function BlogPost({
     headline: post.title,
     description: post.excerpt,
     image: [articleImage],
-    datePublished: post.date,
-    dateModified: post.updated ?? post.date,
+    datePublished: isoDateTime(post.date),
+    dateModified: isoDateTime(post.updated ?? post.date),
     url: `${SITE.url}/blog/${post.slug}`,
     mainEntityOfPage: `${SITE.url}/blog/${post.slug}`,
     author: { "@type": "Organization", name: SITE.name, url: SITE.url },
