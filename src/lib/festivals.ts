@@ -1,5 +1,11 @@
 export type FestivalDateStatus = "confirmed" | "estimated" | "tba";
 
+// Only set this when actually verified against the vendor; absence just
+// means "no live on-sale to report," not "sold out." Never guess.
+export type TicketStatus = "open" | "sold-out";
+
+export type Region = "Europe" | "Americas" | "Asia" | "Other";
+
 export type Festival = {
   slug: string;
   name: string;
@@ -14,6 +20,8 @@ export type Festival = {
   website: string;
   // Absent, never fabricated, if no live on-sale exists yet.
   ticketUrl?: string;
+  // Only set when verified against the vendor (see TicketStatus above).
+  ticketStatus?: TicketStatus;
   description: string;
   image?: string;
   imageAlt?: string;
@@ -108,6 +116,7 @@ export const FESTIVALS: Festival[] = [
     genres: ["techno", "house"],
     website: "https://www.kappafuturfestival.it",
     ticketUrl: "https://www.kappafuturfestival.it/en/tickets",
+    ticketStatus: "sold-out",
     description:
       "A three-day techno and house festival in Turin's Parco Dora, built around a former steel plant, regularly among Europe's earliest sellouts.",
   },
@@ -245,4 +254,32 @@ export function getPastFestivals(): Festival[] {
 
 export function getFestivalBySlug(slug: string): Festival | null {
   return FESTIVALS.find((f) => f.slug === slug) ?? null;
+}
+
+// Country -> region, for the filter toolbar. New countries default to
+// "Other" rather than silently miscategorized into a region they aren't in.
+const EUROPE = new Set([
+  "Germany",
+  "Netherlands",
+  "Italy",
+  "Spain",
+  "Poland",
+  "United Kingdom",
+]);
+const AMERICAS = new Set(["United States", "Canada", "Mexico", "Brazil", "Argentina", "Chile"]);
+const ASIA = new Set(["Japan", "South Korea", "China", "Thailand", "Indonesia"]);
+
+export function regionOf(country: string): Region {
+  if (EUROPE.has(country)) return "Europe";
+  if (AMERICAS.has(country)) return "Americas";
+  if (ASIA.has(country)) return "Asia";
+  return "Other";
+}
+
+// Real, derived from the festival's own dates, never a fabricated "lineup
+// size" or "capacity" figure we haven't verified.
+export function festivalDurationDays(festival: Festival): number | null {
+  if (!festival.startDate || !festival.endDate) return null;
+  const ms = new Date(festival.endDate).getTime() - new Date(festival.startDate).getTime();
+  return Math.round(ms / 86_400_000) + 1;
 }

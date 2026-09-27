@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import Nav from "@/components/Nav";
 import AboutFooter from "@/components/AboutFooter";
+import FestivalsList from "@/components/FestivalsList";
 import { getUpcomingFestivals, getPastFestivals, type Festival } from "@/lib/festivals";
 import { breadcrumbJsonLd, eventJsonLd } from "@/lib/schema";
-import { formatDateRange } from "@/lib/format";
 
 const description =
   "A curated list of the world's major underground house and techno festivals, with dates, cities, and official ticket links.";
@@ -15,61 +15,6 @@ export const metadata: Metadata = {
   openGraph: { type: "website", url: "/festivals", title: "Festivals — RTS.FM", description },
   twitter: { card: "summary_large_image", title: "Festivals — RTS.FM", description },
 };
-
-function dateLabel(festival: Festival): string {
-  if (festival.dateStatus === "tba" || !festival.startDate || !festival.endDate) {
-    return "Dates TBA";
-  }
-  const range = formatDateRange(festival.startDate, festival.endDate);
-  return festival.dateStatus === "estimated" ? `${range} (est., unconfirmed)` : range;
-}
-
-function FestivalRow({ festival }: { festival: Festival }) {
-  return (
-    <li className="blog-row">
-      <div className="flex flex-col gap-4 py-8 pr-4 sm:flex-row sm:items-start sm:gap-6 sm:pr-10">
-        <div className="min-w-0 flex-1">
-          <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-accent">
-            {festival.city.toUpperCase()}, {festival.country.toUpperCase()} · {dateLabel(festival)}
-          </div>
-          <a
-            href={festival.website}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="blog-row-title mt-2 block max-w-[620px] font-display text-lg font-bold uppercase leading-tight tracking-[-0.03em] text-fg transition-colors hover:text-accent sm:text-xl"
-          >
-            {festival.name}
-          </a>
-          <p className="mt-2 max-w-[620px] text-sm leading-relaxed text-fg-dim">
-            {festival.description}
-          </p>
-          {festival.genres.length > 0 && (
-            <div className="mt-3 flex flex-wrap gap-2">
-              {festival.genres.map((g) => (
-                <span
-                  key={g}
-                  className="rounded-full border border-line px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-fg-dim"
-                >
-                  {g}
-                </span>
-              ))}
-            </div>
-          )}
-        </div>
-        {festival.ticketUrl && (
-          <a
-            href={festival.ticketUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="shrink-0 self-start rounded-full border border-accent/60 px-4 py-2 font-mono text-[11px] uppercase tracking-[0.14em] text-accent transition-colors hover:bg-accent hover:text-bg"
-          >
-            Tickets →
-          </a>
-        )}
-      </div>
-    </li>
-  );
-}
 
 export default function FestivalsIndex() {
   const upcoming = getUpcomingFestivals();
@@ -132,28 +77,7 @@ export default function FestivalsIndex() {
               Nothing listed yet — check back soon.
             </p>
           ) : (
-            <>
-              {upcoming.length > 0 && (
-                <ul className="blog-divider mt-10 flex flex-col divide-y border-y">
-                  {upcoming.map((festival) => (
-                    <FestivalRow key={festival.slug} festival={festival} />
-                  ))}
-                </ul>
-              )}
-
-              {past.length > 0 && (
-                <details className="mt-12">
-                  <summary className="cursor-pointer font-mono text-xs font-bold uppercase tracking-[0.14em] text-fg-dim">
-                    Past festivals ({past.length})
-                  </summary>
-                  <ul className="blog-divider mt-4 flex flex-col divide-y border-y">
-                    {past.map((festival) => (
-                      <FestivalRow key={festival.slug} festival={festival} />
-                    ))}
-                  </ul>
-                </details>
-              )}
-            </>
+            <FestivalsList upcoming={upcoming} past={past} />
           )}
         </div>
       </main>
