@@ -87,3 +87,45 @@ export function videoObjectJsonLd(
     contentUrl: `https://www.youtube.com/watch?v=${embed.videoId}`,
   };
 }
+
+// Event markup for a festival listing. Only emits fields the data actually
+// has verified, no invented address, price or date. Google's Event rich
+// result wants a real ticket/registration url inside offers and a real
+// location, so callers should skip this entirely for festivals whose dates
+// aren't confirmed rather than emit an incomplete Event.
+export function eventJsonLd(festival: {
+  name: string;
+  city: string;
+  country: string;
+  startDate: string;
+  endDate: string;
+  website: string;
+  ticketUrl?: string;
+  description: string;
+  image?: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    name: festival.name,
+    startDate: isoDateTime(festival.startDate),
+    endDate: isoDateTime(festival.endDate),
+    eventStatus: "https://schema.org/EventScheduled",
+    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+    location: {
+      "@type": "Place",
+      name: festival.city,
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: festival.city,
+        addressCountry: festival.country,
+      },
+    },
+    ...(festival.image ? { image: festival.image } : {}),
+    description: festival.description,
+    url: festival.website,
+    ...(festival.ticketUrl
+      ? { offers: { "@type": "Offer", url: festival.ticketUrl, availability: "https://schema.org/InStock" } }
+      : {}),
+  };
+}

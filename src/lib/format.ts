@@ -39,6 +39,21 @@ export function formatDateCompact(iso: string) {
   return `${dd}.${mm}.${yy}`;
 }
 
+// "2026-08-14" + "2026-08-16" -> "14-16 AUG 2026"; falls back to two full
+// dates ("14 AUG 2026 - 03 SEP 2026") when the range crosses months or years.
+export function formatDateRange(startIso: string, endIso: string) {
+  const start = new Date(startIso);
+  const end = new Date(endIso);
+  if (start.getTime() === end.getTime()) return formatDate(startIso);
+  const sameMonth = start.getMonth() === end.getMonth() && start.getFullYear() === end.getFullYear();
+  if (sameMonth) {
+    const month = end.toLocaleDateString("en-GB", { month: "short" }).toUpperCase();
+    const year = end.getFullYear();
+    return `${start.getDate()}-${end.getDate()} ${month} ${year}`;
+  }
+  return `${formatDate(startIso)} - ${formatDate(endIso)}`;
+}
+
 // Feed titles look like "Artist | Venue x Label, City 12.06.2026" — split
 // the artist from the venue/city/date so the two can get separate
 // typographic treatment instead of running together as one dense string.

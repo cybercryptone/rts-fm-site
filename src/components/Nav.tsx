@@ -10,13 +10,18 @@ const LINKS = [
   { href: "/#label", label: "label" },
   { href: "/blog", label: "blog" },
   { href: "/artists", label: "artists" },
+  { href: "/festivals", label: "festivals" },
   { href: "/#about", label: "about" },
 ];
 
-// Only /blog and /artists are real routes (the rest are homepage anchors),
-// so this is the one place "active" means anything beyond a same-page jump.
+// Only /blog, /artists and /festivals are real routes (the rest are homepage
+// anchors), so this is the one place "active" means anything beyond a
+// same-page jump.
 function isLinkActive(href: string, pathname: string | null): boolean {
-  return (href === "/blog" || href === "/artists") && !!pathname?.startsWith(href);
+  return (
+    (href === "/blog" || href === "/artists" || href === "/festivals") &&
+    !!pathname?.startsWith(href)
+  );
 }
 
 export default function Nav() {
