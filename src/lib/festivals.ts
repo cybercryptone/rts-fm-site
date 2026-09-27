@@ -58,6 +58,9 @@ export const FESTIVALS: Festival[] = [
     ticketUrl: "https://www.ctm-festival.de/festival-2027/tickets",
     description:
       "A ten-day festival for adventurous club music and sound art spread across venues including Berghain and Radialsystem, running every January since 1999.",
+    image: "https://rts.fm/images/commons/ctm-festival-berghain-facade.jpg",
+    imageAlt: "Facade of Berghain, the Berlin club that hosts part of CTM Festival's January programming.",
+    imageCredit: "Photo by Jane Mejdahl, CC BY-SA 2.0, via Wikimedia Commons.",
   },
   {
     slug: "dgtl-amsterdam",
@@ -73,6 +76,9 @@ export const FESTIVALS: Festival[] = [
     website: "https://dgtl-festival.com/en/dgtl-amsterdam/",
     description:
       "A sustainability-minded techno and house festival at NDSM Docklands that opens Amsterdam's festival calendar every spring.",
+    image: "https://rts.fm/images/commons/dgtl-amsterdam-ndsm-plein.jpg",
+    imageAlt: "NDSM-plein in Amsterdam-Noord, the former shipyard docklands where DGTL Amsterdam is held.",
+    imageCredit: "Photo by Ceescamel, CC BY-SA 4.0, via Wikimedia Commons.",
   },
   {
     slug: "time-warp",
@@ -89,6 +95,9 @@ export const FESTIVALS: Festival[] = [
     ticketUrl: "https://www.time-warp.de/tickets/",
     description:
       "A single 19-hour night across five stages in Mannheim, the German original behind the Time Warp name now licensed to editions worldwide.",
+    image: "https://rts.fm/images/commons/time-warp-maimarkt-entrance.jpg",
+    imageAlt: "Main entrance to Mannheim's Maimarkt fairground, home to the Maimarkthalle where Time Warp's German edition is held.",
+    imageCredit: "Photo by Radosław Drożdżewski, CC BY-SA 4.0, via Wikimedia Commons.",
   },
   {
     slug: "sonar",
@@ -105,6 +114,9 @@ export const FESTIVALS: Festival[] = [
     ticketUrl: "https://sonar.es/en/tickets",
     description:
       "Barcelona's festival for advanced electronic music and digital art since 1994, split across day and night programs.",
+    image: "https://rts.fm/images/commons/sonar-sonar-by-day-2016.jpg",
+    imageAlt: "Crowd at Sonar by Day 2016, with the Palau Nacional visible behind the stages at Fira Montjuic, Barcelona.",
+    imageCredit: "Photo by Nachetere, CC BY-SA 4.0, via Wikimedia Commons.",
   },
   {
     slug: "sea-you-festival",
@@ -121,6 +133,9 @@ export const FESTIVALS: Festival[] = [
     ticketUrl: "https://shop.seayou-festival.de/festivaltickets?language=en_EN",
     description:
       "A house and techno festival built around swimming and dancing at a lake outside Freiburg, six stages over a July weekend.",
+    image: "https://rts.fm/images/commons/sea-you-tunisee-lake.jpg",
+    imageAlt: "Aerial view of the Tunisee lake outside Freiburg im Breisgau, Germany.",
+    imageCredit: "Photo by Norbert Blau, CC BY-SA 3.0, via Wikimedia Commons.",
   },
   {
     slug: "kappa-futurfestival",
@@ -138,6 +153,9 @@ export const FESTIVALS: Festival[] = [
     ticketStatus: "sold-out",
     description:
       "A three-day techno and house festival in Turin's Parco Dora, built around a former steel plant, regularly among Europe's earliest sellouts.",
+    image: "https://rts.fm/images/commons/kappa-parco-dora-vitali-area.jpg",
+    imageAlt: "The orange industrial support towers of Parco Dora's Vitali lot in Turin, the site of Kappa FuturFestival.",
+    imageCredit: "Photo by Pmk58, CC BY-SA 4.0, via Wikimedia Commons.",
   },
   {
     slug: "awakenings-festival",
@@ -154,6 +172,9 @@ export const FESTIVALS: Festival[] = [
     ticketUrl: "https://www.awakenings.com/en/tickets/",
     description:
       "The Dutch techno institution's summer festival, marking its 30th anniversary edition in 2027 after growing out of Amsterdam's early-90s rave scene.",
+    image: "https://rts.fm/images/commons/awakenings-festival-gashouder-westergasfabriek.jpg",
+    imageAlt: "The Gashouder, the domed former gas holder at Amsterdam's Westergasfabriek, the original home of Awakenings.",
+    imageCredit: "Photo by Bert van As / Rijksdienst voor het Cultureel Erfgoed, CC BY-SA 4.0, via Wikimedia Commons.",
   },
   {
     slug: "nachtdigital",
@@ -170,6 +191,9 @@ export const FESTIVALS: Festival[] = [
     ticketUrl: "https://nachtdigital.de/en/tickets",
     description:
       "A small, long-running techno and house gathering at a bungalow village outside Leipzig, known for a deliberately intimate, non-commercial setup.",
+    image: "https://rts.fm/images/commons/nachtdigital-bungalowdorf-olganitz-2014.jpg",
+    imageAlt: "A DJ performing at Nachtdigital festival at Bungalowdorf Olganitz in 2014.",
+    imageCredit: "Photo by Robert Richter, CC BY 2.0, via Wikimedia Commons.",
   },
   {
     slug: "dekmantel-festival",
@@ -186,6 +210,9 @@ export const FESTIVALS: Festival[] = [
     ticketUrl: "https://tickets.dekmantelfestival.com/7f76d13927a5443ca54ccd3c143f3a3b/",
     description:
       "The Amsterdam label's own festival in the Amsterdamse Bos, four days of deliberately eclectic house, techno and disco booking across forest stages.",
+    image: "https://rts.fm/images/commons/dekmantel-festival-amsterdamse-bos-heuvel.jpg",
+    imageAlt: "A wooded clearing in the Amsterdamse Bos, the Amsterdam park that has hosted Dekmantel Festival since 2013.",
+    imageCredit: "Photo by Shirley de Jong, CC BY-SA 3.0, via Wikimedia Commons.",
   },
   {
     slug: "garbicz-festival",
@@ -202,6 +229,9 @@ export const FESTIVALS: Festival[] = [
     ticketUrl: "https://garbiczfestival.com",
     description:
       "A five-day, artist-built festival on a lake in rural western Poland, run since 2012 on a deliberately anti-commercial, community-organized model.",
+    image: "https://rts.fm/images/commons/garbicz-festival-lake-wielicko-aerial.jpg",
+    imageAlt: "Aerial view of Lake Wielicko at Garbicz village, Poland, where Garbicz Festival is held.",
+    imageCredit: "Photo by Łukasz Świerczewski, CC BY-SA 4.0, via Wikimedia Commons.",
   },
   {
     slug: "movement-detroit",
@@ -218,6 +248,9 @@ export const FESTIVALS: Festival[] = [
     ticketUrl: "https://movementfestival.com",
     description:
       "Detroit's own Memorial Day Weekend techno festival at Hart Plaza, the direct descendant of the 2000 Detroit Electronic Music Festival in the genre's birthplace.",
+    image: "https://rts.fm/images/commons/Detroit_Electronic_Music_Festival_2002_main_stage_after_dark.jpg",
+    imageAlt: "The main stage and crowd after dark at the 2002 Detroit Electronic Music Festival, Movement's direct predecessor.",
+    imageCredit: "Photo by Myself248, CC BY-SA 4.0, via Wikimedia Commons.",
   },
   {
     slug: "berlin-atonal",
@@ -234,6 +267,9 @@ export const FESTIVALS: Festival[] = [
     ticketUrl: "https://berlin-atonal.com",
     description:
       "A biennial festival for experimental sound and audiovisual work inside Kraftwerk Berlin's former power plant, tracing back to the West Berlin underground of 1982.",
+    image: "https://rts.fm/images/commons/berlin-atonal-kraftwerk-interior.jpg",
+    imageAlt: "Concrete pillars and turbine hall interior of Kraftwerk Berlin, lit for an event.",
+    imageCredit: "Photo by MakeMagazinDE, CC BY-SA 4.0, via Wikimedia Commons.",
   },
   {
     slug: "draaimolen",
@@ -249,6 +285,9 @@ export const FESTIVALS: Festival[] = [
     website: "https://www.draaimolen.nu",
     description:
       "An independent techno festival on a Brabant campsite built around art, nature and a deliberately non-commercial lineup policy; 2027 dates not yet announced.",
+    image: "https://rts.fm/images/commons/draaimolen-oisterwijkse-bossen-forest.jpg",
+    imageAlt: "Forest path in the Oisterwijkse Bossen en Vennen nature reserve near Oisterwijk, Netherlands.",
+    imageCredit: "Photo by Klankbeeld, CC BY-SA 4.0, via Wikimedia Commons.",
   },
   {
     slug: "junction-2",
@@ -262,6 +301,9 @@ export const FESTIVALS: Festival[] = [
     website: "https://www.junction2.london",
     description:
       "London's own underground house and techno festival at Boston Manor Park, running since 2016 with stages ranging from woodland floors to a rave under the M4 flyover.",
+    image: "https://rts.fm/images/commons/junction-2-m4-flyover-boston-manor-park.jpg",
+    imageAlt: "The underside of the M4 flyover as it crosses Boston Manor Park in Brentford, London, the site of Junction 2's Bridge stage.",
+    imageCredit: "Photo by Ethan Doyle White, CC BY-SA 4.0, via Wikimedia Commons.",
   },
 ];
 

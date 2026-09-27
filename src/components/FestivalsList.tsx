@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import {
   regionOf,
   festivalDurationDays,
@@ -76,14 +77,12 @@ function FestivalRow({
 
         {/* Col 2: title, the visual anchor of the row, plus genre tags */}
         <div className="min-w-0">
-          <a
-            href={festival.website}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href={`/festivals/${festival.slug}`}
             className="block font-display text-[28px] font-bold uppercase leading-[1.05] tracking-[-0.03em] text-fg transition-colors hover:text-accent"
           >
             {festival.name}
-          </a>
+          </Link>
           {festival.genres.length > 0 && (
             <div className="mt-3 flex flex-wrap gap-2">
               {festival.genres.map((g) => (
@@ -96,6 +95,14 @@ function FestivalRow({
               ))}
             </div>
           )}
+          <a
+            href={festival.website}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-3 inline-block font-mono text-[11px] uppercase tracking-[0.14em] text-fg-dim transition-colors hover:text-accent"
+          >
+            Official site ↗
+          </a>
         </div>
 
         {/* Col 3: description, gets its own real column instead of trailing off into empty space */}

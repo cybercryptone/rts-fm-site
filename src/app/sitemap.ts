@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { SITE } from "@/lib/data";
 import { getAllPosts } from "@/lib/blog";
 import { getAllArtists } from "@/lib/artists";
+import { FESTIVALS } from "@/lib/festivals";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
@@ -43,6 +44,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
     ...getAllArtists().map((artist) => ({
       url: `${SITE.url}/artists/${artist.slug}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    })),
+    ...FESTIVALS.map((festival) => ({
+      url: `${SITE.url}/festivals/${festival.slug}`,
       lastModified: new Date(),
       changeFrequency: "monthly" as const,
       priority: 0.6,
