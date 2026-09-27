@@ -62,3 +62,28 @@ export function faqJsonLd(items: { question: string; answer: string }[]) {
 export function isoDateTime(date: string): string {
   return /^\d{4}-\d{2}-\d{2}$/.test(date) ? `${date}T00:00:00+00:00` : date;
 }
+
+// Pulls every <YouTubeEmbed videoId="..." title="..."> out of a post's MDX
+// so the page can emit matching VideoObject markup for each one it has
+// real metadata for (see lib/video-metadata.ts).
+export function extractYouTubeEmbeds(content: string): { videoId: string; title: string }[] {
+  const matches = content.matchAll(/<YouTubeEmbed\s+videoId="([^"]+)"\s+title="([^"]+)"/g);
+  return Array.from(matches, (m) => ({ videoId: m[1], title: m[2] }));
+}
+
+export function videoObjectJsonLd(
+  embed: { videoId: string; title: string },
+  meta: import("./video-metadata").BlogVideoMeta,
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
+    name: embed.title,
+    description: meta.description,
+    thumbnailUrl: meta.thumbnailUrl,
+    uploadDate: meta.uploadDate,
+    duration: meta.duration,
+    embedUrl: `https://www.youtube-nocookie.com/embed/${embed.videoId}`,
+    contentUrl: `https://www.youtube.com/watch?v=${embed.videoId}`,
+  };
+}

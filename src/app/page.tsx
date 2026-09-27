@@ -33,7 +33,7 @@ const archiveVideosJsonLd = {
       uploadDate: archiveSetIsoDate(set),
       duration: archiveSetIsoDuration(set),
       contentUrl: youtubeWatchUrl(set),
-      embedUrl: `https://www.youtube.com/embed/${set.videoId}`,
+      embedUrl: `https://www.youtube-nocookie.com/embed/${set.videoId}`,
       interactionStatistic: {
         "@type": "InteractionCounter",
         interactionType: { "@type": "WatchAction" },

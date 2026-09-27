@@ -14,7 +14,15 @@ import BandcampEmbed from "@/components/BandcampEmbed";
 import { getAllPosts, getArticleImage, getPostBySlug } from "@/lib/blog";
 import { formatDate } from "@/lib/format";
 import { SITE } from "@/lib/data";
-import { breadcrumbJsonLd, extractFaqItems, faqJsonLd, isoDateTime } from "@/lib/schema";
+import {
+  breadcrumbJsonLd,
+  extractFaqItems,
+  extractYouTubeEmbeds,
+  faqJsonLd,
+  isoDateTime,
+  videoObjectJsonLd,
+} from "@/lib/schema";
+import { BLOG_VIDEO_META } from "@/lib/video-metadata";
 
 export function generateStaticParams() {
   return getAllPosts().map((post) => ({ slug: post.slug }));
@@ -211,6 +219,10 @@ export default async function BlogPost({
 
   const faqItems = extractFaqItems(post.content);
 
+  const videoJsonLds = extractYouTubeEmbeds(post.content)
+    .filter((embed) => BLOG_VIDEO_META[embed.videoId])
+    .map((embed) => videoObjectJsonLd(embed, BLOG_VIDEO_META[embed.videoId]));
+
   return (
     <>
       <script
@@ -223,6 +235,13 @@ export default async function BlogPost({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd(faqItems)) }}
         />
       )}
+      {videoJsonLds.map((video) => (
+        <script
+          key={video.embedUrl}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(video) }}
+        />
+      ))}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }}

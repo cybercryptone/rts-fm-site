@@ -1,4 +1,4 @@
-import { ARCHIVE_SETS, youtubeThumbnail, youtubeWatchUrl } from "@/lib/data";
+import { ARCHIVE_SETS, youtubeWatchUrl } from "@/lib/data";
 
 export default function SetsArchive() {
   return (
@@ -19,47 +19,48 @@ export default function SetsArchive() {
 
       <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3 xl:grid-cols-4">
         {ARCHIVE_SETS.map((s) => (
-          <a
+          <div
             key={s.videoId}
-            href={youtubeWatchUrl(s)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group overflow-hidden rounded-xl border border-line bg-bg-elevated transition-colors hover:border-accent/60"
+            className="overflow-hidden rounded-xl border border-line bg-bg-elevated transition-colors hover:border-accent/60"
           >
             <div className="relative aspect-video overflow-hidden">
-              {/* eslint-disable-next-line @next/next/no-img-element -- hotlinked YouTube thumbnail; proxying through next/image's optimizer would route every visitor's load through our own server for no visual benefit (YouTube's hqdefault.jpg is already a fixed, reasonable size) */}
-              <img
-                src={youtubeThumbnail(s)}
-                alt={`${s.artist} — ${s.context}, ${s.date}`}
+              {/* A genuinely embedded, crawlable player, not just a thumbnail
+                  linking out to YouTube: it needs to match the VideoObject
+                  markup below, or Google's video indexing has nothing to
+                  verify the markup against. loading="lazy" defers the actual
+                  network fetch until the card nears the viewport, so this
+                  costs nothing for cards a visitor never scrolls to. */}
+              <iframe
+                src={`https://www.youtube-nocookie.com/embed/${s.videoId}`}
+                title={`${s.artist} — ${s.context}, ${s.date}`}
                 loading="lazy"
-                className="absolute inset-0 h-full w-full object-cover text-[0px] transition-transform duration-500 group-hover:scale-105"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="absolute inset-0 h-full w-full"
               />
 
-              <span className="absolute left-2 top-2 rounded-full bg-black/50 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.1em] text-white/90 backdrop-blur-sm">
+              <span className="pointer-events-none absolute left-2 top-2 rounded-full bg-black/50 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.1em] text-white/90 backdrop-blur-sm">
                 {s.views} views
               </span>
-              <span className="absolute bottom-2 right-2 rounded bg-black/70 px-1.5 py-0.5 font-mono text-[10px] text-white">
+              <span className="pointer-events-none absolute bottom-2 right-2 rounded bg-black/70 px-1.5 py-0.5 font-mono text-[10px] text-white">
                 {s.duration}
               </span>
-
-              <div className="absolute inset-0 flex items-center justify-center bg-ink/0 opacity-0 transition-opacity group-hover:bg-ink/20 group-hover:opacity-100">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-black/60 backdrop-blur-sm">
-                  <svg width="14" height="16" viewBox="0 0 14 16" fill="white">
-                    <path d="M0 0L14 8L0 16V0Z" />
-                  </svg>
-                </div>
-              </div>
             </div>
 
             <div className="px-3 py-2.5">
               <p className="font-display text-sm font-bold uppercase leading-tight tracking-[-0.01em] text-fg">
                 {s.artist}
               </p>
-              <p className="mt-1 truncate font-mono text-[10px] uppercase tracking-[0.08em] text-fg-dim">
+              <a
+                href={youtubeWatchUrl(s)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-1 block truncate font-mono text-[10px] uppercase tracking-[0.08em] text-fg-dim transition-colors hover:text-accent"
+              >
                 {s.context} · {s.date}
-              </p>
+              </a>
             </div>
-          </a>
+          </div>
         ))}
       </div>
     </div>
