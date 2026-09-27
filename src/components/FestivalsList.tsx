@@ -8,6 +8,7 @@ import {
   type Region,
 } from "@/lib/festivals";
 import { formatDateRange } from "@/lib/format";
+import FestivalRadar from "./FestivalRadar";
 
 const REGION_FILTERS: { label: string; value: Region | "all" }[] = [
   { label: "All Regions", value: "all" },
@@ -47,10 +48,24 @@ function TicketCta({ festival }: { festival: Festival }) {
   );
 }
 
-function FestivalRow({ festival }: { festival: Festival }) {
+function FestivalRow({
+  festival,
+  isHighlighted,
+  onHover,
+}: {
+  festival: Festival;
+  isHighlighted: boolean;
+  onHover: (slug: string | null) => void;
+}) {
   const days = festivalDurationDays(festival);
   return (
-    <li className="group relative border-l-2 border-transparent transition-colors hover:border-accent hover:bg-fg/[0.03]">
+    <li
+      onMouseEnter={() => onHover(festival.slug)}
+      onMouseLeave={() => onHover(null)}
+      className={`group relative border-l-2 transition-colors hover:border-accent hover:bg-fg/[0.03] ${
+        isHighlighted ? "border-accent bg-fg/[0.03]" : "border-transparent"
+      }`}
+    >
       <div className="grid grid-cols-1 gap-4 py-8 pl-4 pr-4 sm:grid-cols-[180px_minmax(0,1fr)_auto_auto] sm:items-start sm:gap-6 sm:pl-6 sm:pr-10">
         {/* Col 1: date + city, fixed width */}
         <div className="font-mono text-[10px] uppercase leading-relaxed tracking-[0.14em] text-fg-dim">
@@ -109,6 +124,8 @@ export default function FestivalsList({
   past: Festival[];
 }) {
   const [region, setRegion] = useState<Region | "all">("all");
+  const [view, setView] = useState<"list" | "radar">("list");
+  const [hoveredSlug, setHoveredSlug] = useState<string | null>(null);
 
   const filteredUpcoming = useMemo(
     () => (region === "all" ? upcoming : upcoming.filter((f) => regionOf(f.country) === region)),
@@ -121,51 +138,93 @@ export default function FestivalsList({
 
   return (
     <>
-      <div
-        role="group"
-        aria-label="Filter by region"
-        className="mt-10 flex flex-wrap gap-2 border-y border-line py-4"
-      >
-        {REGION_FILTERS.map((f) => (
-          <button
-            key={f.value}
-            type="button"
-            onClick={() => setRegion(f.value)}
-            aria-pressed={region === f.value}
-            className={`rounded-full border px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.14em] transition-colors ${
-              region === f.value
-                ? "border-accent bg-accent text-bg"
-                : "border-line text-fg-dim hover:border-accent/60 hover:text-accent"
-            }`}
-          >
-            {f.label}
-          </button>
-        ))}
+      <div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-y border-line py-4">
+        <div role="group" aria-label="Filter by region" className="flex flex-wrap gap-2">
+          {REGION_FILTERS.map((f) => (
+            <button
+              key={f.value}
+              type="button"
+              onClick={() => setRegion(f.value)}
+              aria-pressed={region === f.value}
+              className={`rounded-full border px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.14em] transition-colors ${
+                region === f.value
+                  ? "border-accent bg-accent text-bg"
+                  : "border-line text-fg-dim hover:border-accent/60 hover:text-accent"
+              }`}
+            >
+              {f.label}
+            </button>
+          ))}
+        </div>
+
+        <div role="group" aria-label="Switch view" className="flex gap-2">
+          {(["list", "radar"] as const).map((v) => (
+            <button
+              key={v}
+              type="button"
+              onClick={() => setView(v)}
+              aria-pressed={view === v}
+              className={`rounded-full border px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.14em] transition-colors ${
+                view === v
+                  ? "border-accent bg-accent text-bg"
+                  : "border-line text-fg-dim hover:border-accent/60 hover:text-accent"
+              }`}
+            >
+              {v === "list" ? "List View" : "Radar Map"}
+            </button>
+          ))}
+        </div>
       </div>
 
       {filteredUpcoming.length === 0 && filteredPast.length === 0 ? (
         <p className="mt-10 text-sm text-fg-dim">No festivals match that filter yet.</p>
       ) : (
         <>
-          {filteredUpcoming.length > 0 && (
-            <ul className="blog-divider mt-4 flex flex-col divide-y border-y">
-              {filteredUpcoming.map((festival) => (
-                <FestivalRow key={festival.slug} festival={festival} />
-              ))}
-            </ul>
-          )}
+          {view === "radar" ? (
+            <div className="mt-6">
+              <FestivalRadar
+                festivals={[...filteredUpcoming, ...filteredPast]}
+                activeSlug={hoveredSlug}
+                onHoverFestival={setHoveredSlug}
+              />
+              <p className="mt-4 text-xs text-fg-dim">
+                Hover a node for its city and coordinates, or switch to list view for
+                descriptions and ticket links.
+              </p>
+            </div>
+          ) : (
+            <>
+              {filteredUpcoming.length > 0 && (
+                <ul className="blog-divider mt-4 flex flex-col divide-y border-y">
+                  {filteredUpcoming.map((festival) => (
+                    <FestivalRow
+                      key={festival.slug}
+                      festival={festival}
+                      isHighlighted={hoveredSlug === festival.slug}
+                      onHover={setHoveredSlug}
+                    />
+                  ))}
+                </ul>
+              )}
 
-          {filteredPast.length > 0 && (
-            <details className="mt-12">
-              <summary className="cursor-pointer font-mono text-xs font-bold uppercase tracking-[0.14em] text-fg-dim">
-                Past festivals ({filteredPast.length})
-              </summary>
-              <ul className="blog-divider mt-4 flex flex-col divide-y border-y">
-                {filteredPast.map((festival) => (
-                  <FestivalRow key={festival.slug} festival={festival} />
-                ))}
-              </ul>
-            </details>
+              {filteredPast.length > 0 && (
+                <details className="mt-12">
+                  <summary className="cursor-pointer font-mono text-xs font-bold uppercase tracking-[0.14em] text-fg-dim">
+                    Past festivals ({filteredPast.length})
+                  </summary>
+                  <ul className="blog-divider mt-4 flex flex-col divide-y border-y">
+                    {filteredPast.map((festival) => (
+                      <FestivalRow
+                        key={festival.slug}
+                        festival={festival}
+                        isHighlighted={hoveredSlug === festival.slug}
+                        onHover={setHoveredSlug}
+                      />
+                    ))}
+                  </ul>
+                </details>
+              )}
+            </>
           )}
         </>
       )}
