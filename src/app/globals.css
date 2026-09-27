@@ -551,3 +551,27 @@ body::before {
   opacity: 1;
   transform: translateX(0);
 }
+
+/* Festival radar scope — continuous sweep beam, the "live scan" tell.
+   transform-box/transform-origin keeps rotation centered on the SVG
+   group rather than its bounding-box corner. */
+.radar-sweep {
+  transform-box: fill-box;
+  animation: radar-sweep-rotate 7s linear infinite;
+  will-change: transform;
+}
+
+@keyframes radar-sweep-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .radar-sweep {
+    animation: none;
+  }
+}
