@@ -66,7 +66,7 @@ function FestivalRow({
         isHighlighted ? "border-accent bg-fg/[0.03]" : "border-transparent"
       }`}
     >
-      <div className="grid grid-cols-1 gap-5 py-10 pl-4 pr-4 sm:gap-6 sm:pl-6 sm:pr-10 lg:grid-cols-[150px_minmax(180px,1fr)_minmax(240px,32%)_auto] lg:items-start lg:gap-8">
+      <div className="grid grid-cols-1 gap-5 py-10 pl-4 pr-4 sm:gap-6 sm:pl-6 sm:pr-10 lg:grid-cols-[150px_minmax(180px,1fr)_minmax(240px,32%)_150px] lg:items-start lg:gap-8">
         {/* Col 1: date + city, date is the loud one */}
         <div className="font-mono uppercase leading-snug tracking-[0.1em]">
           <div className="text-[15px] font-bold text-accent">{dateLabel(festival)}</div>
