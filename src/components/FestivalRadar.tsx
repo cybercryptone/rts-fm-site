@@ -1,19 +1,26 @@
 "use client";
 
+import { useMemo } from "react";
 import type { Festival } from "@/lib/festivals";
 
 const WIDTH = 720;
 const HEIGHT = 380;
 
-// Plain equirectangular projection, no map library and no drawn coastlines:
-// coastline data we don't have would either need a real geo dataset or a
-// hand-approximated shape we can't verify as accurate, so the "radar" reads
-// off a lat/lon graticule instead. Honest about being abstract rather than
-// a real map.
-function project(lat: number, lon: number): { x: number; y: number } {
-  const x = ((lon + 180) / 360) * WIDTH;
-  const y = ((90 - lat) / 180) * HEIGHT;
-  return { x, y };
+// "Nice" tick intervals to pick from once we know how wide a span the data
+// actually covers, so the graticule reads as a few clean lines rather than
+// either one bare line or fifty crowded ones.
+const TICK_STEPS = [1, 2, 5, 10, 15, 20, 30, 45, 90];
+
+function pickStep(span: number): number {
+  const target = span / 5;
+  return TICK_STEPS.find((step) => step >= target) ?? TICK_STEPS[TICK_STEPS.length - 1];
+}
+
+function ticksFor(min: number, max: number, step: number): number[] {
+  const start = Math.ceil(min / step) * step;
+  const ticks: number[] = [];
+  for (let v = start; v <= max; v += step) ticks.push(Math.round(v * 100) / 100);
+  return ticks;
 }
 
 function coordLabel(lat: number, lon: number): string {
@@ -21,9 +28,6 @@ function coordLabel(lat: number, lon: number): string {
   const ew = lon >= 0 ? "E" : "W";
   return `${Math.abs(lat).toFixed(4)}° ${ns}, ${Math.abs(lon).toFixed(4)}° ${ew}`;
 }
-
-const LAT_LINES = [-60, -30, 0, 30, 60];
-const LON_LINES = [-150, -120, -90, -60, -30, 0, 30, 60, 90, 120, 150];
 
 export default function FestivalRadar({
   festivals,
@@ -36,6 +40,46 @@ export default function FestivalRadar({
 }) {
   const active = festivals.find((f) => f.slug === activeSlug) ?? null;
 
+  // Auto-fit the view to wherever the current (possibly region-filtered)
+  // set of festivals actually is, instead of always projecting the whole
+  // planet. A dozen European festivals plotted against a full world
+  // graticule collapse into a tiny, near-invisible cluster in one corner;
+  // zooming to the data's own bounding box (with padding, and a floor so a
+  // single point or a tight cluster doesn't over-zoom into nothing) is what
+  // makes the radar actually readable.
+  const { project, latTicks, lonTicks } = useMemo(() => {
+    const lats = festivals.map((f) => f.lat);
+    const lons = festivals.map((f) => f.lon);
+    const rawMinLat = lats.length ? Math.min(...lats) : 30;
+    const rawMaxLat = lats.length ? Math.max(...lats) : 60;
+    const rawMinLon = lons.length ? Math.min(...lons) : -10;
+    const rawMaxLon = lons.length ? Math.max(...lons) : 20;
+
+    const latSpan = Math.max(rawMaxLat - rawMinLat, 4);
+    const lonSpan = Math.max(rawMaxLon - rawMinLon, 4);
+    const latPad = Math.max(latSpan * 0.25, 4);
+    const lonPad = Math.max(lonSpan * 0.25, 4);
+
+    const minLat = Math.max(rawMinLat - latPad, -85);
+    const maxLat = Math.min(rawMaxLat + latPad, 85);
+    const minLon = rawMinLon - lonPad;
+    const maxLon = rawMaxLon + lonPad;
+
+    const project = (lat: number, lon: number) => ({
+      x: ((lon - minLon) / (maxLon - minLon)) * WIDTH,
+      y: ((maxLat - lat) / (maxLat - minLat)) * HEIGHT,
+    });
+
+    const latStep = pickStep(maxLat - minLat);
+    const lonStep = pickStep(maxLon - minLon);
+
+    return {
+      project,
+      latTicks: ticksFor(minLat, maxLat, latStep),
+      lonTicks: ticksFor(minLon, maxLon, lonStep),
+    };
+  }, [festivals]);
+
   return (
     <div className="relative overflow-hidden rounded-xl border border-line bg-bg-elevated">
       <svg
@@ -46,22 +90,20 @@ export default function FestivalRadar({
       >
         <rect x={0} y={0} width={WIDTH} height={HEIGHT} className="fill-bg" />
 
-        {/* Graticule, the "radar screen" */}
-        {LAT_LINES.map((lat) => {
+        {/* Graticule, the "radar screen", ticked to whatever span the
+            current data actually covers. */}
+        {latTicks.map((lat) => {
           const { y } = project(lat, 0);
           return (
-            <line
-              key={`lat-${lat}`}
-              x1={0}
-              y1={y}
-              x2={WIDTH}
-              y2={y}
-              className="stroke-line"
-              strokeWidth={1}
-            />
+            <g key={`lat-${lat}`}>
+              <line x1={0} y1={y} x2={WIDTH} y2={y} className="stroke-line" strokeWidth={1} />
+              <text x={6} y={y - 4} className="fill-fg-dim/60 font-mono text-[8px]">
+                {lat.toFixed(0)}°
+              </text>
+            </g>
           );
         })}
-        {LON_LINES.map((lon) => {
+        {lonTicks.map((lon) => {
           const { x } = project(0, lon);
           return (
             <line
@@ -75,9 +117,6 @@ export default function FestivalRadar({
             />
           );
         })}
-        {/* Equator and prime meridian, slightly heavier */}
-        <line x1={0} y1={project(0, 0).y} x2={WIDTH} y2={project(0, 0).y} className="stroke-line" strokeWidth={1.5} />
-        <line x1={project(0, 0).x} y1={0} x2={project(0, 0).x} y2={HEIGHT} className="stroke-line" strokeWidth={1.5} />
 
         {/* Festival reticles */}
         {festivals.map((f) => {
@@ -91,16 +130,23 @@ export default function FestivalRadar({
               onMouseLeave={() => onHoverFestival(null)}
               className="cursor-pointer"
             >
-              <circle r={10} className="fill-transparent" />
+              <circle r={14} className="fill-transparent" />
               {isActive && (
-                <circle r={7} className="fill-none stroke-accent" strokeWidth={1}>
-                  <animate attributeName="r" values="5;10;5" dur="1.6s" repeatCount="indefinite" />
+                <circle r={9} className="fill-none stroke-accent" strokeWidth={1}>
+                  <animate attributeName="r" values="7;14;7" dur="1.6s" repeatCount="indefinite" />
                   <animate attributeName="opacity" values="0.9;0;0.9" dur="1.6s" repeatCount="indefinite" />
                 </circle>
               )}
-              <line x1={-4} y1={0} x2={4} y2={0} className={isActive ? "stroke-accent" : "stroke-fg-dim"} strokeWidth={1.5} />
-              <line x1={0} y1={-4} x2={0} y2={4} className={isActive ? "stroke-accent" : "stroke-fg-dim"} strokeWidth={1.5} />
-              <circle r={2} className={isActive ? "fill-accent" : "fill-fg-dim"} />
+              <line x1={-6} y1={0} x2={6} y2={0} className={isActive ? "stroke-accent" : "stroke-fg-dim"} strokeWidth={1.5} />
+              <line x1={0} y1={-6} x2={0} y2={6} className={isActive ? "stroke-accent" : "stroke-fg-dim"} strokeWidth={1.5} />
+              <circle r={3} className={isActive ? "fill-accent" : "fill-fg-dim"} />
+              <text
+                x={9}
+                y={-9}
+                className={`font-mono text-[9px] uppercase tracking-[0.06em] ${isActive ? "fill-accent" : "fill-fg-dim"}`}
+              >
+                {f.city}
+              </text>
             </g>
           );
         })}
