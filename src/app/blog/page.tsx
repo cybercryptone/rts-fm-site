@@ -53,9 +53,9 @@ export default function BlogIndex() {
                 <li key={post.slug} className="blog-row group">
                   <Link
                     href={`/blog/${post.slug}`}
-                    className="flex flex-col gap-4 py-10 pr-4 sm:grid sm:grid-cols-[56px_minmax(0,1fr)_minmax(240px,38%)_32px] sm:items-center sm:gap-8 sm:pr-10"
+                    className="flex flex-col gap-4 py-10 pr-4 sm:pr-10 lg:grid lg:grid-cols-[56px_minmax(160px,1fr)_minmax(240px,38%)_32px] lg:items-center lg:gap-8"
                   >
-                    <span className="hidden shrink-0 self-start font-mono text-sm tracking-[0.06em] text-fg-dim sm:block sm:self-center">
+                    <span className="hidden shrink-0 self-start font-mono text-sm tracking-[0.06em] text-fg-dim lg:block lg:self-center">
                       {String(i + 1).padStart(2, "0")}
                       {" //"}
                     </span>
@@ -68,10 +68,10 @@ export default function BlogIndex() {
                         {post.title}
                       </p>
                     </div>
-                    <p className="text-sm leading-relaxed text-fg-dim sm:border-l sm:border-line sm:pl-6">
+                    <p className="text-sm leading-relaxed text-fg-dim lg:border-l lg:border-line lg:pl-6">
                       {post.excerpt}
                     </p>
-                    <span className="hidden shrink-0 self-center font-mono text-lg text-accent transition-transform duration-200 group-hover:translate-x-[3px] sm:block">
+                    <span className="hidden shrink-0 self-center font-mono text-lg text-accent transition-transform duration-200 group-hover:translate-x-[3px] lg:block">
                       →
                     </span>
                   </Link>

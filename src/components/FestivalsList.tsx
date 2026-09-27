@@ -66,7 +66,7 @@ function FestivalRow({
         isHighlighted ? "border-accent bg-fg/[0.03]" : "border-transparent"
       }`}
     >
-      <div className="grid grid-cols-1 gap-5 py-10 pl-4 pr-4 sm:grid-cols-[150px_minmax(0,1fr)_minmax(240px,32%)_auto] sm:items-start sm:gap-8 sm:pl-6 sm:pr-10">
+      <div className="grid grid-cols-1 gap-5 py-10 pl-4 pr-4 sm:gap-6 sm:pl-6 sm:pr-10 lg:grid-cols-[150px_minmax(180px,1fr)_minmax(240px,32%)_auto] lg:items-start lg:gap-8">
         {/* Col 1: date + city, date is the loud one */}
         <div className="font-mono uppercase leading-snug tracking-[0.1em]">
           <div className="text-[15px] font-bold text-accent">{dateLabel(festival)}</div>
@@ -100,12 +100,12 @@ function FestivalRow({
         </div>
 
         {/* Col 3: description, gets its own real column instead of trailing off into empty space */}
-        <p className="text-[15px] leading-[1.5] text-fg-dim sm:border-l sm:border-line sm:pl-6">
+        <p className="text-[15px] leading-[1.5] text-fg-dim lg:border-l lg:border-line lg:pl-6">
           {festival.description}
         </p>
 
         {/* Col 4: duration (real, derived) grouped tight against the ticket CTA */}
-        <div className="flex flex-row items-center gap-4 sm:flex-col sm:items-end sm:gap-3">
+        <div className="flex flex-row items-center gap-4 lg:flex-col lg:items-end lg:gap-3">
           {days && (
             <span className="font-mono text-sm uppercase tracking-[0.1em] text-fg-dim">
               {days} DAY{days > 1 ? "S" : ""}
