@@ -66,34 +66,31 @@ function FestivalRow({
         isHighlighted ? "border-accent bg-fg/[0.03]" : "border-transparent"
       }`}
     >
-      <div className="grid grid-cols-1 gap-4 py-8 pl-4 pr-4 sm:grid-cols-[180px_minmax(0,1fr)_auto_auto] sm:items-start sm:gap-6 sm:pl-6 sm:pr-10">
-        {/* Col 1: date + city, fixed width */}
-        <div className="font-mono text-[10px] uppercase leading-relaxed tracking-[0.14em] text-fg-dim">
-          <div className="text-accent">{dateLabel(festival)}</div>
-          <div className="mt-1">
+      <div className="grid grid-cols-1 gap-5 py-10 pl-4 pr-4 sm:grid-cols-[150px_minmax(0,1fr)_minmax(240px,32%)_auto] sm:items-start sm:gap-8 sm:pl-6 sm:pr-10">
+        {/* Col 1: date + city, date is the loud one */}
+        <div className="font-mono uppercase leading-snug tracking-[0.1em]">
+          <div className="text-[15px] font-bold text-accent">{dateLabel(festival)}</div>
+          <div className="mt-1 text-xs text-fg-dim">
             {festival.city}, {festival.country}
           </div>
         </div>
 
-        {/* Col 2: title, description, genres */}
+        {/* Col 2: title, the visual anchor of the row, plus genre tags */}
         <div className="min-w-0">
           <a
             href={festival.website}
             target="_blank"
             rel="noopener noreferrer"
-            className="block font-display text-lg font-bold uppercase leading-tight tracking-[-0.03em] text-fg transition-colors hover:text-accent sm:text-xl"
+            className="block font-display text-[28px] font-bold uppercase leading-[1.05] tracking-[-0.03em] text-fg transition-colors hover:text-accent"
           >
             {festival.name}
           </a>
-          <p className="mt-2 max-w-[520px] text-sm leading-relaxed text-fg-dim">
-            {festival.description}
-          </p>
           {festival.genres.length > 0 && (
             <div className="mt-3 flex flex-wrap gap-2">
               {festival.genres.map((g) => (
                 <span
                   key={g}
-                  className="rounded-full border border-line px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-fg-dim"
+                  className="rounded-full border border-line px-3.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-fg-dim"
                 >
                   {g}
                 </span>
@@ -102,13 +99,18 @@ function FestivalRow({
           )}
         </div>
 
-        {/* Col 3: real, derived stat only, never a guessed lineup or capacity */}
-        <div className="font-mono text-[10px] uppercase tracking-[0.14em] text-fg-dim/70 sm:text-right">
-          {days ? `${days} DAY${days > 1 ? "S" : ""}` : ""}
-        </div>
+        {/* Col 3: description, gets its own real column instead of trailing off into empty space */}
+        <p className="text-[15px] leading-[1.5] text-fg-dim sm:border-l sm:border-line sm:pl-6">
+          {festival.description}
+        </p>
 
-        {/* Col 4: ticket CTA */}
-        <div className="sm:justify-self-end">
+        {/* Col 4: duration (real, derived) grouped tight against the ticket CTA */}
+        <div className="flex flex-row items-center gap-4 sm:flex-col sm:items-end sm:gap-3">
+          {days && (
+            <span className="font-mono text-sm uppercase tracking-[0.1em] text-fg-dim">
+              {days} DAY{days > 1 ? "S" : ""}
+            </span>
+          )}
           <TicketCta festival={festival} />
         </div>
       </div>
