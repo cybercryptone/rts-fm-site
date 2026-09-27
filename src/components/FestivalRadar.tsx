@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { feature } from "topojson-client";
 import type { GeometryCollection, Topology } from "topojson-specification";
 import type { FeatureCollection, GeometryObject } from "geojson";
@@ -84,6 +84,46 @@ export default function FestivalRadar({
 }) {
   const [pointer, setPointer] = useState<{ x: number; y: number } | null>(null);
 
+  // The tooltip's own visibility is tracked separately from the shared
+  // `activeSlug` (which also drives the pulsing ring, and can be set
+  // externally by hovering a list row that has no cursor position to
+  // anchor a tooltip to). A short hide delay, cancelled if the cursor
+  // lands on the tooltip itself before it fires, is what lets a user
+  // actually move from the small diamond onto the tooltip and click a
+  // link in it — without it, leaving the diamond's tiny hit area hid the
+  // tooltip before the cursor ever reached it.
+  const [hoveredKey, setHoveredKey] = useState<string | null>(null);
+  const hideTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (hideTimeout.current) clearTimeout(hideTimeout.current);
+    };
+  }, []);
+
+  function showBlip(blip: Blip) {
+    if (hideTimeout.current) {
+      clearTimeout(hideTimeout.current);
+      hideTimeout.current = null;
+    }
+    setHoveredKey(blip.key);
+    onHoverFestival(blip.festivals[0].slug);
+  }
+
+  function scheduleHide() {
+    hideTimeout.current = setTimeout(() => {
+      setHoveredKey(null);
+      onHoverFestival(null);
+    }, 200);
+  }
+
+  function cancelHide() {
+    if (hideTimeout.current) {
+      clearTimeout(hideTimeout.current);
+      hideTimeout.current = null;
+    }
+  }
+
   // A plain equirectangular fit, auto-fit to the current selection's own
   // bounding box — real lat/lon, not a distance-from-center radar
   // projection. One shared scale for both axes, with a cosine correction
@@ -158,7 +198,7 @@ export default function FestivalRadar({
     return { height, landPaths, blips, latTicks, lonTicks, corners, project };
   }, [festivals]);
 
-  const activeBlip = blips.find((b) => b.festivals.some((f) => f.slug === activeSlug)) ?? null;
+  const tooltipBlip = blips.find((b) => b.key === hoveredKey) ?? null;
 
   return (
     <div
@@ -226,8 +266,8 @@ export default function FestivalRadar({
             <g
               key={blip.key}
               transform={`translate(${blip.point.x}, ${blip.point.y})`}
-              onMouseEnter={() => onHoverFestival(blip.festivals[0].slug)}
-              onMouseLeave={() => onHoverFestival(null)}
+              onMouseEnter={() => showBlip(blip)}
+              onMouseLeave={scheduleHide}
               className="cursor-pointer"
             >
               <circle r={13} className="fill-transparent" />
@@ -261,11 +301,14 @@ export default function FestivalRadar({
         })}
       </svg>
 
-      {/* Hover tooltip — follows the cursor while a contact is active
-          instead of sitting fixed in a corner. */}
-      {activeBlip && pointer && (
+      {/* Hover card — follows the cursor while a contact is active, and
+          stays open (via cancelHide) while the cursor is on the card
+          itself, so its links are actually reachable. */}
+      {tooltipBlip && pointer && (
         <div
-          className="pointer-events-none absolute z-10 rounded-md border border-line bg-bg-elevated px-3 py-2 font-mono text-[10px] uppercase tracking-[0.08em] shadow-lg"
+          onMouseEnter={cancelHide}
+          onMouseLeave={scheduleHide}
+          className="absolute z-10 rounded-md border border-line bg-bg-elevated px-3 py-2 font-mono text-[10px] uppercase tracking-[0.08em] shadow-lg"
           style={{
             left: `${pointer.x}%`,
             top: `${pointer.y}%`,
@@ -274,13 +317,32 @@ export default function FestivalRadar({
             })`,
           }}
         >
-          {activeBlip.festivals.map((f, i) => (
+          {tooltipBlip.festivals.map((f, i) => (
             <div key={f.slug} className={i > 0 ? "mt-2 border-t border-line pt-2" : ""}>
               <div className="text-fg-dim">[{coordLabel(f.lat, f.lon)}]</div>
-              <div className="mt-0.5 text-accent">{`${f.name} // ${f.city}`}</div>
+              <a
+                href={f.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-0.5 block text-accent hover:underline"
+              >
+                {`${f.name} // ${f.city}`}
+              </a>
               <div className="mt-0.5 text-fg-dim">
                 {festivalDateLabel(f)}
-                {f.ticketUrl ? " →" : ""}
+                {" · "}
+                {f.ticketUrl ? (
+                  <a
+                    href={f.ticketUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-accent hover:underline"
+                  >
+                    Tickets →
+                  </a>
+                ) : (
+                  "Tickets TBA"
+                )}
               </div>
             </div>
           ))}
