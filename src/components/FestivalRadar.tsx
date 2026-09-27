@@ -82,6 +82,7 @@ export default function FestivalRadar({
   activeSlug: string | null;
   onHoverFestival: (slug: string | null) => void;
 }) {
+  const containerRef = useRef<HTMLDivElement>(null);
   const [pointer, setPointer] = useState<{ x: number; y: number } | null>(null);
 
   // The tooltip's own visibility is tracked separately from the shared
@@ -93,7 +94,21 @@ export default function FestivalRadar({
   // link in it — without it, leaving the diamond's tiny hit area hid the
   // tooltip before the cursor ever reached it.
   const [hoveredKey, setHoveredKey] = useState<string | null>(null);
+  // A click (or tap — touch devices have no hover at all) pins the
+  // tooltip open regardless of the cursor, until the same marker is
+  // clicked again or the user clicks outside both the marker and the
+  // card. This is what actually makes the map usable on touch.
+  const [pinnedKey, setPinnedKey] = useState<string | null>(null);
   const hideTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  function setPointerFromEvent(e: { clientX: number; clientY: number }) {
+    const rect = containerRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    setPointer({
+      x: ((e.clientX - rect.left) / rect.width) * 100,
+      y: ((e.clientY - rect.top) / rect.height) * 100,
+    });
+  }
 
   useEffect(() => {
     return () => {
@@ -198,19 +213,20 @@ export default function FestivalRadar({
     return { height, landPaths, blips, latTicks, lonTicks, corners, project };
   }, [festivals]);
 
-  const tooltipBlip = blips.find((b) => b.key === hoveredKey) ?? null;
+  const tooltipBlip = blips.find((b) => b.key === (pinnedKey ?? hoveredKey)) ?? null;
 
   return (
     <div
+      ref={containerRef}
       className="relative overflow-hidden rounded-xl border border-line bg-bg-elevated"
-      onMouseMove={(e) => {
-        const rect = e.currentTarget.getBoundingClientRect();
-        setPointer({
-          x: ((e.clientX - rect.left) / rect.width) * 100,
-          y: ((e.clientY - rect.top) / rect.height) * 100,
-        });
-      }}
+      onMouseMove={setPointerFromEvent}
       onMouseLeave={() => setPointer(null)}
+      onClick={(e) => {
+        const target = e.target as Element;
+        if (target.closest("[data-blip-marker]") || target.closest("[data-blip-tooltip]")) return;
+        setPinnedKey(null);
+        onHoverFestival(null);
+      }}
     >
       <svg
         viewBox={`0 0 ${WIDTH} ${height}`}
@@ -261,13 +277,25 @@ export default function FestivalRadar({
             always-visible city label so the map reads without hovering
             every pin. */}
         {blips.map((blip) => {
-          const isActive = blip.festivals.some((f) => f.slug === activeSlug);
+          const isActive = blip.key === pinnedKey || blip.festivals.some((f) => f.slug === activeSlug);
           return (
             <g
               key={blip.key}
+              data-blip-marker
               transform={`translate(${blip.point.x}, ${blip.point.y})`}
               onMouseEnter={() => showBlip(blip)}
               onMouseLeave={scheduleHide}
+              onClick={(e) => {
+                e.stopPropagation();
+                setPointerFromEvent(e);
+                if (pinnedKey === blip.key) {
+                  setPinnedKey(null);
+                  onHoverFestival(null);
+                } else {
+                  setPinnedKey(blip.key);
+                  onHoverFestival(blip.festivals[0].slug);
+                }
+              }}
               className="cursor-pointer"
             >
               <circle r={13} className="fill-transparent" />
@@ -306,6 +334,7 @@ export default function FestivalRadar({
           itself, so its links are actually reachable. */}
       {tooltipBlip && pointer && (
         <div
+          data-blip-tooltip
           onMouseEnter={cancelHide}
           onMouseLeave={scheduleHide}
           className="absolute z-10 rounded-md border border-line bg-bg-elevated px-3 py-2 font-mono text-[10px] uppercase tracking-[0.08em] shadow-lg"
