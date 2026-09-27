@@ -1,56 +1,37 @@
 "use client";
 
 import { useMemo } from "react";
+import { feature } from "topojson-client";
+import type { GeometryCollection, Topology } from "topojson-specification";
+import type { FeatureCollection, GeometryObject } from "geojson";
+import landTopology from "world-atlas/land-110m.json";
 import type { Festival } from "@/lib/festivals";
 
 const WIDTH = 720;
-const HEIGHT = 460;
-const CX = WIDTH / 2;
-const CY = HEIGHT / 2 + 6;
-const OUTER_R = 186;
+const HEIGHT = 400;
 
-const COMPASS = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
-
-function toRad(deg: number): number {
-  return (deg * Math.PI) / 180;
-}
-
-// Real great-circle distance (haversine) between two verified lat/lon
-// points, in km. Never a fabricated "as the crow flies" guess.
-function distanceKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
-  const R = 6371;
-  const dLat = toRad(lat2 - lat1);
-  const dLon = toRad(lon2 - lon1);
-  const a =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-}
-
-// Real initial compass bearing (0-360, 0 = north, clockwise) from point 1
-// to point 2, standard forward-azimuth formula.
-function bearingDeg(lat1: number, lon1: number, lat2: number, lon2: number): number {
-  const phi1 = toRad(lat1);
-  const phi2 = toRad(lat2);
-  const dLon = toRad(lon2 - lon1);
-  const y = Math.sin(dLon) * Math.cos(phi2);
-  const x = Math.cos(phi1) * Math.sin(phi2) - Math.sin(phi1) * Math.cos(phi2) * Math.cos(dLon);
-  return ((Math.atan2(y, x) * 180) / Math.PI + 360) % 360;
-}
-
-function compassLabel(bearing: number): string {
-  return COMPASS[Math.round(bearing / 45) % 8];
-}
-
-function polarPoint(cx: number, cy: number, r: number, bearing: number) {
-  const rad = toRad(bearing);
-  return { x: cx + r * Math.sin(rad), y: cy - r * Math.cos(rad) };
-}
-
-function niceKm(km: number): string {
-  const rounded = km >= 1000 ? Math.round(km / 100) * 100 : Math.round(km / 10) * 10;
-  return rounded.toLocaleString("en-US");
-}
+// Real Natural Earth land outlines (public domain, via the world-atlas
+// package), not a hand-drawn approximation — the whole point of showing a
+// coastline at all is that it has to be geographically honest. Extracted
+// once at module scope since the shapes themselves never change; only the
+// projection (fit to whichever festivals are currently in view) does.
+const LAND_RINGS: [number, number][][] = (() => {
+  const topology = landTopology as unknown as Topology;
+  const fc = feature(
+    topology,
+    topology.objects.land as GeometryCollection,
+  ) as FeatureCollection<GeometryObject>;
+  const rings: [number, number][][] = [];
+  for (const f of fc.features) {
+    const geom = f.geometry;
+    if (geom.type === "Polygon") {
+      for (const ring of geom.coordinates) rings.push(ring as [number, number][]);
+    } else if (geom.type === "MultiPolygon") {
+      for (const poly of geom.coordinates) for (const ring of poly) rings.push(ring as [number, number][]);
+    }
+  }
+  return rings;
+})();
 
 function coordLabel(lat: number, lon: number): string {
   const ns = lat >= 0 ? "N" : "S";
@@ -58,18 +39,10 @@ function coordLabel(lat: number, lon: number): string {
   return `${Math.abs(lat).toFixed(4)}° ${ns}, ${Math.abs(lon).toFixed(4)}° ${ew}`;
 }
 
-type Contact = {
-  festival: Festival;
-  dist: number;
-  bearing: number;
-};
-
 type Blip = {
   key: string;
   point: { x: number; y: number };
-  hub: { x: number; y: number };
-  bearing: number;
-  contacts: Contact[];
+  festivals: Festival[];
 };
 
 export default function FestivalRadar({
@@ -81,102 +54,63 @@ export default function FestivalRadar({
   activeSlug: string | null;
   onHoverFestival: (slug: string | null) => void;
 }) {
-  const active = festivals.find((f) => f.slug === activeSlug) ?? null;
-
-  // Every festival is plotted by its real distance and compass bearing
-  // (haversine + forward azimuth, both real formulas on the verified
-  // lat/lon in festivals.ts) from the centroid of the current, possibly
-  // region-filtered, set — a radar scope centered on "here" rather than a
-  // flat grid that has to fit the whole planet to place a dozen European
-  // points. Festivals sharing exact coordinates (DGTL Amsterdam and
-  // Dekmantel Festival both sit at the same Amsterdam venue district)
-  // collapse to one contact and stack as a labeled group instead of two
-  // labels drawn on top of each other.
-  const { center, maxDist, ringKm, blips, activeContact } = useMemo(() => {
+  // A plain equirectangular fit (real lat -> y, real lon -> x, linear,
+  // auto-fit to the current selection's own bounding box) instead of a
+  // radar-style distance-from-center projection: the latter put a point's
+  // screen position on how far it was from an arbitrary centroid rather
+  // than its real position, which read as geographically nonsensical
+  // (Detroit landing next to London on the same range ring). This keeps
+  // every point where it actually is, relative to its neighbors.
+  const { landPaths, blips } = useMemo(() => {
     const lats = festivals.map((f) => f.lat);
     const lons = festivals.map((f) => f.lon);
-    const center = {
-      lat: lats.reduce((a, b) => a + b, 0) / (lats.length || 1),
-      lon: lons.reduce((a, b) => a + b, 0) / (lons.length || 1),
-    };
+    const rawMinLat = lats.length ? Math.min(...lats) : 30;
+    const rawMaxLat = lats.length ? Math.max(...lats) : 60;
+    const rawMinLon = lons.length ? Math.min(...lons) : -10;
+    const rawMaxLon = lons.length ? Math.max(...lons) : 20;
 
-    const contacts: Contact[] = festivals.map((f) => ({
-      festival: f,
-      dist: distanceKm(center.lat, center.lon, f.lat, f.lon),
-      bearing: bearingDeg(center.lat, center.lon, f.lat, f.lon),
-    }));
+    const latSpan = Math.max(rawMaxLat - rawMinLat, 4);
+    const lonSpan = Math.max(rawMaxLon - rawMinLon, 4);
+    const latPad = Math.max(latSpan * 0.3, 5);
+    const lonPad = Math.max(lonSpan * 0.3, 5);
 
-    const maxDist = Math.max(...contacts.map((c) => c.dist), 1);
+    const minLat = Math.max(rawMinLat - latPad, -85);
+    const maxLat = Math.min(rawMaxLat + latPad, 85);
+    const minLon = rawMinLon - lonPad;
+    const maxLon = rawMaxLon + lonPad;
 
-    const groups = new Map<string, Contact[]>();
-    for (const c of contacts) {
-      const key = `${c.festival.lat.toFixed(3)}_${c.festival.lon.toFixed(3)}`;
-      const group = groups.get(key);
-      if (group) group.push(c);
-      else groups.set(key, [c]);
-    }
-
-    // A linear km-to-pixel scale lets one far outlier (Movement, ~6,200km
-    // from a Europe-heavy centroid) crush every nearby festival into an
-    // illegible cluster at the center. A sqrt scale still preserves real
-    // distance order (further is always further out) but gives the tightly
-    // packed nearby contacts room to separate, the same tradeoff bubble
-    // and radar charts make for exactly this kind of skewed spread.
-    const radiusFor = (dist: number) => OUTER_R * Math.sqrt(dist / maxDist);
-
-    // Real geography still leaves several of these festivals genuinely
-    // close together (Berlin/Leipzig, the Amsterdam/Torzym belt), so even
-    // the sqrt scale can land two blips close enough to overlap. Settle
-    // that by nudging the later-placed one outward along its own bearing
-    // until it clears a minimum on-screen separation from every blip
-    // already placed — a label-declutter pass, not a change to which
-    // point is genuinely closer or farther.
-    const MIN_SEP = 34;
-    const sortedGroups = Array.from(groups.entries()).sort(
-      (a, b) => a[1][0].dist - b[1][0].dist,
-    );
-    const placed: { x: number; y: number }[] = [];
-    // Label hubs get their own, more generous declutter pass on top of the
-    // blip pass above: a blip's own dot can clear MIN_SEP while its text
-    // (offset further out, and taller for a multi-contact group) still
-    // overlaps a neighbor's, so this pass has to grow with the label's own
-    // size, not just repeat the dot check.
-    const placedHubs: { x: number; y: number }[] = [];
-    const blips: Blip[] = sortedGroups.map(([key, group]) => {
-      const { dist, bearing } = group[0];
-      let r = radiusFor(dist);
-      let point = polarPoint(CX, CY, r, bearing);
-      for (let pass = 0; pass < 6; pass++) {
-        const collision = placed.find((p) => Math.hypot(p.x - point.x, p.y - point.y) < MIN_SEP);
-        if (!collision) break;
-        r += MIN_SEP * 0.6;
-        point = polarPoint(CX, CY, r, bearing);
-      }
-      placed.push(point);
-
-      const labelSep = 58 + (group.length - 1) * 14;
-      let hubR = r + 22;
-      let hub = polarPoint(CX, CY, hubR, bearing);
-      for (let pass = 0; pass < 6; pass++) {
-        const collision = placedHubs.find((p) => Math.hypot(p.x - hub.x, p.y - hub.y) < labelSep);
-        if (!collision) break;
-        hubR += labelSep * 0.55;
-        hub = polarPoint(CX, CY, hubR, bearing);
-      }
-      placedHubs.push(hub);
-
-      return { key, point, hub, bearing, contacts: group };
+    const project = (lat: number, lon: number) => ({
+      x: ((lon - minLon) / (maxLon - minLon)) * WIDTH,
+      y: ((maxLat - lat) / (maxLat - minLat)) * HEIGHT,
     });
 
-    const activeContact = contacts.find((c) => c.festival.slug === activeSlug) ?? null;
+    const landPaths = LAND_RINGS.map((ring) => {
+      let d = "";
+      ring.forEach(([lon, lat], i) => {
+        const { x, y } = project(lat, lon);
+        d += `${i === 0 ? "M" : "L"}${x.toFixed(1)},${y.toFixed(1)} `;
+      });
+      return `${d}Z`;
+    });
 
-    // Ring radii sit at even thirds of the scope, so the km value each
-    // ring represents has to invert the same sqrt scale: dist = maxDist *
-    // (r / OUTER_R)^2.
-    const ringKm = [1 / 3, 2 / 3, 1].map((f) => maxDist * f * f);
+    const groups = new Map<string, Festival[]>();
+    for (const f of festivals) {
+      const key = `${f.lat.toFixed(3)}_${f.lon.toFixed(3)}`;
+      const group = groups.get(key);
+      if (group) group.push(f);
+      else groups.set(key, [f]);
+    }
+    const blips: Blip[] = Array.from(groups.entries()).map(([key, group]) => ({
+      key,
+      point: project(group[0].lat, group[0].lon),
+      festivals: group,
+    }));
 
-    return { center, maxDist, ringKm, blips, activeContact };
-  }, [festivals, activeSlug]);
+    return { landPaths, blips };
+  }, [festivals]);
+
+  const activeBlip = blips.find((b) => b.festivals.some((f) => f.slug === activeSlug)) ?? null;
+  const active = festivals.find((f) => f.slug === activeSlug) ?? null;
 
   return (
     <div className="relative overflow-hidden rounded-xl border border-line bg-bg-elevated">
@@ -184,205 +118,88 @@ export default function FestivalRadar({
         viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
         className="h-auto w-full"
         role="img"
-        aria-label="Radar-style scope plotting each festival's real-world distance and compass bearing from the center of the current selection"
+        aria-label="Abstract map plotting each festival by its real coordinates, with a faint real-world coastline for reference"
       >
-        <defs>
-          <radialGradient id="radar-face" cx="50%" cy="50%" r="65%">
-            <stop offset="0%" stopColor="var(--accent)" stopOpacity="0.05" />
-            <stop offset="75%" stopColor="var(--accent)" stopOpacity="0" />
-          </radialGradient>
-          <filter id="blip-glow" x="-200%" y="-200%" width="500%" height="500%">
-            <feGaussianBlur stdDeviation="4.5" />
-          </filter>
-        </defs>
-
         <rect x={0} y={0} width={WIDTH} height={HEIGHT} className="fill-bg" />
-        <circle cx={CX} cy={CY} r={OUTER_R + 2} fill="url(#radar-face)" />
 
-        {/* Range rings, ticked to real km distances derived from the
-            current data's own spread, plus 8-point compass spokes. */}
-        {[1 / 3, 2 / 3, 1].map((frac, i) => (
-          <circle
-            key={frac}
-            cx={CX}
-            cy={CY}
-            r={OUTER_R * frac}
-            className="fill-none stroke-line"
-            strokeWidth={1}
-            strokeDasharray={i < 2 ? "2 4" : undefined}
-          />
-        ))}
-        {COMPASS.map((label, i) => {
-          const angle = i * 45;
-          const rim = polarPoint(CX, CY, OUTER_R, angle);
-          const labelPt = polarPoint(CX, CY, OUTER_R + 16, angle);
-          const anchor = Math.abs(labelPt.x - CX) < 1 ? "middle" : labelPt.x > CX ? "start" : "end";
-          const dy = labelPt.y < CY - 1 ? -2 : labelPt.y > CY + 1 ? 9 : 4;
-          return (
-            <g key={label}>
-              <line
-                x1={CX}
-                y1={CY}
-                x2={rim.x}
-                y2={rim.y}
-                className="stroke-line"
-                strokeWidth={1}
-                opacity={0.6}
-              />
-              <text
-                x={labelPt.x}
-                y={labelPt.y + dy}
-                textAnchor={anchor}
-                className="fill-fg-dim/70 font-mono text-[9px] font-bold uppercase tracking-[0.08em]"
-              >
-                {label}
-              </text>
-            </g>
-          );
-        })}
-        {ringKm.slice(0, 2).map((km, i) => (
-          <text
-            key={i}
-            x={CX + 4}
-            y={CY - OUTER_R * ((i + 1) / 3) - 4}
-            className="fill-fg-dim/50 font-mono text-[8px]"
-          >
-            {niceKm(km)} km
-          </text>
-        ))}
-
-        {/* Continuous sweep beam — the scope's "live" tell. Stops under
-            prefers-reduced-motion via the .radar-sweep rule in globals.css. */}
-        <g className="radar-sweep" style={{ transformOrigin: `${CX}px ${CY}px` }}>
-          {Array.from({ length: 9 }).map((_, i) => {
-            const a0 = -i * 6;
-            const a1 = -(i + 1) * 6;
-            const p0 = polarPoint(CX, CY, OUTER_R, a0);
-            const p1 = polarPoint(CX, CY, OUTER_R, a1);
-            return (
-              <path
-                key={i}
-                d={`M ${CX} ${CY} L ${p0.x} ${p0.y} A ${OUTER_R} ${OUTER_R} 0 0 0 ${p1.x} ${p1.y} Z`}
-                fill="var(--accent)"
-                opacity={0.16 - i * 0.017}
-              />
-            );
-          })}
+        {/* Real coastline (Natural Earth, 110m resolution), faint —
+            geographic reference, not the focal point. */}
+        <g className="fill-fg-dim/[0.09] stroke-fg-dim/[0.14]" strokeWidth={0.75}>
+          {landPaths.map((d, i) => (
+            <path key={i} d={d} />
+          ))}
         </g>
 
-        {/* Scan center — the geometric centroid of the current
-            (region-filtered) selection, not a claimed physical location. */}
-        <g transform={`translate(${CX}, ${CY})`}>
-          <line x1={-7} y1={0} x2={7} y2={0} className="stroke-fg-dim" strokeWidth={1} />
-          <line x1={0} y1={-7} x2={0} y2={7} className="stroke-fg-dim" strokeWidth={1} />
-          <circle r={2} className="fill-fg-dim" />
-        </g>
+        {/* Slow scanline, the one nod to a "live instrument" — subtle
+            enough not to compete with the map itself. */}
+        <line x1={0} x2={WIDTH} className="stroke-accent" strokeWidth={1} opacity={0.14}>
+          <animate attributeName="y1" values={`0;${HEIGHT};0`} dur="10s" repeatCount="indefinite" />
+          <animate attributeName="y2" values={`0;${HEIGHT};0`} dur="10s" repeatCount="indefinite" />
+        </line>
 
-        {/* Contacts. Grouped by exact shared coordinates so two festivals
-            at the same venue district render as one blip with a stacked,
-            individually hoverable label list instead of overlapping text. */}
+        {/* Contacts — small hollow diamonds, lit up only on hover. Names
+            stay hidden until then; showing all of them at once was the
+            spider-web of overlapping labels this replaces. */}
         {blips.map((blip) => {
-          const isActive = blip.contacts.some((c) => c.festival.slug === activeSlug);
-          const hub = blip.hub;
-          const labelAnchor = hub.x >= CX ? "start" : "end";
-          const stubDx = hub.x >= CX ? 6 : -6;
-
+          const isActive = blip.festivals.some((f) => f.slug === activeSlug);
           return (
-            <g key={blip.key}>
-              <line
-                x1={blip.point.x}
-                y1={blip.point.y}
-                x2={hub.x}
-                y2={hub.y}
-                className={isActive ? "stroke-accent" : "stroke-fg-dim"}
-                strokeWidth={1}
-                opacity={0.55}
+            <g
+              key={blip.key}
+              transform={`translate(${blip.point.x}, ${blip.point.y})`}
+              onMouseEnter={() => onHoverFestival(blip.festivals[0].slug)}
+              onMouseLeave={() => onHoverFestival(null)}
+              className="cursor-pointer"
+            >
+              <circle r={14} className="fill-transparent" />
+              {isActive && (
+                <circle r={6} className="fill-none stroke-accent" strokeWidth={1.5}>
+                  <animate attributeName="r" values="5;13;5" dur="1.6s" repeatCount="indefinite" />
+                  <animate attributeName="opacity" values="0.9;0;0.9" dur="1.6s" repeatCount="indefinite" />
+                </circle>
+              )}
+              <rect
+                x={-3.5}
+                y={-3.5}
+                width={7}
+                height={7}
+                transform="rotate(45)"
+                className={isActive ? "fill-accent stroke-accent" : "fill-bg-elevated stroke-fg-dim"}
+                strokeWidth={1.25}
               />
-
-              <g
-                transform={`translate(${blip.point.x}, ${blip.point.y})`}
-                onMouseEnter={() => onHoverFestival(blip.contacts[0].festival.slug)}
-                onMouseLeave={() => onHoverFestival(null)}
-                className="cursor-pointer"
-              >
-                <circle r={16} className="fill-transparent" />
-                <circle
-                  r={10}
-                  filter="url(#blip-glow)"
-                  className={isActive ? "fill-accent" : "fill-fg-dim"}
-                  opacity={isActive ? 0.55 : 0.3}
-                />
-                {isActive && (
-                  <>
-                    <circle r={9} className="fill-none stroke-accent" strokeWidth={1.5}>
-                      <animate attributeName="r" values="8;22;8" dur="1.8s" repeatCount="indefinite" />
-                      <animate attributeName="opacity" values="0.9;0;0.9" dur="1.8s" repeatCount="indefinite" />
-                    </circle>
-                  </>
-                )}
-                <rect
-                  x={-4}
-                  y={-4}
-                  width={8}
-                  height={8}
-                  transform="rotate(45)"
-                  className={isActive ? "fill-accent" : "fill-fg-dim"}
-                />
-              </g>
-
-              <text
-                x={hub.x}
-                y={hub.y - (blip.contacts.length - 1) * 6.5 - 2}
-                textAnchor={labelAnchor}
-                className={`font-mono text-[9px] font-bold uppercase tracking-[0.08em] ${
-                  isActive ? "fill-accent" : "fill-fg-dim"
-                }`}
-              >
-                {blip.contacts[0].festival.city}
-              </text>
-              {blip.contacts.map((c, i) => (
-                <g key={c.festival.slug}>
-                  {blip.contacts.length > 1 && (
-                    <line
-                      x1={hub.x}
-                      y1={hub.y - (blip.contacts.length - 1) * 6.5 + i * 13}
-                      x2={hub.x + stubDx}
-                      y2={hub.y - (blip.contacts.length - 1) * 6.5 + i * 13}
-                      className="stroke-line"
-                      strokeWidth={1}
-                    />
-                  )}
-                  <text
-                    x={hub.x + stubDx}
-                    y={hub.y - (blip.contacts.length - 1) * 6.5 + i * 13 + 3}
-                    textAnchor={labelAnchor}
-                    onMouseEnter={() => onHoverFestival(c.festival.slug)}
-                    onMouseLeave={() => onHoverFestival(null)}
-                    className={`cursor-pointer font-mono text-[9px] uppercase tracking-[0.04em] ${
-                      c.festival.slug === activeSlug ? "fill-accent" : "fill-fg-dim/80"
-                    }`}
-                  >
-                    {blip.contacts.length > 1 ? c.festival.name : ""}
-                  </text>
-                </g>
-              ))}
             </g>
           );
         })}
       </svg>
 
+      {/* Hover tooltip — one compact card near the active point instead of
+          permanent leader-lined labels scattered across the map. */}
+      {activeBlip && (
+        <div
+          className="pointer-events-none absolute z-10 -translate-x-1/2 rounded-md border border-line bg-bg-elevated px-3 py-2 font-mono text-[10px] uppercase tracking-[0.1em] shadow-lg"
+          style={{
+            left: `${(activeBlip.point.x / WIDTH) * 100}%`,
+            top: `${(activeBlip.point.y / HEIGHT) * 100}%`,
+            transform: `translate(-50%, ${activeBlip.point.y < 60 ? "8px" : "calc(-100% - 8px)"})`,
+          }}
+        >
+          <div className="text-accent">{activeBlip.festivals[0].city}</div>
+          {activeBlip.festivals.map((f) => (
+            <div key={f.slug} className="mt-0.5 text-fg-dim">
+              {f.name}
+            </div>
+          ))}
+        </div>
+      )}
+
       <div className="pointer-events-none absolute bottom-3 left-3 font-mono text-[10px] uppercase tracking-[0.14em] text-fg-dim">
-        {active && activeContact ? (
+        {active ? (
           <>
             <span className="text-accent">{active.name}</span>
             {" · "}
             {coordLabel(active.lat, active.lon)}
-            {" · "}
-            {Math.round(activeContact.dist).toLocaleString("en-US")} km {compassLabel(activeContact.bearing)} of
-            center
           </>
         ) : (
-          `Scope centered on ${coordLabel(center.lat, center.lon)} · range ${niceKm(maxDist)} km`
+          "Hover a node for its coordinates"
         )}
       </div>
     </div>

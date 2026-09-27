@@ -190,9 +190,9 @@ export default function FestivalsList({
                 onHoverFestival={setHoveredSlug}
               />
               <p className="mt-4 text-xs text-fg-dim">
-                Each contact is plotted by real distance and compass bearing from the center of
-                this view. Hover a node for details, or switch to list view for descriptions and
-                ticket links.
+                Each node sits at its real coordinates against a faint world coastline. Hover a
+                node for its city and name, or switch to list view for descriptions and ticket
+                links.
               </p>
             </div>
           ) : (
