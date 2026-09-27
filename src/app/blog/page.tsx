@@ -50,28 +50,28 @@ export default function BlogIndex() {
           ) : (
             <ul className="blog-divider mt-12 flex flex-col divide-y border-t">
               {posts.map((post, i) => (
-                <li key={post.slug} className="blog-row">
+                <li key={post.slug} className="blog-row group">
                   <Link
                     href={`/blog/${post.slug}`}
-                    className="flex items-center gap-4 py-8 pr-4 sm:gap-6 sm:pr-10"
+                    className="flex flex-col gap-4 py-10 pr-4 sm:grid sm:grid-cols-[56px_minmax(0,1fr)_minmax(240px,38%)_32px] sm:items-center sm:gap-8 sm:pr-10"
                   >
-                    <span className="hidden shrink-0 self-center font-mono text-[11px] text-fg-dim/50 sm:block sm:w-10">
+                    <span className="hidden shrink-0 self-start font-mono text-sm tracking-[0.06em] text-fg-dim sm:block sm:self-center">
                       {String(i + 1).padStart(2, "0")}
                       {" //"}
                     </span>
-                    <div className="min-w-0 flex-1">
-                      <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-accent">
+                    <div className="min-w-0">
+                      <div className="font-mono text-[12px] uppercase tracking-[0.16em] text-accent">
                         {"[editorial] // "}
                         {formatDateCompact(post.date)}
                       </div>
-                      <p className="blog-row-title mt-2 max-w-[620px] font-display text-lg font-bold uppercase leading-tight tracking-[-0.03em] text-fg sm:text-xl">
+                      <p className="mt-2 font-display text-[26px] font-bold uppercase leading-[1.05] tracking-[-0.03em] text-fg transition-transform duration-200 group-hover:translate-x-[3px] sm:text-[28px]">
                         {post.title}
                       </p>
-                      <p className="mt-2 max-w-[620px] text-sm leading-relaxed text-fg-dim">
-                        {post.excerpt}
-                      </p>
                     </div>
-                    <span className="blog-row-arrow hidden shrink-0 self-center font-mono text-lg text-accent sm:block">
+                    <p className="text-sm leading-relaxed text-fg-dim sm:border-l sm:border-line sm:pl-6">
+                      {post.excerpt}
+                    </p>
+                    <span className="hidden shrink-0 self-center font-mono text-lg text-accent transition-transform duration-200 group-hover:translate-x-[3px] sm:block">
                       →
                     </span>
                   </Link>
