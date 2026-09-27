@@ -26,7 +26,13 @@ function dateLabel(festival: Festival): string {
 }
 
 function TicketCta({ festival }: { festival: Festival }) {
-  if (!festival.ticketUrl) return null;
+  if (!festival.ticketUrl) {
+    return (
+      <span className="shrink-0 self-start rounded-full border border-line px-4 py-2 font-mono text-[11px] uppercase tracking-[0.14em] text-fg-dim/60">
+        Tickets TBA
+      </span>
+    );
+  }
 
   if (festival.ticketStatus === "sold-out") {
     return (

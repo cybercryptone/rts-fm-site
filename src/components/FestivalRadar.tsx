@@ -8,7 +8,15 @@ import landTopology from "world-atlas/land-110m.json";
 import type { Festival } from "@/lib/festivals";
 
 const WIDTH = 720;
-const HEIGHT = 400;
+// Real-world width:height ratio of the current selection's own bounding
+// box, clamped to a sane range. A fixed canvas shape forced tight
+// clusters (Europe alone) to letterbox on the sides, and wide ones
+// (Europe + Detroit) to letterbox top/bottom — either way, wasted canvas
+// around the actual data. Letting the canvas height follow the data's
+// real aspect keeps it filled in both cases, while the clamp keeps an
+// extreme outlier from squashing the map into an unusable sliver.
+const MIN_ASPECT = 0.55;
+const MAX_ASPECT = 3.2;
 
 // Real Natural Earth land outlines (public domain, via the world-atlas
 // package), not a hand-drawn approximation — the whole point of showing a
@@ -33,6 +41,20 @@ const LAND_RINGS: [number, number][][] = (() => {
   return rings;
 })();
 
+const TICK_STEPS = [1, 2, 5, 10, 15, 20, 30, 45, 90];
+
+function pickStep(span: number): number {
+  const target = span / 5;
+  return TICK_STEPS.find((step) => step >= target) ?? TICK_STEPS[TICK_STEPS.length - 1];
+}
+
+function ticksFor(min: number, max: number, step: number): number[] {
+  const start = Math.ceil(min / step) * step;
+  const ticks: number[] = [];
+  for (let v = start; v <= max; v += step) ticks.push(Math.round(v * 100) / 100);
+  return ticks;
+}
+
 function coordLabel(lat: number, lon: number): string {
   const ns = lat >= 0 ? "N" : "S";
   const ew = lon >= 0 ? "E" : "W";
@@ -54,14 +76,16 @@ export default function FestivalRadar({
   activeSlug: string | null;
   onHoverFestival: (slug: string | null) => void;
 }) {
-  // A plain equirectangular fit (real lat -> y, real lon -> x, linear,
-  // auto-fit to the current selection's own bounding box) instead of a
-  // radar-style distance-from-center projection: the latter put a point's
-  // screen position on how far it was from an arbitrary centroid rather
-  // than its real position, which read as geographically nonsensical
-  // (Detroit landing next to London on the same range ring). This keeps
-  // every point where it actually is, relative to its neighbors.
-  const { landPaths, blips } = useMemo(() => {
+  // A plain equirectangular fit, auto-fit to the current selection's own
+  // bounding box — real lat/lon, not a distance-from-center radar
+  // projection. The earlier version scaled x and y independently to fill
+  // the canvas, which stretched real geography (a degree of latitude and
+  // a degree of longitude cover different ground distances) into
+  // unrecognizable shapes. This uses one shared scale for both axes, with
+  // a cosine correction on longitude for the view's own reference
+  // latitude — the standard equirectangular fix — so a real square patch
+  // of the earth's surface still renders roughly square.
+  const { height, landPaths, blips, latTicks, lonTicks, project } = useMemo(() => {
     const lats = festivals.map((f) => f.lat);
     const lons = festivals.map((f) => f.lon);
     const rawMinLat = lats.length ? Math.min(...lats) : 30;
@@ -69,19 +93,29 @@ export default function FestivalRadar({
     const rawMinLon = lons.length ? Math.min(...lons) : -10;
     const rawMaxLon = lons.length ? Math.max(...lons) : 20;
 
-    const latSpan = Math.max(rawMaxLat - rawMinLat, 4);
-    const lonSpan = Math.max(rawMaxLon - rawMinLon, 4);
-    const latPad = Math.max(latSpan * 0.3, 5);
-    const lonPad = Math.max(lonSpan * 0.3, 5);
+    const latSpan = Math.max(rawMaxLat - rawMinLat, 3);
+    const lonSpan = Math.max(rawMaxLon - rawMinLon, 3);
+    const latPad = Math.max(latSpan * 0.15, 2.5);
+    const lonPad = Math.max(lonSpan * 0.15, 2.5);
 
     const minLat = Math.max(rawMinLat - latPad, -85);
     const maxLat = Math.min(rawMaxLat + latPad, 85);
     const minLon = rawMinLon - lonPad;
     const maxLon = rawMaxLon + lonPad;
 
+    const midLat = (minLat + maxLat) / 2;
+    const midLon = (minLon + maxLon) / 2;
+    const cosMidLat = Math.cos((midLat * Math.PI) / 180);
+
+    const rawAspect = ((maxLon - minLon) * cosMidLat) / (maxLat - minLat);
+    const aspect = Math.min(Math.max(rawAspect, MIN_ASPECT), MAX_ASPECT);
+    const height = Math.round(WIDTH / aspect);
+
+    const scale = Math.min(WIDTH / ((maxLon - minLon) * cosMidLat), height / (maxLat - minLat));
+
     const project = (lat: number, lon: number) => ({
-      x: ((lon - minLon) / (maxLon - minLon)) * WIDTH,
-      y: ((maxLat - lat) / (maxLat - minLat)) * HEIGHT,
+      x: WIDTH / 2 + (lon - midLon) * cosMidLat * scale,
+      y: height / 2 - (lat - midLat) * scale,
     });
 
     const landPaths = LAND_RINGS.map((ring) => {
@@ -92,6 +126,11 @@ export default function FestivalRadar({
       });
       return `${d}Z`;
     });
+
+    const latStep = pickStep(maxLat - minLat);
+    const lonStep = pickStep(maxLon - minLon);
+    const latTicks = ticksFor(minLat, maxLat, latStep);
+    const lonTicks = ticksFor(minLon, maxLon, lonStep);
 
     const groups = new Map<string, Festival[]>();
     for (const f of festivals) {
@@ -106,21 +145,20 @@ export default function FestivalRadar({
       festivals: group,
     }));
 
-    return { landPaths, blips };
+    return { height, landPaths, blips, latTicks, lonTicks, project };
   }, [festivals]);
 
   const activeBlip = blips.find((b) => b.festivals.some((f) => f.slug === activeSlug)) ?? null;
-  const active = festivals.find((f) => f.slug === activeSlug) ?? null;
 
   return (
     <div className="relative overflow-hidden rounded-xl border border-line bg-bg-elevated">
       <svg
-        viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
+        viewBox={`0 0 ${WIDTH} ${height}`}
         className="h-auto w-full"
         role="img"
-        aria-label="Abstract map plotting each festival by its real coordinates, with a faint real-world coastline for reference"
+        aria-label="Abstract map plotting each festival by its real coordinates, with a faint real-world coastline and coordinate grid for reference"
       >
-        <rect x={0} y={0} width={WIDTH} height={HEIGHT} className="fill-bg" />
+        <rect x={0} y={0} width={WIDTH} height={height} className="fill-bg" />
 
         {/* Real coastline (Natural Earth, 110m resolution), faint —
             geographic reference, not the focal point. */}
@@ -130,16 +168,23 @@ export default function FestivalRadar({
           ))}
         </g>
 
-        {/* Slow scanline, the one nod to a "live instrument" — subtle
-            enough not to compete with the map itself. */}
-        <line x1={0} x2={WIDTH} className="stroke-accent" strokeWidth={1} opacity={0.14}>
-          <animate attributeName="y1" values={`0;${HEIGHT};0`} dur="10s" repeatCount="indefinite" />
-          <animate attributeName="y2" values={`0;${HEIGHT};0`} dur="10s" repeatCount="indefinite" />
-        </line>
+        {/* Faint coordinate grid — reads as a plotting board rather than
+            bare gray shapes. */}
+        <g className="stroke-fg-dim/[0.08]" strokeWidth={0.75}>
+          {latTicks.map((lat) => {
+            const { y } = project(lat, 0);
+            return <line key={`lat-${lat}`} x1={0} y1={y} x2={WIDTH} y2={y} />;
+          })}
+          {lonTicks.map((lon) => {
+            const { x } = project(0, lon);
+            return <line key={`lon-${lon}`} x1={x} y1={0} x2={x} y2={height} />;
+          })}
+        </g>
 
-        {/* Contacts — small hollow diamonds, lit up only on hover. Names
-            stay hidden until then; showing all of them at once was the
-            spider-web of overlapping labels this replaces. */}
+        {/* Contacts — small hollow diamonds on a solid halo so nearby
+            points (the Netherlands/Germany cluster) stay visually
+            distinct instead of merging edge to edge. Names stay hidden
+            until hover. */}
         {blips.map((blip) => {
           const isActive = blip.festivals.some((f) => f.slug === activeSlug);
           return (
@@ -150,18 +195,19 @@ export default function FestivalRadar({
               onMouseLeave={() => onHoverFestival(null)}
               className="cursor-pointer"
             >
-              <circle r={14} className="fill-transparent" />
+              <circle r={13} className="fill-transparent" />
               {isActive && (
-                <circle r={6} className="fill-none stroke-accent" strokeWidth={1.5}>
-                  <animate attributeName="r" values="5;13;5" dur="1.6s" repeatCount="indefinite" />
+                <circle r={5} className="fill-none stroke-accent" strokeWidth={1.5}>
+                  <animate attributeName="r" values="4;11;4" dur="1.6s" repeatCount="indefinite" />
                   <animate attributeName="opacity" values="0.9;0;0.9" dur="1.6s" repeatCount="indefinite" />
                 </circle>
               )}
+              <rect x={-5} y={-5} width={10} height={10} transform="rotate(45)" className="fill-bg-elevated" />
               <rect
-                x={-3.5}
-                y={-3.5}
-                width={7}
-                height={7}
+                x={-3}
+                y={-3}
+                width={6}
+                height={6}
                 transform="rotate(45)"
                 className={isActive ? "fill-accent stroke-accent" : "fill-bg-elevated stroke-fg-dim"}
                 strokeWidth={1.25}
@@ -178,29 +224,24 @@ export default function FestivalRadar({
           className="pointer-events-none absolute z-10 -translate-x-1/2 rounded-md border border-line bg-bg-elevated px-3 py-2 font-mono text-[10px] uppercase tracking-[0.1em] shadow-lg"
           style={{
             left: `${(activeBlip.point.x / WIDTH) * 100}%`,
-            top: `${(activeBlip.point.y / HEIGHT) * 100}%`,
+            top: `${(activeBlip.point.y / height) * 100}%`,
             transform: `translate(-50%, ${activeBlip.point.y < 60 ? "8px" : "calc(-100% - 8px)"})`,
           }}
         >
-          <div className="text-accent">{activeBlip.festivals[0].city}</div>
           {activeBlip.festivals.map((f) => (
-            <div key={f.slug} className="mt-0.5 text-fg-dim">
+            <div key={f.slug} className="whitespace-nowrap text-fg-dim">
+              <span className="text-accent">[{f.city}]</span>
+              {" // "}
               {f.name}
+              {" — "}
+              {coordLabel(f.lat, f.lon)}
             </div>
           ))}
         </div>
       )}
 
       <div className="pointer-events-none absolute bottom-3 left-3 font-mono text-[10px] uppercase tracking-[0.14em] text-fg-dim">
-        {active ? (
-          <>
-            <span className="text-accent">{active.name}</span>
-            {" · "}
-            {coordLabel(active.lat, active.lon)}
-          </>
-        ) : (
-          "Hover a node for its coordinates"
-        )}
+        Hover a node for its city, name, and coordinates
       </div>
     </div>
   );
