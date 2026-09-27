@@ -1,11 +1,11 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { feature } from "topojson-client";
 import type { GeometryCollection, Topology } from "topojson-specification";
 import type { FeatureCollection, GeometryObject } from "geojson";
 import landTopology from "world-atlas/land-110m.json";
-import type { Festival } from "@/lib/festivals";
+import { festivalDateLabel, type Festival } from "@/lib/festivals";
 
 const WIDTH = 720;
 // Real-world width:height ratio of the current selection's own bounding
@@ -61,6 +61,12 @@ function coordLabel(lat: number, lon: number): string {
   return `${Math.abs(lat).toFixed(4)}° ${ns}, ${Math.abs(lon).toFixed(4)}° ${ew}`;
 }
 
+function axisLabel(lat: number, lon: number): string {
+  const ns = lat >= 0 ? "N" : "S";
+  const ew = lon >= 0 ? "E" : "W";
+  return `${Math.abs(lat).toFixed(1)}° ${ns} // ${Math.abs(lon).toFixed(1)}° ${ew}`;
+}
+
 type Blip = {
   key: string;
   point: { x: number; y: number };
@@ -76,16 +82,15 @@ export default function FestivalRadar({
   activeSlug: string | null;
   onHoverFestival: (slug: string | null) => void;
 }) {
+  const [pointer, setPointer] = useState<{ x: number; y: number } | null>(null);
+
   // A plain equirectangular fit, auto-fit to the current selection's own
   // bounding box — real lat/lon, not a distance-from-center radar
-  // projection. The earlier version scaled x and y independently to fill
-  // the canvas, which stretched real geography (a degree of latitude and
-  // a degree of longitude cover different ground distances) into
-  // unrecognizable shapes. This uses one shared scale for both axes, with
-  // a cosine correction on longitude for the view's own reference
-  // latitude — the standard equirectangular fix — so a real square patch
-  // of the earth's surface still renders roughly square.
-  const { height, landPaths, blips, latTicks, lonTicks, project } = useMemo(() => {
+  // projection. One shared scale for both axes, with a cosine correction
+  // on longitude for the view's own reference latitude — the standard
+  // equirectangular fix — so a real square patch of the earth's surface
+  // still renders roughly square instead of stretching.
+  const { height, landPaths, blips, latTicks, lonTicks, corners, project } = useMemo(() => {
     const lats = festivals.map((f) => f.lat);
     const lons = festivals.map((f) => f.lon);
     const rawMinLat = lats.length ? Math.min(...lats) : 30;
@@ -145,13 +150,28 @@ export default function FestivalRadar({
       festivals: group,
     }));
 
-    return { height, landPaths, blips, latTicks, lonTicks, project };
+    const corners = {
+      topLeft: axisLabel(maxLat, minLon),
+      bottomRight: axisLabel(minLat, maxLon),
+    };
+
+    return { height, landPaths, blips, latTicks, lonTicks, corners, project };
   }, [festivals]);
 
   const activeBlip = blips.find((b) => b.festivals.some((f) => f.slug === activeSlug)) ?? null;
 
   return (
-    <div className="relative overflow-hidden rounded-xl border border-line bg-bg-elevated">
+    <div
+      className="relative overflow-hidden rounded-xl border border-line bg-bg-elevated"
+      onMouseMove={(e) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        setPointer({
+          x: ((e.clientX - rect.left) / rect.width) * 100,
+          y: ((e.clientY - rect.top) / rect.height) * 100,
+        });
+      }}
+      onMouseLeave={() => setPointer(null)}
+    >
       <svg
         viewBox={`0 0 ${WIDTH} ${height}`}
         className="h-auto w-full"
@@ -181,10 +201,25 @@ export default function FestivalRadar({
           })}
         </g>
 
+        {/* Corner coordinate readout — studio-HUD detail tying the map
+            back to the site's instrument aesthetic. */}
+        <text x={8} y={16} className="fill-fg-dim/60 font-mono text-[8px] uppercase tracking-[0.06em]">
+          {corners.topLeft}
+        </text>
+        <text
+          x={WIDTH - 8}
+          y={height - 8}
+          textAnchor="end"
+          className="fill-fg-dim/60 font-mono text-[8px] uppercase tracking-[0.06em]"
+        >
+          {corners.bottomRight}
+        </text>
+
         {/* Contacts — small hollow diamonds on a solid halo so nearby
             points (the Netherlands/Germany cluster) stay visually
-            distinct instead of merging edge to edge. Names stay hidden
-            until hover. */}
+            distinct instead of merging edge to edge, each with an
+            always-visible city label so the map reads without hovering
+            every pin. */}
         {blips.map((blip) => {
           const isActive = blip.festivals.some((f) => f.slug === activeSlug);
           return (
@@ -197,52 +232,60 @@ export default function FestivalRadar({
             >
               <circle r={13} className="fill-transparent" />
               {isActive && (
-                <circle r={5} className="fill-none stroke-accent" strokeWidth={1.5}>
-                  <animate attributeName="r" values="4;11;4" dur="1.6s" repeatCount="indefinite" />
+                <circle r={4} className="fill-none stroke-accent" strokeWidth={1.5}>
+                  <animate attributeName="r" values="3.5;10;3.5" dur="1.6s" repeatCount="indefinite" />
                   <animate attributeName="opacity" values="0.9;0;0.9" dur="1.6s" repeatCount="indefinite" />
                 </circle>
               )}
-              <rect x={-5} y={-5} width={10} height={10} transform="rotate(45)" className="fill-bg-elevated" />
+              <rect x={-4.5} y={-4.5} width={9} height={9} transform="rotate(45)" className="fill-bg-elevated" />
               <rect
-                x={-3}
-                y={-3}
-                width={6}
-                height={6}
+                x={-2.5}
+                y={-2.5}
+                width={5}
+                height={5}
                 transform="rotate(45)"
-                className={isActive ? "fill-accent stroke-accent" : "fill-bg-elevated stroke-fg-dim"}
+                className={isActive ? "fill-accent stroke-accent" : "fill-bg-elevated stroke-fg"}
                 strokeWidth={1.25}
               />
+              <text
+                x={7}
+                y={-6}
+                className={`font-mono text-[8px] uppercase tracking-[0.05em] ${
+                  isActive ? "fill-accent" : "fill-fg-dim/40"
+                }`}
+              >
+                {blip.festivals[0].city}
+              </text>
             </g>
           );
         })}
       </svg>
 
-      {/* Hover tooltip — one compact card near the active point instead of
-          permanent leader-lined labels scattered across the map. */}
-      {activeBlip && (
+      {/* Hover tooltip — follows the cursor while a contact is active
+          instead of sitting fixed in a corner. */}
+      {activeBlip && pointer && (
         <div
-          className="pointer-events-none absolute z-10 -translate-x-1/2 rounded-md border border-line bg-bg-elevated px-3 py-2 font-mono text-[10px] uppercase tracking-[0.1em] shadow-lg"
+          className="pointer-events-none absolute z-10 rounded-md border border-line bg-bg-elevated px-3 py-2 font-mono text-[10px] uppercase tracking-[0.08em] shadow-lg"
           style={{
-            left: `${(activeBlip.point.x / WIDTH) * 100}%`,
-            top: `${(activeBlip.point.y / height) * 100}%`,
-            transform: `translate(-50%, ${activeBlip.point.y < 60 ? "8px" : "calc(-100% - 8px)"})`,
+            left: `${pointer.x}%`,
+            top: `${pointer.y}%`,
+            transform: `translate(${pointer.x > 65 ? "calc(-100% - 14px)" : "14px"}, ${
+              pointer.y > 70 ? "calc(-100% - 14px)" : "14px"
+            })`,
           }}
         >
-          {activeBlip.festivals.map((f) => (
-            <div key={f.slug} className="whitespace-nowrap text-fg-dim">
-              <span className="text-accent">[{f.city}]</span>
-              {" // "}
-              {f.name}
-              {" — "}
-              {coordLabel(f.lat, f.lon)}
+          {activeBlip.festivals.map((f, i) => (
+            <div key={f.slug} className={i > 0 ? "mt-2 border-t border-line pt-2" : ""}>
+              <div className="text-fg-dim">[{coordLabel(f.lat, f.lon)}]</div>
+              <div className="mt-0.5 text-accent">{`${f.name} // ${f.city}`}</div>
+              <div className="mt-0.5 text-fg-dim">
+                {festivalDateLabel(f)}
+                {f.ticketUrl ? " →" : ""}
+              </div>
             </div>
           ))}
         </div>
       )}
-
-      <div className="pointer-events-none absolute bottom-3 left-3 font-mono text-[10px] uppercase tracking-[0.14em] text-fg-dim">
-        Hover a node for its city, name, and coordinates
-      </div>
     </div>
   );
 }

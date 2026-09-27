@@ -1,3 +1,5 @@
+import { formatDateRange } from "./format";
+
 export type FestivalDateStatus = "confirmed" | "estimated" | "tba";
 
 // Only set this when actually verified against the vendor; absence just
@@ -315,4 +317,12 @@ export function festivalDurationDays(festival: Festival): number | null {
   if (!festival.startDate || !festival.endDate) return null;
   const ms = new Date(festival.endDate).getTime() - new Date(festival.startDate).getTime();
   return Math.round(ms / 86_400_000) + 1;
+}
+
+export function festivalDateLabel(festival: Festival): string {
+  if (festival.dateStatus === "tba" || !festival.startDate || !festival.endDate) {
+    return "Dates TBA";
+  }
+  const range = formatDateRange(festival.startDate, festival.endDate);
+  return festival.dateStatus === "estimated" ? `${range} (est., unconfirmed)` : range;
 }

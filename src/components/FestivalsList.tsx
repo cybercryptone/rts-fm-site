@@ -4,10 +4,10 @@ import { useMemo, useState } from "react";
 import {
   regionOf,
   festivalDurationDays,
+  festivalDateLabel,
   type Festival,
   type Region,
 } from "@/lib/festivals";
-import { formatDateRange } from "@/lib/format";
 import FestivalRadar from "./FestivalRadar";
 
 const REGION_FILTERS: { label: string; value: Region | "all" }[] = [
@@ -16,14 +16,6 @@ const REGION_FILTERS: { label: string; value: Region | "all" }[] = [
   { label: "Americas", value: "Americas" },
   { label: "Asia", value: "Asia" },
 ];
-
-function dateLabel(festival: Festival): string {
-  if (festival.dateStatus === "tba" || !festival.startDate || !festival.endDate) {
-    return "Dates TBA";
-  }
-  const range = formatDateRange(festival.startDate, festival.endDate);
-  return festival.dateStatus === "estimated" ? `${range} (est., unconfirmed)` : range;
-}
 
 function TicketCta({ festival }: { festival: Festival }) {
   if (!festival.ticketUrl) {
@@ -76,7 +68,7 @@ function FestivalRow({
       <div className="grid grid-cols-1 gap-5 py-10 pl-4 pr-4 sm:gap-6 sm:pl-6 sm:pr-10 lg:grid-cols-[180px_minmax(180px,1fr)_minmax(240px,32%)_150px] lg:items-center lg:gap-8">
         {/* Col 1: date + city, date is the loud one */}
         <div className="font-mono uppercase leading-snug tracking-[0.1em]">
-          <div className="text-[15px] font-bold text-accent">{dateLabel(festival)}</div>
+          <div className="text-[15px] font-bold text-accent">{festivalDateLabel(festival)}</div>
           <div className="mt-1 text-xs text-fg-dim">
             {festival.city}, {festival.country}
           </div>
