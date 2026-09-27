@@ -62,11 +62,12 @@ function FestivalRow({
     <li
       onMouseEnter={() => onHover(festival.slug)}
       onMouseLeave={() => onHover(null)}
-      className={`group relative border-l-2 transition-colors hover:border-accent hover:bg-fg/[0.03] ${
-        isHighlighted ? "border-accent bg-fg/[0.03]" : "border-transparent"
+      style={{ borderLeftColor: isHighlighted ? "var(--accent)" : "transparent" }}
+      className={`group relative border-l-2 transition-colors hover:bg-fg/[0.03] ${
+        isHighlighted ? "bg-fg/[0.03]" : ""
       }`}
     >
-      <div className="grid grid-cols-1 gap-5 py-10 pl-4 pr-4 sm:gap-6 sm:pl-6 sm:pr-10 lg:grid-cols-[150px_minmax(180px,1fr)_minmax(240px,32%)_150px] lg:items-start lg:gap-8">
+      <div className="grid grid-cols-1 gap-5 py-10 pl-4 pr-4 sm:gap-6 sm:pl-6 sm:pr-10 lg:grid-cols-[180px_minmax(180px,1fr)_minmax(240px,32%)_150px] lg:items-center lg:gap-8">
         {/* Col 1: date + city, date is the loud one */}
         <div className="font-mono uppercase leading-snug tracking-[0.1em]">
           <div className="text-[15px] font-bold text-accent">{dateLabel(festival)}</div>
