@@ -93,6 +93,17 @@ export function videoObjectJsonLd(
 // result wants a real ticket/registration url inside offers and a real
 // location, so callers should skip this entirely for festivals whose dates
 // aren't confirmed rather than emit an incomplete Event.
+//
+// Deliberately still omits offers.price/priceCurrency/validFrom and
+// top-level performer, both flagged as "non-critical" by GSC (they don't
+// block the rich result). These festivals sell multi-tier tickets (single
+// day / full pass / add-on side events, often on a third-party platform we
+// don't control) with no one number that honestly represents "the" price,
+// and it would be stale within weeks as early tiers sell out. RTS.FM
+// doesn't maintain lineup data either (a narrow curated list, not an
+// aggregator), so performer has nothing real to point to. Both are real
+// gaps in what we know, not oversights to silently paper over with a
+// cherry-picked or invented value.
 export function eventJsonLd(festival: {
   name: string;
   city: string;
@@ -101,6 +112,7 @@ export function eventJsonLd(festival: {
   endDate: string;
   website: string;
   ticketUrl?: string;
+  ticketStatus?: "open" | "sold-out";
   description: string;
   image?: string;
 }) {
@@ -124,8 +136,22 @@ export function eventJsonLd(festival: {
     ...(festival.image ? { image: festival.image } : {}),
     description: festival.description,
     url: festival.website,
+    // The organizing entity isn't separately tracked per festival (most
+    // aren't run by a company distinct from the festival's own brand), so
+    // this points at the festival's own name and official site, which is
+    // always true rather than a guess.
+    organizer: { "@type": "Organization", name: festival.name, url: festival.website },
     ...(festival.ticketUrl
-      ? { offers: { "@type": "Offer", url: festival.ticketUrl, availability: "https://schema.org/InStock" } }
+      ? {
+          offers: {
+            "@type": "Offer",
+            url: festival.ticketUrl,
+            availability:
+              festival.ticketStatus === "sold-out"
+                ? "https://schema.org/SoldOut"
+                : "https://schema.org/InStock",
+          },
+        }
       : {}),
   };
 }
