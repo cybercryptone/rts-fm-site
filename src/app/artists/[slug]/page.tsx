@@ -5,10 +5,18 @@ import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import Nav from "@/components/Nav";
 import AboutFooter from "@/components/AboutFooter";
+import YouTubeEmbed from "@/components/YouTubeEmbed";
 import { getAllArtists, getArtistBySlug } from "@/lib/artists";
 import { getAllPosts } from "@/lib/blog";
 import { SITE } from "@/lib/data";
-import { breadcrumbJsonLd } from "@/lib/schema";
+import {
+  breadcrumbJsonLd,
+  extractFaqItems,
+  extractYouTubeEmbeds,
+  faqJsonLd,
+  videoObjectJsonLd,
+} from "@/lib/schema";
+import { ARTIST_VIDEO_META } from "@/lib/artist-video-metadata";
 
 export function generateStaticParams() {
   return getAllArtists().map((artist) => ({ slug: artist.slug }));
@@ -122,6 +130,7 @@ const mdxComponents = {
     />
   ),
   img: MdxImage,
+  YouTubeEmbed,
 };
 
 export default async function ArtistPage({
@@ -158,12 +167,31 @@ export default async function ArtistPage({
     { name: artist.name, path: `/artists/${artist.slug}` },
   ]);
 
+  const faqItems = extractFaqItems(artist.content);
+
+  const videoJsonLds = extractYouTubeEmbeds(artist.content)
+    .filter((embed) => ARTIST_VIDEO_META[embed.videoId])
+    .map((embed) => videoObjectJsonLd(embed, ARTIST_VIDEO_META[embed.videoId]));
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      {faqItems.length > 0 && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd(faqItems)) }}
+        />
+      )}
+      {videoJsonLds.map((video) => (
+        <script
+          key={video.embedUrl}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(video) }}
+        />
+      ))}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumb) }}
