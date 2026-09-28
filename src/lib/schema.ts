@@ -94,16 +94,16 @@ export function videoObjectJsonLd(
 // location, so callers should skip this entirely for festivals whose dates
 // aren't confirmed rather than emit an incomplete Event.
 //
-// Deliberately still omits offers.price/priceCurrency/validFrom and
-// top-level performer, both flagged as "non-critical" by GSC (they don't
-// block the rich result). These festivals sell multi-tier tickets (single
-// day / full pass / add-on side events, often on a third-party platform we
-// don't control) with no one number that honestly represents "the" price,
-// and it would be stale within weeks as early tiers sell out. RTS.FM
-// doesn't maintain lineup data either (a narrow curated list, not an
-// aggregator), so performer has nothing real to point to. Both are real
-// gaps in what we know, not oversights to silently paper over with a
-// cherry-picked or invented value.
+// price/priceCurrency are only ever set (in festivals.ts) when the vendor's
+// own page shows one unambiguous number for a real full-festival pass or a
+// clearly single-priced ticket; left unset (rather than guessed, or filled
+// with a multi-tier festival's cheapest add-on or a payment plan's deposit)
+// for every festival where no honest single price exists. validFrom and
+// top-level performer are omitted entirely: RTS.FM doesn't track ticket
+// on-sale dates, and deliberately doesn't maintain lineup data at all (a
+// narrow curated list, not an aggregator), so neither has anything real to
+// point to. All are flagged "non-critical" by GSC (they don't block the
+// rich result) — real gaps in what we know, not oversights.
 export function eventJsonLd(festival: {
   name: string;
   city: string;
@@ -113,6 +113,8 @@ export function eventJsonLd(festival: {
   website: string;
   ticketUrl?: string;
   ticketStatus?: "open" | "sold-out";
+  ticketPrice?: number;
+  ticketPriceCurrency?: string;
   description: string;
   image?: string;
 }) {
@@ -150,6 +152,9 @@ export function eventJsonLd(festival: {
               festival.ticketStatus === "sold-out"
                 ? "https://schema.org/SoldOut"
                 : "https://schema.org/InStock",
+            ...(festival.ticketPrice !== undefined && festival.ticketPriceCurrency
+              ? { price: festival.ticketPrice, priceCurrency: festival.ticketPriceCurrency }
+              : {}),
           },
         }
       : {}),

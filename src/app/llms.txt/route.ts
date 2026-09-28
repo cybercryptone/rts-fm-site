@@ -1,12 +1,14 @@
 import { SITE, RELEASES, CITIES, SOCIALS } from "@/lib/data";
 import { getAllPosts } from "@/lib/blog";
 import { getAllArtists } from "@/lib/artists";
+import { getUpcomingFestivals, getPastFestivals, festivalDateLabel } from "@/lib/festivals";
 
 export const revalidate = 3600; // 1 hour
 
 export async function GET() {
   const posts = getAllPosts();
   const artists = getAllArtists();
+  const festivals = [...getUpcomingFestivals(), ...getPastFestivals()];
 
   const lines: string[] = [
     `# ${SITE.name}`,
@@ -37,6 +39,14 @@ export async function GET() {
     "",
     `- [Artist index](${SITE.url}/artists): biography pages for DJs and producers shaping tech house, minimal house, and minimal techno.`,
     ...artists.map((a) => `- [${a.name}](${SITE.url}/artists/${a.slug}): ${a.excerpt}`),
+    "",
+    "## Festivals",
+    "",
+    `- [Festival index](${SITE.url}/festivals): a curated list of the world's major underground house and techno festivals, with dates, cities, and official ticket links.`,
+    ...festivals.map(
+      (f) =>
+        `- [${f.name}](${SITE.url}/festivals/${f.slug}): ${f.city}, ${f.country}. ${festivalDateLabel(f)}. ${f.description}`,
+    ),
     "",
     "## Optional",
     "",

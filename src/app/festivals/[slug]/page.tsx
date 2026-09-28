@@ -193,6 +193,8 @@ export default async function FestivalPage({
           website: festival.website,
           ticketUrl: festival.ticketUrl,
           ticketStatus: festival.ticketStatus,
+          ticketPrice: festival.ticketPrice,
+          ticketPriceCurrency: festival.ticketPriceCurrency,
           description: festival.description,
           image: festival.image,
         })

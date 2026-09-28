@@ -29,6 +29,17 @@ export type Festival = {
   ticketUrl?: string;
   // Only set when verified against the vendor (see TicketStatus above).
   ticketStatus?: TicketStatus;
+  // The real, current lowest-tier ticket price at the vendor, only set
+  // when the vendor's own page shows one unambiguous number (a genuine
+  // full-festival pass, or a clearly single-priced ticket type). Many of
+  // these festivals sell multi-tier or per-show tickets with no one price
+  // that honestly represents "the" cost of attending, or show nothing at
+  // all (presale-only, external vendor with no visible price, a payment
+  // plan's deposit rather than the real price) — leave both fields unset
+  // rather than guess or use a misleading number. Expect this to go stale
+  // as tiers sell through; re-check alongside dates/links.
+  ticketPrice?: number;
+  ticketPriceCurrency?: string;
   description: string;
   image?: string;
   imageAlt?: string;
@@ -56,6 +67,8 @@ export const FESTIVALS: Festival[] = [
     genres: ["experimental", "electronic"],
     website: "https://www.ctm-festival.de",
     ticketUrl: "https://www.ctm-festival.de/festival-2027/tickets",
+    ticketPrice: 195,
+    ticketPriceCurrency: "EUR",
     description:
       "A ten-day festival for adventurous club music and sound art spread across venues including Berghain and Radialsystem, running every January since 1999.",
     image: "https://rts.fm/images/commons/ctm-festival-berghain-facade.jpg",
@@ -112,6 +125,8 @@ export const FESTIVALS: Festival[] = [
     genres: ["electronic", "techno", "experimental"],
     website: "https://sonar.es",
     ticketUrl: "https://sonar.es/en/tickets",
+    ticketPrice: 49,
+    ticketPriceCurrency: "EUR",
     description:
       "Barcelona's festival for advanced electronic music and digital art since 1994, split across day and night programs.",
     image: "https://rts.fm/images/commons/sonar-sonar-by-day-2016.jpg",
@@ -131,6 +146,8 @@ export const FESTIVALS: Festival[] = [
     genres: ["house", "techno"],
     website: "https://www.seayou-festival.de",
     ticketUrl: "https://shop.seayou-festival.de/festivaltickets?language=en_EN",
+    ticketPrice: 79.99,
+    ticketPriceCurrency: "EUR",
     description:
       "A house and techno festival built around swimming and dancing at a lake outside Freiburg, six stages over a July weekend.",
     image: "https://rts.fm/images/commons/sea-you-tunisee-lake.jpg",
