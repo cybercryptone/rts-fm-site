@@ -187,6 +187,15 @@ export const FESTIVALS: Festival[] = [
     genres: ["techno"],
     website: "https://www.awakenings.com",
     ticketUrl: "https://www.awakenings.com/en/tickets/",
+    // Unlike the other ticketPrice entries in this file, this one isn't
+    // confirmed on awakenings.com's own pages directly (its real price is
+    // rendered client-side at checkout, past what a fetch can see).
+    // Sourced instead from several independent third-party listings
+    // (~79.95 EUR for a day ticket), rounded to a "from" figure per an
+    // explicit editorial call; re-verify against the vendor directly if
+    // revisited.
+    ticketPrice: 80,
+    ticketPriceCurrency: "EUR",
     description:
       "The Dutch techno institution's summer festival, marking its 30th anniversary edition in 2027 after growing out of Amsterdam's early-90s rave scene.",
     image: "https://rts.fm/images/commons/awakenings-festival-gashouder-westergasfabriek.jpg",
