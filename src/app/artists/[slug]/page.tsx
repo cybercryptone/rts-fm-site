@@ -150,6 +150,10 @@ export default async function ArtistPage({
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "ProfilePage",
+    // Real dates for when this profile page itself was written (from git
+    // history, see lib/artists.ts), not the artist's own career dates.
+    ...(artist.dateCreated ? { dateCreated: artist.dateCreated } : {}),
+    ...(artist.dateModified ? { dateModified: artist.dateModified } : {}),
     mainEntity: {
       "@type": "MusicGroup",
       name: artist.name,

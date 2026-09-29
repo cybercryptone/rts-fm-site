@@ -1,8 +1,19 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
+import artistDates from "@/content/artist-dates.json";
 
 const ARTISTS_DIR = path.join(process.cwd(), "src/content/artists");
+
+// Real git commit history for each artist file, snapshotted to a static
+// file rather than shelled out to `git log` at build time, since a
+// production build may run from a shallow clone with no history to read.
+// Regenerate after adding or editing an artist file (see the one-off
+// script used to first generate this — a `git log --diff-filter=A
+// --follow` / `git log -1` pair per file, both --format=%aI). A slug
+// missing from this map (a new artist added without regenerating it)
+// just gets no dateCreated/dateModified rather than a build failure.
+const ARTIST_DATES: Record<string, { dateCreated: string; dateModified: string }> = artistDates;
 
 export type ArtistMeta = {
   slug: string;
@@ -17,6 +28,8 @@ export type ArtistMeta = {
   imageCredit: string;
   sameAs: string[];
   relatedPosts: string[];
+  dateCreated?: string;
+  dateModified?: string;
 };
 
 export type Artist = ArtistMeta & {
@@ -44,6 +57,8 @@ function toMeta(slug: string, data: Record<string, unknown>): ArtistMeta {
     imageCredit: data.imageCredit as string,
     sameAs: (data.sameAs as string[]) ?? [],
     relatedPosts: (data.relatedPosts as string[]) ?? [],
+    dateCreated: ARTIST_DATES[slug]?.dateCreated,
+    dateModified: ARTIST_DATES[slug]?.dateModified,
   };
 }
 
