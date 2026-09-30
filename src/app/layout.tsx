@@ -105,7 +105,11 @@ const organizationJsonLd = {
   logo: `${SITE.url}/icon.png`,
   description: SITE.description,
   foundingDate: String(SITE.founded),
-  sameAs: SOCIALS.map((s) => s.href),
+  // The Wikipedia entry is included specifically to help Google's Knowledge
+  // Graph disambiguate this Organization from the several unrelated "RTS"
+  // entities (Radio Télévision Suisse, Radio Television of Serbia, Somfy's
+  // RTS home-automation line) that outrank rts.fm for bare-acronym queries.
+  sameAs: [...SOCIALS.map((s) => s.href), "https://en.wikipedia.org/wiki/RTS.FM"],
 };
 
 const websiteJsonLd = {
