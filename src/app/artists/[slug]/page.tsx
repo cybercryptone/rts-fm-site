@@ -133,6 +133,17 @@ const mdxComponents = {
   YouTubeEmbed,
 };
 
+// The frontmatter image is rendered right under the H1, so any body copy of
+// the same image (markdown image plus its italic credit line) is dropped to
+// avoid showing it twice.
+function stripHeroImage(content: string, image: string): string {
+  const escaped = image.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return content.replace(
+    new RegExp(`!\\[[^\\]]*\\]\\(${escaped}\\)[ \\t]*(?:\\r?\\n\\*[^\\n]*\\*[ \\t]*)?(?:\\r?\\n)*`, "g"),
+    "",
+  );
+}
+
 export default async function ArtistPage({
   params,
 }: {
@@ -216,6 +227,23 @@ export default async function ArtistPage({
           <h1 className="mt-3 font-display text-3xl font-bold uppercase tracking-[-0.02em] text-fg sm:text-4xl">
             {artist.name}
           </h1>
+          {artist.image && (
+            <figure className="mt-6">
+              {/* eslint-disable-next-line @next/next/no-img-element -- self-hosted editorial image; not worth Next/Image for one-off credits */}
+              <img
+                src={artist.image}
+                alt={artist.imageAlt}
+                loading="eager"
+                fetchPriority="high"
+                className="max-h-[34rem] w-full rounded-xl border border-line object-cover object-top"
+              />
+              {artist.imageCredit && (
+                <figcaption className="mt-2 font-mono text-[11px] uppercase tracking-[0.1em] text-fg-dim">
+                  {artist.imageCredit}
+                </figcaption>
+              )}
+            </figure>
+          )}
           <p className="mt-4 max-w-xl text-sm leading-relaxed text-fg-dim sm:text-base">
             {artist.excerpt}
           </p>
@@ -258,7 +286,7 @@ export default async function ArtistPage({
           )}
 
           <div className="mt-6 border-t border-line pt-6">
-            <MDXRemote source={artist.content} components={mdxComponents} />
+            <MDXRemote source={stripHeroImage(artist.content, artist.image)} components={mdxComponents} />
           </div>
 
           {relatedPosts.length > 0 && (
