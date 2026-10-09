@@ -192,4 +192,58 @@ export const ARTIST_VIDEO_META: Record<string, BlogVideoMeta> = {
     duration: "PT1H6M10S",
     thumbnailUrl: "https://i.ytimg.com/vi/JuePD-3Z-sU/maxresdefault.jpg",
   },
+  "RRhO4lajPRE": {
+    description: "Chris Stussy DJ set recorded live for RTS.FM Budapest at Vinyl & Wood, Budapest, 19.01.2018.",
+    uploadDate: "2018-01-29T12:23:50Z",
+    duration: "PT1H22M21S",
+    thumbnailUrl: "https://i.ytimg.com/vi/RRhO4lajPRE/maxresdefault.jpg",
+  },
+  "9tGztDVgCcs": {
+    description: "Theo Parrish master class, presented with Red Bull Music Academy and recorded at RTS.FM Moscow, 10.07.2009.",
+    uploadDate: "2013-04-05T23:45:31Z",
+    duration: "PT2H23M59S",
+    thumbnailUrl: "https://i.ytimg.com/vi/9tGztDVgCcs/hqdefault.jpg",
+  },
+  "-p3GN6OS0go": {
+    description: "Daniel Wang DJ set recorded for RTS.FM, 03.06.2011.",
+    uploadDate: "2013-07-23T01:50:26Z",
+    duration: "PT1H14M39S",
+    thumbnailUrl: "https://i.ytimg.com/vi/-p3GN6OS0go/hqdefault.jpg",
+  },
+  "ltDQBYOCeqs": {
+    description: "Move D DJ set recorded for RTS.FM, 07.11.2010.",
+    uploadDate: "2013-07-19T16:18:53Z",
+    duration: "PT2H8M9S",
+    thumbnailUrl: "https://i.ytimg.com/vi/ltDQBYOCeqs/hqdefault.jpg",
+  },
+  "Exukg3a1MkI": {
+    description: "Move D DJ set recorded live at RTS.FM's St. Petersburg studio, 06.02.2010.",
+    uploadDate: "2013-07-11T08:47:35Z",
+    duration: "PT1H16M40S",
+    thumbnailUrl: "https://i.ytimg.com/vi/Exukg3a1MkI/hqdefault.jpg",
+  },
+  "fl6VuCNtO9M": {
+    description: "Daniel Bell DJ set recorded live at RTS.FM's Berlin studio, 14.01.2010.",
+    uploadDate: "2013-07-10T17:02:06Z",
+    duration: "PT1H8M",
+    thumbnailUrl: "https://i.ytimg.com/vi/fl6VuCNtO9M/hqdefault.jpg",
+  },
+  "4VthSs_Ci8g": {
+    description: "Vince Watson live set recorded at RTS.FM's Moscow studio, 06.11.2008.",
+    uploadDate: "2013-04-04T22:08:47Z",
+    duration: "PT1H26S",
+    thumbnailUrl: "https://i.ytimg.com/vi/4VthSs_Ci8g/hqdefault.jpg",
+  },
+  "WTQ2WT49PYg": {
+    description: "Andrey Pushkarev DJ set recorded live for RTS.FM Budapest at Aktrecords, Budapest, 23.12.2014.",
+    uploadDate: "2016-12-06T22:13:37Z",
+    duration: "PT1H10M32S",
+    thumbnailUrl: "https://i.ytimg.com/vi/WTQ2WT49PYg/maxresdefault.jpg",
+  },
+  "KaX8kVsOTlM": {
+    description: "Andrey Pushkarev DJ set at the opening of RTS.FM's Bucharest studio, 24.09.2014.",
+    uploadDate: "2016-01-10T16:49:31Z",
+    duration: "PT1H9M8S",
+    thumbnailUrl: "https://i.ytimg.com/vi/KaX8kVsOTlM/maxresdefault.jpg",
+  },
 };
