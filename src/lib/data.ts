@@ -43,6 +43,7 @@ export const SOCIALS = [
   { label: "Instagram", href: "https://www.instagram.com/rts.fm/" },
   { label: "Label IG", href: "https://www.instagram.com/rts.fm.label/" },
   { label: "Bandcamp", href: "https://rtsfm.bandcamp.com/" },
+  { label: "Lyra", href: "https://www.lyramusic.io/artist/rtsfm-label" },
   { label: "SoundCloud", href: "https://soundcloud.com/rtsfm" },
   { label: "Facebook", href: "https://www.facebook.com/rtsfm/" },
 ];
