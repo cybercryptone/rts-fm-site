@@ -2,14 +2,23 @@ import type { Metadata } from "next";
 import Nav from "@/components/Nav";
 import AboutFooter from "@/components/AboutFooter";
 import FestivalsList from "@/components/FestivalsList";
-import { getUpcomingFestivals, getPastFestivals, type Festival } from "@/lib/festivals";
+import Link from "next/link";
+import {
+  getUpcomingFestivals,
+  getPastFestivals,
+  getCalendarYears,
+  getCountryHubs,
+  oldestVerified,
+  type Festival,
+} from "@/lib/festivals";
+import { formatDate } from "@/lib/format";
 import { breadcrumbJsonLd, eventJsonLd } from "@/lib/schema";
 
 const description =
   "A curated list of the world's major underground house and techno festivals, with dates, cities, and official ticket links.";
 
 export const metadata: Metadata = {
-  title: "Festivals",
+  title: { absolute: "Underground Techno & House Festivals: Dates & Tickets" },
   description,
   alternates: { canonical: "/festivals" },
   openGraph: { type: "website", url: "/festivals", title: "Festivals — RTS.FM", description },
@@ -19,6 +28,9 @@ export const metadata: Metadata = {
 export default function FestivalsIndex() {
   const upcoming = getUpcomingFestivals();
   const past = getPastFestivals();
+  const years = getCalendarYears();
+  const hubs = getCountryHubs();
+  const checked = oldestVerified();
   const breadcrumb = breadcrumbJsonLd([
     { name: "Home", path: "/" },
     { name: "Festivals", path: "/festivals" },
@@ -71,6 +83,34 @@ export default function FestivalsIndex() {
             festivals, not a full listings aggregator. Every ticket link goes straight to the
             festival&apos;s own vendor; RTS.FM never sells or handles tickets itself.
           </p>
+
+          {(years.length > 0 || hubs.length > 0) && (
+            <p className="mt-5 font-mono text-[11px] uppercase tracking-[0.14em] text-fg-dim">
+              Browse:{" "}
+              {years.map((y, i) => (
+                <span key={y}>
+                  {i > 0 && " · "}
+                  <Link href={`/festivals/calendar/${y}`} className="text-accent hover:text-accent-soft">
+                    {y} calendar
+                  </Link>
+                </span>
+              ))}
+              {years.length > 0 && hubs.length > 0 && " · "}
+              {hubs.map((h, i) => (
+                <span key={h.slug}>
+                  {i > 0 && " · "}
+                  <Link href={`/festivals/country/${h.slug}`} className="text-accent hover:text-accent-soft">
+                    {h.country}
+                  </Link>
+                </span>
+              ))}
+            </p>
+          )}
+          {checked && (
+            <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.14em] text-fg-dim/70">
+              Dates and links checked against each festival&apos;s own pages, oldest check {formatDate(checked)}
+            </p>
+          )}
 
           {upcoming.length === 0 && past.length === 0 ? (
             <p className="mt-10 text-sm text-fg-dim">

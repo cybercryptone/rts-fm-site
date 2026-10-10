@@ -115,6 +115,8 @@ export function eventJsonLd(festival: {
   ticketStatus?: "open" | "sold-out";
   ticketPrice?: number;
   ticketPriceCurrency?: string;
+  venue?: string;
+  venueAddress?: string;
   description: string;
   image?: string;
 }) {
@@ -128,9 +130,10 @@ export function eventJsonLd(festival: {
     eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
     location: {
       "@type": "Place",
-      name: festival.city,
+      name: festival.venue ?? festival.city,
       address: {
         "@type": "PostalAddress",
+        ...(festival.venueAddress ? { streetAddress: festival.venueAddress } : {}),
         addressLocality: festival.city,
         addressCountry: festival.country,
       },

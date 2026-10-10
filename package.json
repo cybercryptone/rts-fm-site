@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start -p ${PORT:-3000}",
-    "lint": "eslint"
+    "lint": "eslint",
+    "check:festivals": "node scripts/check-festivals.mjs"
   },
   "dependencies": {
     "fast-xml-parser": "^5.11.1",

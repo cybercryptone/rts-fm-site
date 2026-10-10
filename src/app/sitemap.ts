@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { SITE } from "@/lib/data";
 import { getAllPosts } from "@/lib/blog";
 import { getAllArtists } from "@/lib/artists";
-import { FESTIVALS } from "@/lib/festivals";
+import { FESTIVALS, getCalendarYears, getCountryHubs } from "@/lib/festivals";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
@@ -50,8 +50,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
     ...FESTIVALS.map((festival) => ({
       url: `${SITE.url}/festivals/${festival.slug}`,
-      lastModified: new Date(),
+      lastModified: festival.lastVerified ? new Date(festival.lastVerified) : new Date(),
       changeFrequency: "monthly" as const,
+      priority: 0.6,
+    })),
+    ...getCalendarYears().map((year) => ({
+      url: `${SITE.url}/festivals/calendar/${year}`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.7,
+    })),
+    ...getCountryHubs().map((hub) => ({
+      url: `${SITE.url}/festivals/country/${hub.slug}`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
       priority: 0.6,
     })),
   ];

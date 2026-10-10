@@ -9,6 +9,7 @@ import YouTubeEmbed from "@/components/YouTubeEmbed";
 import { getAllArtists, getArtistBySlug } from "@/lib/artists";
 import { getAllPosts } from "@/lib/blog";
 import { SITE } from "@/lib/data";
+import { festivalDateLabel, festivalsForArtist } from "@/lib/festivals";
 import {
   breadcrumbJsonLd,
   extractFaqItems,
@@ -154,6 +155,7 @@ export default async function ArtistPage({
   if (!artist) notFound();
 
   const relatedPosts = getAllPosts().filter((p) => artist.relatedPosts.includes(p.slug));
+  const festivals = festivalsForArtist(artist.slug);
 
   // MusicGroup (not Person) per schema.org's own guidance: it covers solo
   // acts as well as bands and, unlike Person, carries genre/sameAs in a way
@@ -288,6 +290,35 @@ export default async function ArtistPage({
           <div className="mt-6 border-t border-line pt-6">
             <MDXRemote source={stripHeroImage(artist.content, artist.image)} components={mdxComponents} />
           </div>
+
+          {festivals.length > 0 && (
+            <div className="mt-14 border-t border-line pt-8">
+              <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-fg-dim">
+                festivals
+              </p>
+              <ul className="mt-4 flex flex-col divide-y divide-line">
+                {festivals.map((f) => (
+                  <li key={f.slug}>
+                    <Link
+                      href={`/festivals/${f.slug}`}
+                      className="flex items-center justify-between gap-4 py-3 text-sm font-semibold text-fg transition-colors hover:text-accent"
+                    >
+                      <span>
+                        {f.name}
+                        <span className="ml-2 font-mono text-[11px] font-normal uppercase tracking-[0.1em] text-fg-dim">
+                          {f.city}, {festivalDateLabel(f)}
+                        </span>
+                      </span>
+                      <span className="shrink-0 text-accent">→</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-3 text-xs text-fg-dim">
+                Past appearances and announced lineups only, each checked against the festival&apos;s own records.
+              </p>
+            </div>
+          )}
 
           {relatedPosts.length > 0 && (
             <div className="mt-14 border-t border-line pt-8">

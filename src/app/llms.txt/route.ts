@@ -1,7 +1,13 @@
 import { SITE, RELEASES, CITIES, SOCIALS } from "@/lib/data";
 import { getAllPosts } from "@/lib/blog";
 import { getAllArtists } from "@/lib/artists";
-import { getUpcomingFestivals, getPastFestivals, festivalDateLabel } from "@/lib/festivals";
+import {
+  getUpcomingFestivals,
+  getPastFestivals,
+  festivalDateLabel,
+  getCalendarYears,
+  getCountryHubs,
+} from "@/lib/festivals";
 
 export const revalidate = 3600; // 1 hour
 
@@ -43,6 +49,12 @@ export async function GET() {
     "## Festivals",
     "",
     `- [Festival index](${SITE.url}/festivals): a curated list of the world's major underground house and techno festivals, with dates, cities, and official ticket links.`,
+    ...getCalendarYears().map(
+      (y) => `- [Festival calendar ${y}](${SITE.url}/festivals/calendar/${y}): month-by-month list of ${y} festivals with dates, cities and ticket links.`,
+    ),
+    ...getCountryHubs().map(
+      (h) => `- [Festivals in ${h.country}](${SITE.url}/festivals/country/${h.slug}): ${h.festivals.length} festivals in ${h.country}.`,
+    ),
     ...festivals.map(
       (f) =>
         `- [${f.name}](${SITE.url}/festivals/${f.slug}): ${f.city}, ${f.country}. ${festivalDateLabel(f)}. ${f.description}`,
