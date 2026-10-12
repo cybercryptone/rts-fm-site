@@ -1,3 +1,4 @@
+import { getImageDims } from "@/lib/image-dims";
 import type { Metadata } from "next";
 import { Children, isValidElement } from "react";
 import Link from "next/link";
@@ -18,7 +19,7 @@ import {
   type Festival,
 } from "@/lib/festivals";
 import { getAllArtists } from "@/lib/artists";
-import { formatDate } from "@/lib/format";
+import { formatDate, metaDescription } from "@/lib/format";
 import { getFestivalContent } from "@/lib/festival-content";
 import { breadcrumbJsonLd, eventJsonLd, extractFaqItems, faqJsonLd } from "@/lib/schema";
 
@@ -34,22 +35,24 @@ export async function generateMetadata({
   const { slug } = await params;
   const festival = getFestivalBySlug(slug);
   if (!festival) return {};
-  const title = `${festival.name} — ${festival.city}`;
+  const full = `${festival.name}: Dates, Tickets & Guide, ${festival.city}`;
+  const title = full.length <= 60 ? full : `${festival.name}: Dates, Tickets & Guide`;
+  const description = metaDescription(festival.description);
   return {
     title: { absolute: title },
-    description: festival.description,
+    description,
     alternates: { canonical: `/festivals/${slug}` },
     openGraph: {
       type: "website",
       url: `/festivals/${slug}`,
       title,
-      description: festival.description,
+      description,
       ...(festival.image ? { images: [festival.image] } : {}),
     },
     twitter: {
       card: "summary_large_image",
       title,
-      description: festival.description,
+      description,
       ...(festival.image ? { images: [festival.image] } : {}),
     },
   };
@@ -58,9 +61,18 @@ export async function generateMetadata({
 // Same figure/figcaption-out-of-<p> hydration fix used on blog/artist pages
 // — see src/app/blog/[slug]/page.tsx for the full rationale.
 function MdxFigureImg({ alt, ...props }: React.ComponentProps<"img">) {
+  const dims = getImageDims(typeof props.src === "string" ? props.src : undefined);
   return (
     /* eslint-disable-next-line @next/next/no-img-element -- external, CC-licensed editorial images; not worth Next/Image's remote-domain allowlisting for one-off credits */
-    <img alt={alt} loading="lazy" className="w-full rounded-xl border border-line object-cover" {...props} />
+    <img
+      alt={alt}
+      loading="lazy"
+      decoding="async"
+      width={dims?.width}
+      height={dims?.height}
+      className="h-auto w-full rounded-xl border border-line object-cover"
+      {...props}
+    />
   );
 }
 
@@ -309,6 +321,8 @@ export default async function FestivalPage({
               <img
                 src={festival.image}
                 alt={festival.imageAlt ?? festival.name}
+                width={getImageDims(festival.image)?.width}
+                height={getImageDims(festival.image)?.height}
                 loading="lazy"
                 className="w-full rounded-xl border border-line object-cover"
               />

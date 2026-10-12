@@ -1,3 +1,5 @@
+import { metaDescription } from "@/lib/format";
+import { getImageDims } from "@/lib/image-dims";
 import type { Metadata } from "next";
 import { Children, isValidElement } from "react";
 import Link from "next/link";
@@ -33,19 +35,19 @@ export async function generateMetadata({
   if (!artist) return {};
   return {
     title: { absolute: artist.title },
-    description: artist.excerpt,
+    description: metaDescription(artist.excerpt),
     alternates: { canonical: `/artists/${slug}` },
     openGraph: {
       type: "profile",
       url: `/artists/${slug}`,
       title: artist.title,
-      description: artist.excerpt,
+      description: metaDescription(artist.excerpt),
       images: [artist.image],
     },
     twitter: {
       card: "summary_large_image",
       title: artist.title,
-      description: artist.excerpt,
+      description: metaDescription(artist.excerpt),
     },
   };
 }
@@ -53,9 +55,18 @@ export async function generateMetadata({
 // Same figure/figcaption-out-of-<p> hydration fix used on blog posts — see
 // src/app/blog/[slug]/page.tsx for the full rationale.
 function MdxFigureImg({ alt, ...props }: React.ComponentProps<"img">) {
+  const dims = getImageDims(typeof props.src === "string" ? props.src : undefined);
   return (
     /* eslint-disable-next-line @next/next/no-img-element -- external, CC-licensed editorial images; not worth Next/Image's remote-domain allowlisting for one-off credits */
-    <img alt={alt} loading="lazy" className="w-full rounded-xl border border-line object-cover" {...props} />
+    <img
+      alt={alt}
+      loading="lazy"
+      decoding="async"
+      width={dims?.width}
+      height={dims?.height}
+      className="h-auto w-full rounded-xl border border-line object-cover"
+      {...props}
+    />
   );
 }
 
@@ -235,6 +246,8 @@ export default async function ArtistPage({
               <img
                 src={artist.image}
                 alt={artist.imageAlt}
+                width={getImageDims(artist.image)?.width}
+                height={getImageDims(artist.image)?.height}
                 loading="eager"
                 fetchPriority="high"
                 className="max-h-[34rem] w-full rounded-xl border border-line object-cover object-top"

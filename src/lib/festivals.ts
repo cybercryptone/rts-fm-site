@@ -148,7 +148,7 @@ export const FESTIVALS: Festival[] = [
     endDate: "2027-06-19",
     dateStatus: "confirmed",
     genres: ["electronic", "techno", "experimental"],
-    website: "https://sonar.es",
+    website: "https://sonar.es/en/",
     description:
       "Barcelona's festival for advanced electronic music and digital art since 1994, with the Sonar+D creativity and technology congress alongside.",
     image: "https://rts.fm/images/commons/sonar-sonar-by-day-2016.jpg",

@@ -69,3 +69,22 @@ export function splitTitle(title: string) {
     .join(" · ");
   return { artist, meta: rest };
 }
+
+// Search-result snippet limit. Longer descriptions get truncated by Google,
+// so cut at the last full sentence that fits, else at a word boundary.
+const META_DESCRIPTION_MAX = 155;
+
+export function metaDescription(text: string, max = META_DESCRIPTION_MAX): string {
+  const clean = text.replace(/\s+/g, " ").trim();
+  if (clean.length <= max) return clean;
+  const window = clean.slice(0, max);
+  const lastSentence = Math.max(
+    window.lastIndexOf(". "),
+    window.lastIndexOf("! "),
+    window.lastIndexOf("? "),
+  );
+  if (lastSentence >= 80) return window.slice(0, lastSentence + 1);
+  const cut = clean.slice(0, max - 1);
+  const space = cut.lastIndexOf(" ");
+  return `${cut.slice(0, space > 0 ? space : cut.length).replace(/[,;:\s-]+$/, "")}…`;
+}

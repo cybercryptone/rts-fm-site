@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Children, isValidElement } from "react";
+import { Children, cache, isValidElement } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
@@ -13,6 +13,7 @@ import SoundCloudEmbed from "@/components/SoundCloudEmbed";
 import BandcampEmbed from "@/components/BandcampEmbed";
 import { getAllPosts, getArticleImage, getPostBySlug } from "@/lib/blog";
 import { formatDate } from "@/lib/format";
+import { getImageDims } from "@/lib/image-dims";
 import { SITE } from "@/lib/data";
 import {
   breadcrumbJsonLd,
@@ -64,10 +65,25 @@ export async function generateMetadata({
 // hydration mismatch, not just a lint nit). `p` below unwraps to just the
 // figure when that's effectively its only content, so no <figure> ever ends
 // up nested inside a <p> in the rendered HTML.
+// Per-request holder for the post's first image, which is the above-the-fold
+// hero (house rule) and so must load eagerly for LCP; later images stay lazy.
+const heroImage = cache(() => ({ src: "" }));
+
 function MdxFigureImg({ alt, ...props }: React.ComponentProps<"img">) {
+  const isHero = !!props.src && props.src === heroImage().src;
+  const dims = getImageDims(typeof props.src === "string" ? props.src : undefined);
   return (
     /* eslint-disable-next-line @next/next/no-img-element -- external, CC-licensed editorial images; not worth Next/Image's remote-domain allowlisting for one-off blog credits */
-    <img alt={alt} loading="lazy" className="w-full rounded-xl border border-line object-cover" {...props} />
+    <img
+      alt={alt}
+      loading={isHero ? "eager" : "lazy"}
+      fetchPriority={isHero ? "high" : undefined}
+      decoding="async"
+      width={dims?.width}
+      height={dims?.height}
+      className="h-auto w-full rounded-xl border border-line object-cover"
+      {...props}
+    />
   );
 }
 
@@ -218,6 +234,7 @@ export default async function BlogPost({
   ]);
 
   const faqItems = extractFaqItems(post.content);
+  heroImage().src = post.content.match(/!\[[^\]]*\]\(([^)\s]+)\)/)?.[1] ?? "";
 
   const videoJsonLds = extractYouTubeEmbeds(post.content)
     .filter((embed) => BLOG_VIDEO_META[embed.videoId])
