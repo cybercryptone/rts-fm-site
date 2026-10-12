@@ -1,4 +1,6 @@
 import { metaDescription } from "@/lib/format";
+import { relatedForArtist } from "@/lib/related";
+import RelatedLinks from "@/components/RelatedLinks";
 import { getImageDims } from "@/lib/image-dims";
 import type { Metadata } from "next";
 import { Children, isValidElement } from "react";
@@ -353,6 +355,8 @@ export default async function ArtistPage({
               </ul>
             </div>
           )}
+
+          <RelatedLinks groups={relatedForArtist(artist)} />
         </article>
       </main>
       <AboutFooter />

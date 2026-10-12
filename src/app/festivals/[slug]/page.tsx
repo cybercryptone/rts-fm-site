@@ -20,6 +20,8 @@ import {
 } from "@/lib/festivals";
 import { getAllArtists } from "@/lib/artists";
 import { formatDate, metaDescription } from "@/lib/format";
+import { relatedForFestival } from "@/lib/related";
+import RelatedLinks from "@/components/RelatedLinks";
 import { getFestivalContent } from "@/lib/festival-content";
 import { breadcrumbJsonLd, eventJsonLd, extractFaqItems, faqJsonLd } from "@/lib/schema";
 
@@ -377,6 +379,8 @@ export default async function FestivalPage({
               )}
             </p>
           )}
+
+          <RelatedLinks groups={relatedForFestival(festival)} />
         </article>
       </main>
       <AboutFooter />
