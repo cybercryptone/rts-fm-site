@@ -11,6 +11,10 @@ export const SITE = {
 export const FEED_URL =
   "https://feeds.soundcloud.com/users/soundcloud:users:1302198/sounds.rss";
 
+// Public Apple Podcasts listing for the show (the feed above, submitted there).
+export const APPLE_PODCASTS_URL =
+  "https://podcasts.apple.com/us/podcast/rts-fm-radio/id1586958635";
+
 // Real numbers, not genre words — shown as the hero stat chips. The years
 // figure is computed at build time (rebuilt on every deploy), same as the
 // rest of the site's date-dependent content.
@@ -45,6 +49,7 @@ export const SOCIALS = [
   { label: "Bandcamp", href: "https://rtsfm.bandcamp.com/" },
   { label: "Lyra", href: "https://www.lyramusic.io/artist/rtsfm-label" },
   { label: "SoundCloud", href: "https://soundcloud.com/rtsfm" },
+  { label: "Apple Podcasts", href: APPLE_PODCASTS_URL },
   { label: "Facebook", href: "https://www.facebook.com/rtsfm/" },
 ];
 

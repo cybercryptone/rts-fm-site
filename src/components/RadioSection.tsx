@@ -1,5 +1,6 @@
 "use client";
 
+import ApplePodcastsBadge from "@/components/ApplePodcastsBadge";
 import { useState } from "react";
 import SetsArchive from "./SetsArchive";
 import PlayerCard from "./PlayerCard";
@@ -63,23 +64,15 @@ export default function RadioSection() {
           <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-fg-dim">
             also on
           </p>
-          {[
-            {
-              label: "Apple Podcasts",
-              href: "https://podcasts.apple.com/us/podcast/rts-fm-radio/id1586958635",
-            },
-            { label: "SoundCloud", href: "https://soundcloud.com/rtsfm" },
-          ].map((p) => (
-            <a
-              key={p.label}
-              href={p.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-full border border-line px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-fg-dim transition-colors hover:border-accent hover:text-accent"
-            >
-              {p.label} ↗
-            </a>
-          ))}
+          <ApplePodcastsBadge className="h-9" />
+          <a
+            href="https://soundcloud.com/rtsfm"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-full border border-line px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-fg-dim transition-colors hover:border-accent hover:text-accent"
+          >
+            SoundCloud ↗
+          </a>
         </div>
 
         <SetsArchive />

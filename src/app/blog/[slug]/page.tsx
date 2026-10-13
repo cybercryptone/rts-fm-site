@@ -16,6 +16,7 @@ import { formatDate } from "@/lib/format";
 import { getImageDims } from "@/lib/image-dims";
 import { relatedForPost } from "@/lib/related";
 import RelatedLinks from "@/components/RelatedLinks";
+import ListenBlock from "@/components/ListenBlock";
 import { SITE } from "@/lib/data";
 import {
   breadcrumbJsonLd,
@@ -297,6 +298,7 @@ export default async function BlogPost({
           </div>
 
           <RelatedLinks groups={relatedForPost(post.slug)} />
+          <ListenBlock />
         </article>
       </main>
       <AboutFooter />
