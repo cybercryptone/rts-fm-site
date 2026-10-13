@@ -69,9 +69,25 @@ export default function RadioSection() {
             href="https://soundcloud.com/rtsfm"
             target="_blank"
             rel="noopener noreferrer"
-            className="rounded-full border border-line px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-fg-dim transition-colors hover:border-accent hover:text-accent"
+            aria-label="Listen to RTS.FM on SoundCloud"
+            className="inline-flex h-9 items-center gap-2.5 rounded-lg bg-black px-3 text-white transition-opacity hover:opacity-80"
           >
-            SoundCloud ↗
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 20 16"
+              className="h-5 w-6 shrink-0 text-[#ff5500]"
+              fill="currentColor"
+            >
+              <rect x="0" y="8" width="2" height="6" rx="1" />
+              <rect x="4" y="5" width="2" height="9" rx="1" />
+              <rect x="8" y="2" width="2" height="12" rx="1" />
+              <rect x="12" y="0" width="2" height="14" rx="1" />
+              <rect x="16" y="4" width="2" height="10" rx="1" />
+            </svg>
+            <span className="flex flex-col font-sans leading-none">
+              <span className="text-[9px] font-medium tracking-[0.01em]">Listen on</span>
+              <span className="mt-0.5 text-[17px] font-semibold tracking-[-0.01em]">SoundCloud</span>
+            </span>
           </a>
         </div>
 
