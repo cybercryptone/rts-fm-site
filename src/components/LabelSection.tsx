@@ -19,8 +19,7 @@ export default function LabelSection() {
         </div>
 
         <p className="mt-6 max-w-xl text-sm leading-relaxed text-fg-dim sm:text-base">
-          Releases from the RTS.FM roster — {RELEASES.length} records deep,
-          RTSFM001 through {RELEASES[0].cat.replace("RTSFM", "")}.
+          Releases from the RTS.FM roster.
         </p>
 
         <div className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
