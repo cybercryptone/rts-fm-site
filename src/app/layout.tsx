@@ -1,38 +1,42 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import {
-  Syne,
-  Unbounded,
-  Space_Grotesk,
-  JetBrains_Mono,
-} from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { SITE, SOCIALS } from "@/lib/data";
 import { PlayerProvider } from "@/lib/PlayerProvider";
 import PlayerDock from "@/components/PlayerDock";
 
-const syne = Syne({
+// Fonts are self-hosted (latin subset, variable woff2 files originally from
+// Google Fonts, all four families under the SIL Open Font License) instead of
+// being fetched from Google at build time. A failed fetch during `next build`
+// on the host took the whole deploy down once, so the build no longer depends
+// on the network for fonts.
+const syne = localFont({
+  src: "../fonts/Syne-latin.woff2",
   variable: "--font-display",
-  subsets: ["latin"],
-  weight: ["700", "800"],
+  weight: "400 800",
+  display: "swap",
 });
 
-const unbounded = Unbounded({
+const unbounded = localFont({
+  src: "../fonts/Unbounded-latin.woff2",
   variable: "--font-headline",
-  subsets: ["latin"],
-  weight: ["700", "800", "900"],
+  weight: "200 900",
+  display: "swap",
 });
 
-const spaceGrotesk = Space_Grotesk({
+const spaceGrotesk = localFont({
+  src: "../fonts/SpaceGrotesk-latin.woff2",
   variable: "--font-sans",
-  subsets: ["latin"],
-  weight: ["400", "500", "700"],
+  weight: "300 700",
+  display: "swap",
 });
 
-const jetBrainsMono = JetBrains_Mono({
+const jetBrainsMono = localFont({
+  src: "../fonts/JetBrainsMono-latin.woff2",
   variable: "--font-mono",
-  subsets: ["latin"],
-  weight: ["400", "500"],
+  weight: "100 800",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
