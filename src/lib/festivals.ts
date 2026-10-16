@@ -156,7 +156,7 @@ export const FESTIVALS: Festival[] = [
     imageCredit: "Photo by Nachetere, CC BY-SA 4.0, via Wikimedia Commons.",
     venue: "Fira Gran Via (2026 edition venue; 2027 venue not yet announced)",
     venueAddress: "C/ Botànica 62, 08908 L'Hospitalet de Llobregat (Barcelona)",
-    lastVerified: "2026-10-10",
+    lastVerified: "2026-10-16",
     artists: ["amelie-lens", "charlotte-de-witte", "chris-stussy", "sara-landry", "surgeon", "nina-kraviz", "theo-parrish", "jeff-mills", "sven-vath", "kalabrese"],
   },
   {
@@ -206,7 +206,7 @@ export const FESTIVALS: Festival[] = [
     imageCredit: "Photo by Pmk58, CC BY-SA 4.0, via Wikimedia Commons.",
     venue: "Parco Dora (Vitali area)",
     venueAddress: "Corso Mortara, 10149 Torino",
-    lastVerified: "2026-10-10",
+    lastVerified: "2026-10-16",
     artists: ["amelie-lens", "anyma", "batu", "charlotte-de-witte", "chris-stussy", "donato-dozzy", "jeff-mills", "joseph-capriati", "luciano", "marco-carola", "motor-city-drum-ensemble", "nastia", "nina-kraviz", "sara-landry", "sven-vath", "surgeon"],
   },
   {
@@ -232,7 +232,7 @@ export const FESTIVALS: Festival[] = [
     ticketStatus: "open",
     venue: "Beekse Bergen",
     venueAddress: "Beekse Bergen 1, 5081 NJ Hilvarenbeek",
-    lastVerified: "2026-10-10",
+    lastVerified: "2026-10-16",
     artists: ["charlotte-de-witte", "nina-kraviz", "joseph-capriati", "marco-carola", "chris-stussy", "sara-landry", "amelie-lens", "jeff-mills", "traumer"],
   },
   {
@@ -390,7 +390,7 @@ export const FESTIVALS: Festival[] = [
     imageCredit: "Photo by Ethan Doyle White, CC BY-SA 4.0, via Wikimedia Commons.",
     venue: "Boston Manor Park",
     venueAddress: "Boston Manor Road, TW8 9JX Brentford, London",
-    lastVerified: "2026-10-10",
+    lastVerified: "2026-10-16",
     artists: ["jeff-mills", "nina-kraviz"],
   },
   {
@@ -453,8 +453,8 @@ export const FESTIVALS: Festival[] = [
     imageAlt: "The west front of Houghton Hall, the Palladian country house in Norfolk whose grounds host Houghton Festival.",
     imageCredit: "Photo by Elliott Brown, CC BY 2.0, via Wikimedia Commons.",
     venue: "Houghton Hall",
-    venueAddress: "Houghton Hall, King's Lynn PE31 6TY",
-    lastVerified: "2026-10-10",
+    venueAddress: "Houghton Hall, King's Lynn, Norfolk PE31 6UE",
+    lastVerified: "2026-10-16",
     artists: ["move-d", "donato-dozzy", "batu", "daniel-bell"],
   },
   {

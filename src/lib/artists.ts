@@ -15,6 +15,20 @@ const ARTISTS_DIR = path.join(process.cwd(), "src/content/artists");
 // just gets no dateCreated/dateModified rather than a build failure.
 const ARTIST_DATES: Record<string, { dateCreated: string; dateModified: string }> = artistDates;
 
+// Verified quick facts shown in the "Quick facts" box and in structured data.
+// Every key is optional: a key is only present when a reliable source states
+// it (see factsSources). Born is either a full date ("21 July 1992") or a year.
+export type ArtistFacts = {
+  realName?: string;
+  born?: string;
+  birthplace?: string;
+  nationality?: string;
+  basedIn?: string;
+  aliases?: string[];
+  labels?: string[];
+  activeSince?: string;
+};
+
 export type ArtistMeta = {
   slug: string;
   name: string;
@@ -28,6 +42,8 @@ export type ArtistMeta = {
   imageCredit: string;
   sameAs: string[];
   relatedPosts: string[];
+  facts?: ArtistFacts;
+  factsSources: string[];
   dateCreated?: string;
   dateModified?: string;
 };
@@ -57,6 +73,8 @@ function toMeta(slug: string, data: Record<string, unknown>): ArtistMeta {
     imageCredit: data.imageCredit as string,
     sameAs: (data.sameAs as string[]) ?? [],
     relatedPosts: (data.relatedPosts as string[]) ?? [],
+    facts: data.facts as ArtistFacts | undefined,
+    factsSources: (data.factsSources as string[]) ?? [],
     dateCreated: ARTIST_DATES[slug]?.dateCreated,
     dateModified: ARTIST_DATES[slug]?.dateModified,
   };

@@ -10,7 +10,7 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import Nav from "@/components/Nav";
 import AboutFooter from "@/components/AboutFooter";
 import YouTubeEmbed from "@/components/YouTubeEmbed";
-import { getAllArtists, getArtistBySlug } from "@/lib/artists";
+import { getAllArtists, getArtistBySlug, type ArtistMeta } from "@/lib/artists";
 import { getAllPosts } from "@/lib/blog";
 import { SITE } from "@/lib/data";
 import { festivalDateLabel, festivalsForArtist } from "@/lib/festivals";
@@ -158,6 +158,37 @@ function stripHeroImage(content: string, image: string): string {
   );
 }
 
+// Person properties from the verified quick facts. The profile stays a
+// MusicGroup (see below) but is also typed Person when personal facts exist,
+// so schema.org consumers can read birth and name details.
+function factsJsonLd(facts: ArtistMeta["facts"]) {
+  if (!facts) return {};
+  const names = [facts.realName, ...(facts.aliases ?? [])].filter(Boolean) as string[];
+  const hasPerson = facts.realName || facts.born || facts.birthplace || facts.nationality;
+  return {
+    ...(hasPerson ? { "@type": ["MusicGroup", "Person"] } : {}),
+    ...(names.length ? { alternateName: names } : {}),
+    ...(facts.born && /^\d{4}$/.test(facts.born) ? { birthDate: facts.born } : {}),
+    ...(facts.born && !/^\d{4}$/.test(facts.born) && !Number.isNaN(Date.parse(`${facts.born} UTC`))
+      ? { birthDate: new Date(`${facts.born} UTC`).toISOString().slice(0, 10) }
+      : {}),
+    ...(facts.birthplace ? { birthPlace: { "@type": "Place", name: facts.birthplace } } : {}),
+    ...(facts.nationality ? { nationality: facts.nationality } : {}),
+    ...(facts.labels?.length ? { affiliation: facts.labels.map((l) => ({ "@type": "Organization", name: l })) } : {}),
+  };
+}
+
+const FACT_ROWS: { key: keyof NonNullable<ArtistMeta["facts"]>; label: string }[] = [
+  { key: "realName", label: "Real name" },
+  { key: "aliases", label: "Also known as" },
+  { key: "born", label: "Born" },
+  { key: "birthplace", label: "Birthplace" },
+  { key: "nationality", label: "Nationality" },
+  { key: "basedIn", label: "Based in" },
+  { key: "activeSince", label: "Active since" },
+  { key: "labels", label: "Labels" },
+];
+
 export default async function ArtistPage({
   params,
 }: {
@@ -188,6 +219,7 @@ export default async function ArtistPage({
       url: `${SITE.url}/artists/${artist.slug}`,
       genre: artist.genres,
       sameAs: artist.sameAs,
+      ...factsJsonLd(artist.facts),
     },
   };
 
@@ -264,6 +296,68 @@ export default async function ArtistPage({
           <p className="mt-4 max-w-xl text-sm leading-relaxed text-fg-dim sm:text-base">
             {artist.excerpt}
           </p>
+
+          {artist.facts && (
+            <section
+              aria-label={`${artist.name} quick facts`}
+              className="mt-6 rounded-xl border border-line p-5 sm:p-6"
+            >
+              <h2 className="font-mono text-[11px] uppercase tracking-[0.18em] text-fg-dim">
+                quick facts
+              </h2>
+              <dl className="mt-4 grid grid-cols-1 gap-x-8 gap-y-3 sm:grid-cols-2">
+                {FACT_ROWS.map(({ key, label }) => {
+                  const raw = artist.facts?.[key];
+                  const value = Array.isArray(raw) ? raw.join(", ") : raw;
+                  if (!value) return null;
+                  return (
+                    <div key={key} className="flex flex-col">
+                      <dt className="font-mono text-[10px] uppercase tracking-[0.14em] text-fg-dim">
+                        {label}
+                      </dt>
+                      <dd className="mt-0.5 text-sm font-semibold text-fg">{value}</dd>
+                    </div>
+                  );
+                })}
+                {artist.genres.length > 0 && (
+                  <div className="flex flex-col">
+                    <dt className="font-mono text-[10px] uppercase tracking-[0.14em] text-fg-dim">
+                      Genres
+                    </dt>
+                    <dd className="mt-0.5 text-sm font-semibold text-fg">
+                      {artist.genres.join(", ")}
+                    </dd>
+                  </div>
+                )}
+              </dl>
+              {artist.factsSources.length > 0 && (
+                <p className="mt-4 text-[11px] leading-relaxed text-fg-dim">
+                  Sources:{" "}
+                  {artist.factsSources.map((href, i) => {
+                    let label: string;
+                    try {
+                      label = new URL(href).hostname.replace(/^www\./, "");
+                    } catch {
+                      label = href;
+                    }
+                    return (
+                      <span key={href}>
+                        {i > 0 && ", "}
+                        <a
+                          href={href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="underline decoration-line underline-offset-2 hover:text-accent"
+                        >
+                          {label}
+                        </a>
+                      </span>
+                    );
+                  })}
+                </p>
+              )}
+            </section>
+          )}
 
           {artist.genres.length > 0 && (
             <div className="mt-5 flex flex-wrap gap-2">
