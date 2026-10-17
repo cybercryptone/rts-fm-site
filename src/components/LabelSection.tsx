@@ -31,7 +31,7 @@ export default function LabelSection() {
               rel="noopener noreferrer"
               className="group relative flex aspect-square flex-col justify-between overflow-hidden rounded-xl border border-line bg-bg-elevated transition-colors hover:border-accent/60"
             >
-              {/* eslint-disable-next-line @next/next/no-img-element -- hotlinked Bandcamp cover art; see the same note on SetsArchive's thumbnails */}
+              {/* eslint-disable-next-line @next/next/no-img-element -- self-hosted label cover art (public/images/covers); small fixed-size tiles, not worth Next/Image */}
               <img
                 src={r.cover}
                 alt={`${r.artist} — ${r.cat} cover art`}
