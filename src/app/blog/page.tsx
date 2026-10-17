@@ -12,8 +12,8 @@ export const metadata: Metadata = {
   title: "Blog",
   description,
   alternates: { canonical: "/blog" },
-  openGraph: { type: "website", url: "/blog", title: "Blog — RTS.FM", description },
-  twitter: { card: "summary_large_image", title: "Blog — RTS.FM", description },
+  openGraph: { type: "website", url: "/blog", title: "Blog — RTS.FM", description, images: [{ url: "/og-image.jpg", width: 1200, height: 630 }] },
+  twitter: { card: "summary_large_image", title: "Blog — RTS.FM", description, images: ["/og-image.jpg"] },
 };
 
 export default function BlogIndex() {

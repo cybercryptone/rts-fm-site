@@ -12,8 +12,8 @@ export const metadata: Metadata = {
   title: "Artists",
   description,
   alternates: { canonical: "/artists" },
-  openGraph: { type: "website", url: "/artists", title: "Artists — RTS.FM", description },
-  twitter: { card: "summary_large_image", title: "Artists — RTS.FM", description },
+  openGraph: { type: "website", url: "/artists", title: "Artists — RTS.FM", description, images: [{ url: "/og-image.jpg", width: 1200, height: 630 }] },
+  twitter: { card: "summary_large_image", title: "Artists — RTS.FM", description, images: ["/og-image.jpg"] },
 };
 
 const ALPHABET = Array.from({ length: 26 }, (_, i) => String.fromCharCode(65 + i));

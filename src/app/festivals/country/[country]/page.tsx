@@ -34,8 +34,8 @@ export async function generateMetadata({
     title: { absolute: title },
     description,
     alternates: { canonical: `/festivals/country/${hub.slug}` },
-    openGraph: { type: "website", url: `/festivals/country/${hub.slug}`, title, description },
-    twitter: { card: "summary_large_image", title, description },
+    openGraph: { type: "website", url: `/festivals/country/${hub.slug}`, title, description, images: [{ url: "/og-image.jpg", width: 1200, height: 630 }] },
+    twitter: { card: "summary_large_image", title, description, images: ["/og-image.jpg"] },
   };
 }
 

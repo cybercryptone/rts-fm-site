@@ -49,13 +49,13 @@ export async function generateMetadata({
       url: `/festivals/${slug}`,
       title,
       description,
-      ...(festival.image ? { images: [festival.image] } : {}),
+      images: [festival.image ?? "/og-image.jpg"],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      ...(festival.image ? { images: [festival.image] } : {}),
+      images: [festival.image ?? "/og-image.jpg"],
     },
   };
 }

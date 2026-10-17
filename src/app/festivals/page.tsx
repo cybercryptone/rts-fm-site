@@ -21,8 +21,8 @@ export const metadata: Metadata = {
   title: { absolute: "Underground Techno & House Festivals: Dates & Tickets" },
   description,
   alternates: { canonical: "/festivals" },
-  openGraph: { type: "website", url: "/festivals", title: "Festivals — RTS.FM", description },
-  twitter: { card: "summary_large_image", title: "Festivals — RTS.FM", description },
+  openGraph: { type: "website", url: "/festivals", title: "Festivals — RTS.FM", description, images: [{ url: "/og-image.jpg", width: 1200, height: 630 }] },
+  twitter: { card: "summary_large_image", title: "Festivals — RTS.FM", description, images: ["/og-image.jpg"] },
 };
 
 export default function FestivalsIndex() {
