@@ -186,7 +186,7 @@ const mdxComponents = {
     <th className="border-b border-line px-4 py-3 text-left font-normal" {...props} />
   ),
   td: (props: React.ComponentProps<"td">) => (
-    <td className="border-b border-line px-4 py-3 text-fg-dim last:border-b-0" {...props} />
+    <td className="border-b border-line px-4 py-3 text-fg-dim" {...props} />
   ),
   tr: (props: React.ComponentProps<"tr">) => <tr className="last:[&>td]:border-b-0" {...props} />,
   QuickWins,
