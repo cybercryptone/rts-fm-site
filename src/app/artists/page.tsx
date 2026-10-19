@@ -121,7 +121,7 @@ export default function ArtistsIndex() {
                             </span>
                             <div className="min-w-0 flex-1">
                               <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-accent">
-                                {artist.jobTitle.toUpperCase()} · {artist.location.toUpperCase()}
+                                {[artist.jobTitle, artist.location].filter(Boolean).join(" · ").toUpperCase()}
                               </div>
                               <p className="blog-row-title mt-2 max-w-[620px] font-display text-lg font-bold uppercase leading-tight tracking-[-0.03em] text-fg sm:text-xl">
                                 {artist.name}

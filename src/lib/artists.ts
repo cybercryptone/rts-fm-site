@@ -37,9 +37,9 @@ export type ArtistMeta = {
   jobTitle: string;
   genres: string[];
   location: string;
-  image: string;
-  imageAlt: string;
-  imageCredit: string;
+  image?: string;
+  imageAlt?: string;
+  imageCredit?: string;
   sameAs: string[];
   relatedPosts: string[];
   facts?: ArtistFacts;
@@ -67,10 +67,10 @@ function toMeta(slug: string, data: Record<string, unknown>): ArtistMeta {
     excerpt: data.excerpt as string,
     jobTitle: data.jobTitle as string,
     genres: (data.genres as string[]) ?? [],
-    location: data.location as string,
-    image: data.image as string,
-    imageAlt: data.imageAlt as string,
-    imageCredit: data.imageCredit as string,
+    location: (data.location as string | undefined) ?? "",
+    image: data.image as string | undefined,
+    imageAlt: data.imageAlt as string | undefined,
+    imageCredit: data.imageCredit as string | undefined,
     sameAs: (data.sameAs as string[]) ?? [],
     relatedPosts: (data.relatedPosts as string[]) ?? [],
     facts: data.facts as ArtistFacts | undefined,

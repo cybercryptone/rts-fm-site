@@ -44,12 +44,13 @@ export async function generateMetadata({
       url: `/artists/${slug}`,
       title: artist.title,
       description: metaDescription(artist.excerpt),
-      images: [artist.image],
+      images: [artist.image || "/og-image.jpg"],
     },
     twitter: {
       card: "summary_large_image",
       title: artist.title,
       description: metaDescription(artist.excerpt),
+      images: [artist.image || "/og-image.jpg"],
     },
   };
 }
@@ -150,7 +151,8 @@ const mdxComponents = {
 // The frontmatter image is rendered right under the H1, so any body copy of
 // the same image (markdown image plus its italic credit line) is dropped to
 // avoid showing it twice.
-function stripHeroImage(content: string, image: string): string {
+function stripHeroImage(content: string, image?: string): string {
+  if (!image) return content;
   const escaped = image.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   return content.replace(
     new RegExp(`!\\[[^\\]]*\\]\\(${escaped}\\)[ \\t]*(?:\\r?\\n\\*[^\\n]*\\*[ \\t]*)?(?:\\r?\\n)*`, "g"),
@@ -215,7 +217,7 @@ export default async function ArtistPage({
       "@type": "MusicGroup",
       name: artist.name,
       description: artist.excerpt,
-      image: artist.image,
+      ...(artist.image ? { image: artist.image } : {}),
       url: `${SITE.url}/artists/${artist.slug}`,
       genre: artist.genres,
       sameAs: artist.sameAs,
@@ -269,7 +271,7 @@ export default async function ArtistPage({
           </Link>
 
           <p className="mt-8 font-mono text-[11px] uppercase tracking-[0.18em] text-fg-dim">
-            {artist.jobTitle} · {artist.location}
+            {[artist.jobTitle, artist.location].filter(Boolean).join(" · ")}
           </p>
           <h1 className="mt-3 font-display text-3xl font-bold uppercase tracking-[-0.02em] text-fg sm:text-4xl">
             {artist.name}
