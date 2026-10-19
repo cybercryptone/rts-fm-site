@@ -89,8 +89,8 @@ export const FESTIVALS: Festival[] = [
     ticketStatus: "open",
     venue: "Berghain (one of many Berlin venues; CTM has no single home venue)",
     venueAddress: "Am Wriezener Bahnhof, 10243 Berlin",
-    lastVerified: "2026-10-10",
-    artists: [],
+    lastVerified: "2026-10-19",
+    artists: ["spekki-webu"],
   },
   {
     slug: "dgtl-amsterdam",
@@ -111,7 +111,7 @@ export const FESTIVALS: Festival[] = [
     imageCredit: "Photo by Ceescamel, CC BY-SA 4.0, via Wikimedia Commons.",
     venue: "NDSM Docklands",
     venueAddress: "NDSM-Plein 85, 1033 WC Amsterdam",
-    lastVerified: "2026-10-10",
+    lastVerified: "2026-10-19",
     artists: ["nina-kraviz", "jeff-mills", "amelie-lens", "motor-city-drum-ensemble", "chris-stussy"],
   },
   {
@@ -156,8 +156,8 @@ export const FESTIVALS: Festival[] = [
     imageCredit: "Photo by Nachetere, CC BY-SA 4.0, via Wikimedia Commons.",
     venue: "Fira Gran Via (2026 edition venue; 2027 venue not yet announced)",
     venueAddress: "C/ Botànica 62, 08908 L'Hospitalet de Llobregat (Barcelona)",
-    lastVerified: "2026-10-16",
-    artists: ["amelie-lens", "charlotte-de-witte", "chris-stussy", "sara-landry", "surgeon", "nina-kraviz", "theo-parrish", "jeff-mills", "sven-vath", "kalabrese"],
+    lastVerified: "2026-10-19",
+    artists: ["amelie-lens", "charlotte-de-witte", "chris-stussy", "sara-landry", "surgeon", "nina-kraviz", "theo-parrish", "jeff-mills", "sven-vath", "kalabrese", "marcel-dettmann", "speedy-j"],
   },
   {
     slug: "sea-you-festival",
@@ -172,7 +172,7 @@ export const FESTIVALS: Festival[] = [
     genres: ["house", "techno"],
     website: "https://www.seayou-festival.de",
     ticketUrl: "https://shop.seayou-festival.de/festivaltickets?language=en_EN",
-    ticketPrice: 172.81,
+    ticketPrice: 179.99,
     ticketPriceCurrency: "EUR",
     description:
       "A house and techno festival built around swimming and dancing at a lake outside Freiburg, six stages over a July weekend.",
@@ -182,7 +182,7 @@ export const FESTIVALS: Festival[] = [
     ticketStatus: "open",
     venue: "Tunisee",
     venueAddress: "Seestraße 30, 79108 Freiburg im Breisgau",
-    lastVerified: "2026-10-10",
+    lastVerified: "2026-10-19",
     artists: ["sven-vath", "nina-kraviz", "joseph-capriati", "marco-carola", "luciano", "charlotte-de-witte", "jeff-mills", "amelie-lens"],
   },
   {
@@ -206,8 +206,8 @@ export const FESTIVALS: Festival[] = [
     imageCredit: "Photo by Pmk58, CC BY-SA 4.0, via Wikimedia Commons.",
     venue: "Parco Dora (Vitali area)",
     venueAddress: "Corso Mortara, 10149 Torino",
-    lastVerified: "2026-10-16",
-    artists: ["amelie-lens", "anyma", "batu", "charlotte-de-witte", "chris-stussy", "donato-dozzy", "jeff-mills", "joseph-capriati", "luciano", "marco-carola", "motor-city-drum-ensemble", "nastia", "nina-kraviz", "sara-landry", "sven-vath", "surgeon"],
+    lastVerified: "2026-10-19",
+    artists: ["amelie-lens", "anyma", "batu", "charlotte-de-witte", "chris-stussy", "donato-dozzy", "jeff-mills", "joseph-capriati", "luciano", "marco-carola", "motor-city-drum-ensemble", "nastia", "nina-kraviz", "sara-landry", "sven-vath", "surgeon", "ben-klock", "marcel-dettmann", "carl-craig", "floating-points", "four-tet", "maceo-plex", "richie-hawtin", "seth-troxler"],
   },
   {
     slug: "awakenings-festival",
@@ -255,8 +255,8 @@ export const FESTIVALS: Festival[] = [
     imageCredit: "Photo by Robert Richter, CC BY 2.0, via Wikimedia Commons.",
     venue: "Bungalowdorf Olganitz",
     venueAddress: "Zum Bungalowdorf 1, 04758 Cavertitz",
-    lastVerified: "2026-10-10",
-    artists: ["marek-hemmann", "move-d", "theo-parrish", "donato-dozzy", "jeff-mills", "batu"],
+    lastVerified: "2026-10-19",
+    artists: ["marek-hemmann", "move-d", "theo-parrish", "donato-dozzy", "jeff-mills", "batu", "ben-ufo", "richie-hawtin", "dixon", "floating-points", "four-tet", "henrik-schwarz", "josh-wink", "stephan-bodzin", "electric-indigo", "monolake", "carl-craig", "ricardo-villalobos"],
   },
   {
     slug: "dekmantel-festival",
@@ -276,7 +276,6 @@ export const FESTIVALS: Festival[] = [
     image: "https://rts.fm/images/commons/dekmantel-festival-amsterdamse-bos-heuvel.jpg",
     imageAlt: "A wooded clearing in the Amsterdamse Bos, the Amsterdam park that has hosted Dekmantel Festival since 2013.",
     imageCredit: "Photo by Shirley de Jong, CC BY-SA 3.0, via Wikimedia Commons.",
-    ticketStatus: "open",
     venue: "Amsterdamse Bos",
     venueAddress: "Nieuwe Meerlaan 1, 1187 NW Amstelveen",
     lastVerified: "2026-10-10",
@@ -326,8 +325,8 @@ export const FESTIVALS: Festival[] = [
     ticketStatus: "open",
     venue: "Hart Plaza",
     venueAddress: "1 Hart Plaza, Detroit, MI 48226",
-    lastVerified: "2026-10-10",
-    artists: ["jeff-mills", "theo-parrish", "sara-landry", "rick-wade", "daniel-bell", "eric-cloutier", "move-d", "nina-kraviz", "charlotte-de-witte", "joseph-capriati", "donato-dozzy"],
+    lastVerified: "2026-10-19",
+    artists: ["jeff-mills", "theo-parrish", "sara-landry", "rick-wade", "daniel-bell", "eric-cloutier", "move-d", "nina-kraviz", "charlotte-de-witte", "joseph-capriati", "donato-dozzy", "ben-ufo", "carl-craig", "kevin-saunderson", "loco-dice", "seth-troxler", "marcel-dettmann", "dubfire", "ricardo-villalobos"],
   },
   {
     slug: "berlin-atonal",
@@ -348,7 +347,7 @@ export const FESTIVALS: Festival[] = [
     imageCredit: "Photo by MakeMagazinDE, CC BY-SA 4.0, via Wikimedia Commons.",
     venue: "Kraftwerk Berlin",
     venueAddress: "Köpenicker Straße 70, 10179 Berlin",
-    lastVerified: "2026-10-10",
+    lastVerified: "2026-10-19",
     artists: ["donato-dozzy", "surgeon", "tygapaw", "topdown-dialectic"],
   },
   {
@@ -412,7 +411,7 @@ export const FESTIVALS: Festival[] = [
     imageCredit: "Photo by Cholo Aleman, CC BY-SA 3.0, via Wikimedia Commons.",
     venue: "The Garden Resort",
     venueAddress: "Petrića Glava 34, 22240 Tisno",
-    lastVerified: "2026-10-10",
+    lastVerified: "2026-10-19",
     artists: ["theo-parrish", "motor-city-drum-ensemble", "jeff-mills", "nina-kraviz"],
   },
   {
@@ -432,7 +431,7 @@ export const FESTIVALS: Festival[] = [
       "A one-day daytime techno festival timed to Amsterdam Dance Event, running since 2014 and now held at Havenpark alongside Mystic Garden Festival on a single shared ticket.",
     venue: "Havenpark",
     venueAddress: "Havenpark, Wethouder van Essenweg (official navigation address), Amsterdam",
-    lastVerified: "2026-10-10",
+    lastVerified: "2026-10-19",
     artists: ["surgeon", "nastia", "luciano"],
   },
   {
@@ -454,7 +453,7 @@ export const FESTIVALS: Festival[] = [
     imageCredit: "Photo by Elliott Brown, CC BY 2.0, via Wikimedia Commons.",
     venue: "Houghton Hall",
     venueAddress: "Houghton Hall, King's Lynn, Norfolk PE31 6UE",
-    lastVerified: "2026-10-16",
+    lastVerified: "2026-10-19",
     artists: ["move-d", "donato-dozzy", "batu", "daniel-bell"],
   },
   {
@@ -477,7 +476,7 @@ export const FESTIVALS: Festival[] = [
     imageCredit: "Photo by PersianDutchNetwork, CC BY-SA 4.0, via Wikimedia Commons.",
     venue: "Het Twiske",
     venueAddress: "De Zuiderlaaik 1, Oostzaan",
-    lastVerified: "2026-10-10",
+    lastVerified: "2026-10-19",
     artists: ["chris-stussy"],
   },
   {
@@ -503,7 +502,7 @@ export const FESTIVALS: Festival[] = [
     imageCredit: "Photo by Tinyflare, CC BY-SA 3.0, via Wikimedia Commons.",
     venue: "Quartier des spectacles, including the Society for Arts and Technology (SAT)",
     venueAddress: "1201 boulevard Saint-Laurent, Montréal QC H2X 2S6",
-    lastVerified: "2026-10-10",
+    lastVerified: "2026-10-19",
     artists: ["jeff-mills", "daniel-bell", "surgeon"],
   },
   {
@@ -527,8 +526,8 @@ export const FESTIVALS: Festival[] = [
     imageCredit: "Photo by AssaultMedia, CC BY-SA 4.0, via Wikimedia Commons.",
     venue: "Raketenbasis Pydna",
     venueAddress: "Raketenbasis Pydna, 56288 Kastellaun (rural site in the Hunsrück, no street address given by the festival)",
-    lastVerified: "2026-10-10",
-    artists: ["charlotte-de-witte", "amelie-lens", "sven-vath", "jeff-mills", "nina-kraviz", "joseph-capriati", "marco-carola", "sara-landry", "marek-hemmann", "terry-lee-brown-jr", "dirty-doering"],
+    lastVerified: "2026-10-19",
+    artists: ["charlotte-de-witte", "amelie-lens", "sven-vath", "jeff-mills", "nina-kraviz", "joseph-capriati", "marco-carola", "sara-landry", "marek-hemmann", "terry-lee-brown-jr", "dirty-doering", "adam-beyer"],
   },
   {
     slug: "rewire-festival",
@@ -551,7 +550,7 @@ export const FESTIVALS: Festival[] = [
     imageCredit: "Photo by PersianDutchNetwork, CC BY-SA 4.0, via Wikimedia Commons.",
     venue: "Multiple venues in The Hague city centre, including the Koninklijke Schouwburg and PAARD",
     venueAddress: "Korte Voorhout 3, 2511 CW The Hague",
-    lastVerified: "2026-10-10",
+    lastVerified: "2026-10-19",
     artists: ["nina-kraviz", "jeff-mills", "spekki-webu"],
   },
   {
