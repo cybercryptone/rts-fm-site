@@ -32,6 +32,12 @@ export default function AboutFooter() {
                 editorial standards &amp; contact →
               </Link>
               <Link
+                href="/radio"
+                className="font-mono text-[11px] uppercase tracking-[0.18em] text-fg-dim transition-colors hover:text-accent"
+              >
+                radio, explained →
+              </Link>
+              <Link
                 href="/artists"
                 className="font-mono text-[11px] uppercase tracking-[0.18em] text-fg-dim transition-colors hover:text-accent"
               >

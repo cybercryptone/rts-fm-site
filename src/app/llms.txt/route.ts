@@ -26,6 +26,7 @@ export async function GET() {
     "## Radio",
     "",
     `- [Live radio & archived sets](${SITE.url}/#radio): live and recorded DJ sets, broadcast from studios in ${CITIES.join(", ")}.`,
+    `- [Radio, explained](${SITE.url}/radio): what RTS.FM is, how to listen online and how it differs from other broadcasters with the RTS abbreviation.`,
     "- [YouTube archive](https://www.youtube.com/user/rtsfmmoscow/videos): thousands of recorded live sets.",
     "- [SoundCloud](https://soundcloud.com/rtsfm): the show's audio feed.",
     "",

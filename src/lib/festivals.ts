@@ -383,14 +383,14 @@ export const FESTIVALS: Festival[] = [
     genres: ["techno", "house"],
     website: "https://www.junction2.london",
     description:
-      "London's own underground house and techno festival at Boston Manor Park, running since 2016 with stages ranging from woodland floors to a rave under the M4 flyover.",
+      "London's underground house and techno festival at Boston Manor Park, first held in 2016, with its main stage under the M4 flyover. The 2026 tenth-anniversary edition ran July 25, July 26 and August 2; the official site now lists Summer 2027 at the park under The Bridge series, with no dates announced.",
     image: "https://rts.fm/images/commons/junction-2-m4-flyover-boston-manor-park.jpg",
     imageAlt: "The underside of the M4 flyover as it crosses Boston Manor Park in Brentford, London, the site of Junction 2's Bridge stage.",
     imageCredit: "Photo by Ethan Doyle White, CC BY-SA 4.0, via Wikimedia Commons.",
     venue: "Boston Manor Park",
     venueAddress: "Boston Manor Road, TW8 9JX Brentford, London",
-    lastVerified: "2026-10-16",
-    artists: ["jeff-mills", "nina-kraviz"],
+    lastVerified: "2026-10-20",
+    artists: ["jeff-mills", "nina-kraviz", "adam-beyer", "charlotte-de-witte"],
   },
   {
     slug: "dimensions-festival",
