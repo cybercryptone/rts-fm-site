@@ -54,7 +54,7 @@ export default function Home() {
       <main className="flex-1">
         <Hero />
         <Ticker />
-        <RadioSection />
+        <RadioSection aboutLink />
         <LabelSection />
         <BlogSection />
       </main>

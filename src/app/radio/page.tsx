@@ -7,7 +7,7 @@ import { APPLE_PODCASTS_URL, CITIES, SITE, SOCIALS } from "@/lib/data";
 import { breadcrumbJsonLd, faqJsonLd } from "@/lib/schema";
 
 const description =
-  "RTS.FM is an independent underground internet radio and record label running since 2006. Listen to the on-demand player, the archive channel and 3,800 recorded DJ sets.";
+  "RTS.FM is an independent underground internet radio and label running since 2006. Play the on-demand player and the archive of 3,800 recorded DJ sets.";
 
 export const metadata: Metadata = {
   title: "RTS.FM Radio: Listen Online",

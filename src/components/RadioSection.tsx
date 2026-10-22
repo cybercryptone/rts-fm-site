@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import ApplePodcastsBadge from "@/components/ApplePodcastsBadge";
 import { useState } from "react";
 import SetsArchive from "./SetsArchive";
@@ -7,7 +8,7 @@ import PlayerCard from "./PlayerCard";
 import VideoChannel, { type UpcomingEntry } from "./VideoChannel";
 import { formatWait } from "@/lib/format";
 
-export default function RadioSection() {
+export default function RadioSection({ aboutLink = false }: { aboutLink?: boolean }) {
   const [upNext, setUpNext] = useState<UpcomingEntry[]>([]);
 
   return (
@@ -17,9 +18,18 @@ export default function RadioSection() {
           <h2 className="font-display text-4xl font-bold uppercase tracking-[-0.02em] text-fg sm:text-5xl">
             Radio
           </h2>
-          <span className="hidden font-mono text-xs uppercase tracking-[0.18em] text-fg-dim sm:block">
-            01 / on air
-          </span>
+          {aboutLink ? (
+            <Link
+              href="/radio"
+              className="font-mono text-xs uppercase tracking-[0.18em] text-fg-dim transition-colors hover:text-accent"
+            >
+              what is rts.fm radio? →
+            </Link>
+          ) : (
+            <span className="hidden font-mono text-xs uppercase tracking-[0.18em] text-fg-dim sm:block">
+              01 / on air
+            </span>
+          )}
         </div>
 
         <div className="mt-12 grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">

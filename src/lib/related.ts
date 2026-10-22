@@ -66,6 +66,15 @@ type Index = {
   mentions: Map<string, Set<string>>; // post slug -> entity hrefs mentioned
   topics: Map<string, Set<string>>; // post slug -> themes
   inlinks: Map<string, number>; // href -> body links pointing at it
+  plan: LinkPlan; // balanced "similar" / "keep reading" picks, see balance()
+};
+
+// Planned related picks per source slug, balanced so every page ends up with
+// at least MIN_INBOUND links pointing at it (see balance()).
+type LinkPlan = {
+  artists: Map<string, string[]>;
+  festivals: Map<string, string[]>;
+  posts: Map<string, string[]>;
 };
 
 let cached: Index | undefined;
@@ -78,6 +87,69 @@ function stripLinksAndMedia(body: string) {
   return body
     .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
     .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1");
+}
+
+const MIN_INBOUND = 2;
+const BASE_PICKS = 4;
+const MAX_PICKS = 6;
+
+// Deterministic tie-break, so equally good candidates are not always chosen
+// alphabetically (which starved every page late in the alphabet of links).
+function pairHash(a: string, b: string): number {
+  let h = 2166136261;
+  for (const c of `${a}|${b}`) h = Math.imul(h ^ c.charCodeAt(0), 16777619);
+  return h >>> 0;
+}
+
+type Candidate = { target: string; score: number };
+
+// Picks BASE_PICKS best candidates per source, then tops up any target that
+// would still have fewer than MIN_INBOUND links pointing at it by adding it to
+// the lists of its closest sources (up to MAX_PICKS each). Static inbound
+// links already in the content count towards the target.
+function balance(
+  sources: string[],
+  candidates: Map<string, Candidate[]>,
+  staticIn: (target: string) => number,
+  minScoreForTopUp: number,
+  minScoreBase: number,
+): Map<string, string[]> {
+  const plan = new Map<string, string[]>();
+  const incoming = new Map<string, number>();
+  for (const src of sources) {
+    const picks = (candidates.get(src) ?? [])
+      .filter((c) => c.score >= minScoreBase)
+      .sort((a, b) => b.score - a.score || pairHash(src, a.target) - pairHash(src, b.target))
+      .slice(0, BASE_PICKS)
+      .map((c) => c.target);
+    plan.set(src, picks);
+    for (const t of picks) incoming.set(t, (incoming.get(t) ?? 0) + 1);
+  }
+  const total = (t: string) => staticIn(t) + (incoming.get(t) ?? 0);
+  const needy = sources
+    .filter((t) => total(t) < MIN_INBOUND)
+    .sort((a, b) => total(a) - total(b) || a.localeCompare(b));
+  for (const target of needy) {
+    const suitors = sources
+      .filter((src) => src !== target && !(plan.get(src) ?? []).includes(target))
+      .map((src) => ({ src, c: (candidates.get(src) ?? []).find((c) => c.target === target) }))
+      .filter((x): x is { src: string; c: Candidate } => !!x.c && x.c.score >= minScoreForTopUp)
+      .sort(
+        (a, b) =>
+          b.c.score - a.c.score ||
+          (plan.get(a.src)?.length ?? 0) - (plan.get(b.src)?.length ?? 0) ||
+          pairHash(a.src, target) - pairHash(b.src, target),
+      );
+    for (const { src } of suitors) {
+      if (total(target) >= MIN_INBOUND) break;
+      const list = plan.get(src) ?? [];
+      if (list.length >= MAX_PICKS) continue;
+      list.push(target);
+      plan.set(src, list);
+      incoming.set(target, (incoming.get(target) ?? 0) + 1);
+    }
+  }
+  return plan;
 }
 
 function build(): Index {
@@ -137,7 +209,95 @@ function build(): Index {
     inlinks.set(`/artists/${slug}`, (inlinks.get(`/artists/${slug}`) ?? 0) + 1);
   }
 
-  return { entities, posts, bodies, mentions, topics, inlinks };
+  const plan = buildPlan(posts, artists, bodies, mentions, topics, inlinks);
+  return { entities, posts, bodies, mentions, topics, inlinks, plan };
+}
+
+function tokenOverlap(a: Set<string>, b: Set<string>): number {
+  let n = 0;
+  for (const t of a) if (b.has(t)) n++;
+  return n;
+}
+
+function buildPlan(
+  posts: PostMeta[],
+  artists: ArtistMeta[],
+  bodies: Map<string, string>,
+  mentions: Map<string, Set<string>>,
+  topics: Map<string, Set<string>>,
+  inlinks: Map<string, number>,
+): LinkPlan {
+  // Artists: shared genres (x2) and country, as before.
+  const artistCands = new Map<string, Candidate[]>();
+  for (const a of artists) {
+    artistCands.set(
+      a.slug,
+      artists
+        .filter((b) => b.slug !== a.slug)
+        .map((b) => {
+          const genres = b.genres.filter((g) => a.genres.includes(g)).length;
+          const sameCountry = country(b.location) && country(b.location) === country(a.location) ? 1 : 0;
+          return { target: b.slug, score: genres * 2 + sameCountry };
+        }),
+    );
+  }
+  const artistPlan = balance(
+    artists.map((a) => a.slug),
+    artistCands,
+    (t) => inlinks.get(`/artists/${t}`) ?? 0,
+    1,
+    2,
+  );
+
+  // Festivals: shared genres and country.
+  const festCands = new Map<string, Candidate[]>();
+  for (const f of FESTIVALS) {
+    festCands.set(
+      f.slug,
+      FESTIVALS.filter((g) => g.slug !== f.slug).map((g) => ({
+        target: g.slug,
+        score: g.genres.filter((x) => f.genres.includes(x)).length + (g.country === f.country ? 2 : 0),
+      })),
+    );
+  }
+  const festPlan = balance(
+    FESTIVALS.map((f) => f.slug),
+    festCands,
+    (t) => inlinks.get(`/festivals/${t}`) ?? 0,
+    1,
+    2,
+  );
+
+  // Posts: shared entities, title words and themes, skipping posts already
+  // linked from the body.
+  const titleTokens = new Map(posts.map((p) => [p.slug, tokens(p.title)] as const));
+  const postCands = new Map<string, Candidate[]>();
+  for (const p of posts) {
+    const already = linkedFrom(bodies.get(p.slug) ?? "");
+    const mine = mentions.get(p.slug) ?? new Set<string>();
+    const myThemes = topics.get(p.slug) ?? new Set<string>();
+    postCands.set(
+      p.slug,
+      posts
+        .filter((q) => q.slug !== p.slug && !already.has(`/blog/${q.slug}`))
+        .map((q) => {
+          const theirs = mentions.get(q.slug) ?? new Set<string>();
+          let shared = 0;
+          for (const h of mine) if (theirs.has(h)) shared++;
+          const overlap = tokenOverlap(titleTokens.get(p.slug) ?? new Set(), titleTokens.get(q.slug) ?? new Set());
+          const themes = tokenOverlap(myThemes, topics.get(q.slug) ?? new Set());
+          return { target: q.slug, score: Math.min(shared, 2) * 2 + overlap * 2.5 + Math.min(themes, 2) * 1.5 };
+        }),
+    );
+  }
+  const postPlan = balance(
+    posts.map((p) => p.slug),
+    postCands,
+    (t) => inlinks.get(`/blog/${t}`) ?? 0,
+    1.5,
+    5,
+  );
+  return { artists: artistPlan, festivals: festPlan, posts: postPlan };
 }
 
 function index(): Index {
@@ -170,7 +330,7 @@ function postItem(p: PostMeta): RelatedItem {
 }
 
 export function relatedForPost(slug: string): RelatedGroup[] {
-  const { entities, posts, bodies, mentions, topics, inlinks } = index();
+  const { entities, posts, bodies, mentions, inlinks, plan } = index();
   const body = bodies.get(slug) ?? "";
   const already = linkedFrom(body);
   const mine = mentions.get(slug) ?? new Set<string>();
@@ -195,26 +355,11 @@ export function relatedForPost(slug: string): RelatedGroup[] {
     });
   }
 
-  const myTokens = tokens(posts.find((p) => p.slug === slug)?.title ?? "");
-  const scored = posts
-    .filter((p) => p.slug !== slug && !already.has(`/blog/${p.slug}`))
-    .map((p) => {
-      const theirs = mentions.get(p.slug) ?? new Set<string>();
-      let shared = 0;
-      for (const h of mine) if (theirs.has(h)) shared++;
-      let overlap = 0;
-      for (const t of tokens(p.title)) if (myTokens.has(t)) overlap++;
-      let themes = 0;
-      const myThemes = topics.get(slug) ?? new Set<string>();
-      for (const t of topics.get(p.slug) ?? []) if (myThemes.has(t)) themes++;
-      const topical = Math.min(shared, 2) * 2 + overlap * 2.5 + Math.min(themes, 2) * 1.5;
-      return { p, topical, score: topical + isolationBoost(`/blog/${p.slug}`, inlinks) };
-    })
-    .filter((x) => x.topical >= 5)
-    .sort((a, b) => b.score - a.score || (a.p.date < b.p.date ? 1 : -1))
-    .slice(0, 4);
-  if (scored.length) {
-    groups.push({ heading: "Keep reading", items: scored.map((x) => postItem(x.p)) });
+  const planned = (plan.posts.get(slug) ?? [])
+    .map((q) => posts.find((p) => p.slug === q))
+    .filter((p): p is PostMeta => !!p && !already.has(`/blog/${p.slug}`));
+  if (planned.length) {
+    groups.push({ heading: "Keep reading", items: planned.map(postItem) });
   }
   return groups;
 }
@@ -236,23 +381,17 @@ function country(location: string) {
 }
 
 export function relatedForArtist(artist: ArtistMeta): RelatedGroup[] {
-  const { inlinks } = index();
+  const { plan } = index();
   const groups: RelatedGroup[] = [];
 
   const posts = postsMentioning(`/artists/${artist.slug}`, new Set(artist.relatedPosts), 4);
   if (posts.length) groups.push({ heading: "Also mentioned in", items: posts.map(postItem) });
 
-  const similar = getAllArtists()
-    .filter((a) => a.slug !== artist.slug)
-    .map((a) => {
-      const genres = a.genres.filter((g) => artist.genres.includes(g)).length;
-      const sameCountry = country(a.location) && country(a.location) === country(artist.location) ? 1 : 0;
-      const base = genres * 2 + sameCountry;
-      return { a, base, score: base + isolationBoost(`/artists/${a.slug}`, inlinks) };
-    })
-    .filter((x) => x.base >= 2)
-    .sort((x, y) => y.score - x.score || x.a.name.localeCompare(y.a.name))
-    .slice(0, 4);
+  const bySlug = new Map(getAllArtists().map((a) => [a.slug, a] as const));
+  const similar = (plan.artists.get(artist.slug) ?? [])
+    .map((slug) => bySlug.get(slug))
+    .filter((a): a is ArtistMeta => !!a)
+    .map((a) => ({ a }));
   if (similar.length) {
     groups.push({
       heading: "Similar artists",
@@ -267,21 +406,16 @@ export function relatedForArtist(artist: ArtistMeta): RelatedGroup[] {
 }
 
 export function relatedForFestival(festival: Festival): RelatedGroup[] {
-  const { inlinks } = index();
+  const { plan } = index();
   const groups: RelatedGroup[] = [];
 
   const posts = postsMentioning(`/festivals/${festival.slug}`, new Set(), 4);
   if (posts.length) groups.push({ heading: "Related articles", items: posts.map(postItem) });
 
-  const similar = FESTIVALS.filter((f) => f.slug !== festival.slug)
-    .map((f) => {
-      const genres = f.genres.filter((g) => festival.genres.includes(g)).length;
-      const base = genres + (f.country === festival.country ? 2 : 0);
-      return { f, base, score: base + isolationBoost(`/festivals/${f.slug}`, inlinks) };
-    })
-    .filter((x) => x.base >= 2)
-    .sort((x, y) => y.score - x.score || x.f.name.localeCompare(y.f.name))
-    .slice(0, 3);
+  const similar = (plan.festivals.get(festival.slug) ?? [])
+    .map((slug) => FESTIVALS.find((f) => f.slug === slug))
+    .filter((f): f is Festival => !!f)
+    .map((f) => ({ f }));
   if (similar.length) {
     groups.push({
       heading: "Similar festivals",

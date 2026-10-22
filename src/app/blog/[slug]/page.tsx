@@ -12,7 +12,7 @@ import YouTubeEmbed from "@/components/YouTubeEmbed";
 import SoundCloudEmbed from "@/components/SoundCloudEmbed";
 import BandcampEmbed from "@/components/BandcampEmbed";
 import { getAllPosts, getArticleImage, getPostBySlug } from "@/lib/blog";
-import { formatDate } from "@/lib/format";
+import { formatDate, metaDescription } from "@/lib/format";
 import { getImageDims } from "@/lib/image-dims";
 import { relatedForPost } from "@/lib/related";
 import RelatedLinks from "@/components/RelatedLinks";
@@ -43,13 +43,13 @@ export async function generateMetadata({
   const articleImage = getArticleImage(post) ?? `${SITE.url}/og-image.jpg`;
   return {
     title: { absolute: post.title },
-    description: post.excerpt,
+    description: metaDescription(post.excerpt),
     alternates: { canonical: `/blog/${slug}` },
     openGraph: {
       type: "article",
       url: `/blog/${slug}`,
       title: post.title,
-      description: post.excerpt,
+      description: metaDescription(post.excerpt),
       publishedTime: isoDateTime(post.date),
       modifiedTime: isoDateTime(post.updated ?? post.date),
       images: [articleImage],
@@ -57,7 +57,7 @@ export async function generateMetadata({
     twitter: {
       card: "summary_large_image",
       title: post.title,
-      description: post.excerpt,
+      description: metaDescription(post.excerpt),
       images: [articleImage],
     },
   };

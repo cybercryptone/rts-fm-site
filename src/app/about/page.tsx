@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import Nav from "@/components/Nav";
 import AboutFooter from "@/components/AboutFooter";
 import { SITE } from "@/lib/data";
@@ -80,7 +81,11 @@ export default function AboutPage() {
             Invite-only and non-commercial from day one, it grew into a community of
             artists, listeners and studios spanning multiple cities, plus a record
             label pressing music from the people playing on air. No outside
-            investment, no ad sales, no sponsor logos on the stream.
+            investment, no ad sales, no sponsor logos on the stream.{" "}
+            <Link href="/radio" className="text-fg underline decoration-line underline-offset-4 hover:text-accent">
+              How the radio works
+            </Link>
+            .
           </p>
 
           <h2 className="mt-10 font-display text-xl font-bold uppercase tracking-[-0.01em] text-fg">
