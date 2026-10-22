@@ -567,8 +567,8 @@ export const FESTIVALS: Festival[] = [
     description:
       "A beach festival of minimal and house that began in Mamaia, Romania in 2007 and now travels, with its 20th anniversary Spring Edition set for Golden Sands on Bulgaria's Black Sea coast. Known for marathon sets, including Marco Carola's 24 hours in 2015.",
     venue: "PR Beach",
-    lastVerified: "2026-10-10",
-    artists: ["marco-carola", "joseph-capriati", "traumer", "chris-stussy"],
+    lastVerified: "2026-10-22",
+    artists: ["marco-carola", "joseph-capriati", "traumer", "chris-stussy", "raresh", "rhadoo", "petre-inspirescu", "priku", "sit", "cristi-cons", "vlad-caia", "sonja-moonear", "praslea"],
   },
   {
     slug: "unsound-festival",
