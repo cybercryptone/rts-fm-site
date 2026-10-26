@@ -288,6 +288,12 @@ export const ARTIST_VIDEO_META: Record<string, BlogVideoMeta> = {
     duration: "PT7M25S",
     thumbnailUrl: "https://i.ytimg.com/vi/B3AgHS50zxs/hqdefault.jpg",
   },
+  "r9-Q3JR_-9Y": {
+    description: "Techu | Groovy Tunes x RTS.FM Unclave Koh-Phangan, Thailand 23.03.2025. Archive set from the RTS.FM YouTube channel.",
+    uploadDate: "2025-05-15T15:00:06Z",
+    duration: "PT1H55M44S",
+    thumbnailUrl: "https://i.ytimg.com/vi/r9-Q3JR_-9Y/hqdefault.jpg",
+  },
   "DCLSWnzRiOc": {
     description: "HUGOBEAT Own Productions Only, RTS.FM Koh Phangan, Thailand, 1 August 2025. Archive set from the RTS.FM YouTube channel.",
     uploadDate: "2025-08-01T12:00:06Z",
