@@ -9,10 +9,21 @@ export default function Hero() {
       className="relative flex min-h-dvh flex-col overflow-hidden pt-28"
       style={{
         backgroundImage:
-          "linear-gradient(180deg, rgba(216,218,222,0.85) 0%, rgba(216,218,222,0.45) 16%, rgba(216,218,222,0) 40%), radial-gradient(46% 52% at 40% 50%, rgba(224,74,63,0.4) 0%, rgba(224,74,63,0.15) 42%, rgba(224,74,63,0) 76%), radial-gradient(65% 60% at 80% 6%, rgba(255,255,255,0.4) 0%, transparent 60%), radial-gradient(55% 60% at 6% 2%, rgba(110,114,121,0.5) 0%, transparent 65%), linear-gradient(180deg, var(--ink) 0%, var(--bg) 100%)",
+          "linear-gradient(180deg, rgba(216,218,222,0.85) 0%, rgba(216,218,222,0.45) 16%, rgba(216,218,222,0) 40%), radial-gradient(65% 60% at 80% 6%, rgba(255,255,255,0.4) 0%, transparent 60%), radial-gradient(55% 60% at 6% 2%, rgba(110,114,121,0.5) 0%, transparent 65%), linear-gradient(180deg, var(--ink) 0%, var(--bg) 100%)",
       }}
     >
       <div aria-hidden="true" className="hero-brushed-metal" />
+
+      {/* The big orange spot behind the headline, split out of the section
+          background so it can breathe: it fades almost out, then swells back. */}
+      <div
+        aria-hidden="true"
+        className="hero-orange-pulse"
+        style={{
+          background:
+            "radial-gradient(46% 52% at 40% 50%, rgba(224,74,63,0.4) 0%, rgba(224,74,63,0.15) 42%, rgba(224,74,63,0) 76%)",
+        }}
+      />
 
       <div
         aria-hidden="true"
@@ -37,7 +48,7 @@ export default function Hero() {
           top: "18%",
           background:
             "radial-gradient(closest-side, rgba(224,74,63,0.6) 0%, transparent 72%)",
-          animation: "drift-a 11s ease-in-out infinite",
+          animation: "drift-a 11s ease-in-out infinite, orange-fade 6.5s ease-in-out infinite",
         }}
       />
       <div

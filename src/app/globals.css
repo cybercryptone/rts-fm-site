@@ -106,6 +106,46 @@ body::before {
   }
 }
 
+/* Orange spot: fades nearly out, then swells back. Two periods (the static
+   spot and the drifting blob) so they never pulse in lockstep. */
+@keyframes orange-breathe {
+  0%,
+  100% {
+    opacity: 0.04;
+    transform: scale(0.94);
+  }
+  45%,
+  60% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+}
+
+@keyframes orange-fade {
+  0%,
+  100% {
+    opacity: 0.1;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.hero-orange-pulse {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  animation: orange-breathe 9s ease-in-out infinite;
+  will-change: opacity, transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-orange-pulse {
+    animation: none;
+    opacity: 0.8;
+  }
+}
+
 .hero-glow {
   position: absolute;
   border-radius: 9999px;
