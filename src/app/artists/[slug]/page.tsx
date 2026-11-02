@@ -1,4 +1,4 @@
-import { metaDescription } from "@/lib/format";
+import { artistMetaDescription } from "@/lib/artist-meta";
 import { relatedForArtist } from "@/lib/related";
 import RelatedLinks from "@/components/RelatedLinks";
 import { getImageDims } from "@/lib/image-dims";
@@ -23,6 +23,9 @@ import {
 } from "@/lib/schema";
 import { ARTIST_VIDEO_META } from "@/lib/artist-video-metadata";
 
+// The meta description states the artist's current age, so re-render daily.
+export const revalidate = 86400;
+
 export function generateStaticParams() {
   return getAllArtists().map((artist) => ({ slug: artist.slug }));
 }
@@ -35,21 +38,22 @@ export async function generateMetadata({
   const { slug } = await params;
   const artist = getArtistBySlug(slug);
   if (!artist) return {};
+  const description = artistMetaDescription(artist);
   return {
     title: { absolute: artist.title },
-    description: metaDescription(artist.excerpt),
+    description,
     alternates: { canonical: `/artists/${slug}` },
     openGraph: {
       type: "profile",
       url: `/artists/${slug}`,
       title: artist.title,
-      description: metaDescription(artist.excerpt),
+      description,
       images: [artist.image || "/og-image.jpg"],
     },
     twitter: {
       card: "summary_large_image",
       title: artist.title,
-      description: metaDescription(artist.excerpt),
+      description,
       images: [artist.image || "/og-image.jpg"],
     },
   };

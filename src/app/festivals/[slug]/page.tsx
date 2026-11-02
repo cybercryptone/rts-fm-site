@@ -29,6 +29,41 @@ export function generateStaticParams() {
   return FESTIVALS.map((festival) => ({ slug: festival.slug }));
 }
 
+// Title and description lead with the edition year and dates, since that is
+// what searches for a festival ("rewire 2027", "houghton 2027 dates") ask.
+// Unconfirmed dates are never put in the title as if they were fixed.
+function festivalMeta(festival: NonNullable<ReturnType<typeof getFestivalBySlug>>) {
+  const year = festival.startDate ? festival.startDate.slice(0, 4) : (festival.nextEditionYear ?? null);
+  const confirmed = festival.dateStatus === "confirmed" && festival.startDate && festival.endDate;
+  let dates = "";
+  if (confirmed) {
+    const start = new Date(`${festival.startDate}T00:00:00Z`);
+    const end = new Date(`${festival.endDate}T00:00:00Z`);
+    const m = (d: Date) => d.toLocaleDateString("en-GB", { month: "short", timeZone: "UTC" });
+    dates =
+      start.getTime() === end.getTime()
+        ? `${start.getUTCDate()} ${m(start)}`
+        : m(start) === m(end)
+          ? `${start.getUTCDate()}-${end.getUTCDate()} ${m(end)}`
+          : `${start.getUTCDate()} ${m(start)}-${end.getUTCDate()} ${m(end)}`;
+  }
+  const candidates = [
+    year && dates ? `${festival.name} ${year}: ${dates}, Tickets & Guide` : "",
+    year ? `${festival.name} ${year}: Dates, Tickets & Guide` : "",
+    `${festival.name}: Dates, Tickets & Guide, ${festival.city}`,
+    `${festival.name}: Dates, Tickets & Guide`,
+  ].filter(Boolean);
+  const title = candidates.find((t) => t.length <= 60) ?? candidates[candidates.length - 1];
+  const lead =
+    year && dates
+      ? `${festival.name} ${year} runs ${dates} in ${festival.city}. `
+      : "";
+  const description = festival.metaDescription
+    ? metaDescription(festival.metaDescription)
+    : metaDescription(`${lead}${festival.description}`);
+  return { title, description };
+}
+
 export async function generateMetadata({
   params,
 }: {
@@ -37,9 +72,7 @@ export async function generateMetadata({
   const { slug } = await params;
   const festival = getFestivalBySlug(slug);
   if (!festival) return {};
-  const full = `${festival.name}: Dates, Tickets & Guide, ${festival.city}`;
-  const title = full.length <= 60 ? full : `${festival.name}: Dates, Tickets & Guide`;
-  const description = metaDescription(festival.description);
+  const { title, description } = festivalMeta(festival);
   return {
     title: { absolute: title },
     description,

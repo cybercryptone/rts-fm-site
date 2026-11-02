@@ -23,6 +23,9 @@ export type Festival = {
   startDate?: string;
   endDate?: string;
   dateStatus: FestivalDateStatus;
+  // Year of the announced-but-undated next edition ("Summer 2027"), used only
+  // in the page title when there are no start/end dates to take it from.
+  nextEditionYear?: string;
   genres: string[];
   website: string;
   // Absent, never fabricated, if no live on-sale exists yet.
@@ -41,6 +44,9 @@ export type Festival = {
   ticketPrice?: number;
   ticketPriceCurrency?: string;
   description: string;
+  // Hand-written search snippet (155 chars max) for pages where the generated
+  // "<name> <year> runs <dates>" lead plus the description is too long.
+  metaDescription?: string;
   image?: string;
   imageAlt?: string;
   imageCredit?: string;
@@ -250,6 +256,8 @@ export const FESTIVALS: Festival[] = [
     ticketUrl: "https://nachtdigital.de/en/tickets",
     description:
       "A small, long-running techno and house gathering at a bungalow village outside Leipzig, known for a deliberately intimate, non-commercial setup.",
+    metaDescription:
+      "Nachtdigital (Nachti) 2027 runs 30 July to 1 August near Leipzig: a small, hand-picked techno and house gathering. Dates, tickets, travel.",
     image: "https://rts.fm/images/commons/nachtdigital-bungalowdorf-olganitz-2014.jpg",
     imageAlt: "A DJ performing at Nachtdigital festival at Bungalowdorf Olganitz in 2014.",
     imageCredit: "Photo by Robert Richter, CC BY 2.0, via Wikimedia Commons.",
@@ -380,10 +388,13 @@ export const FESTIVALS: Festival[] = [
     lat: 51.5072,
     lon: -0.1276,
     dateStatus: "tba",
+    nextEditionYear: "2027",
     genres: ["techno", "house"],
     website: "https://www.junction2.london",
     description:
       "London's underground house and techno festival at Boston Manor Park, first held in 2016, with its main stage under the M4 flyover. The 2026 tenth-anniversary edition ran July 25, July 26 and August 2; the official site now lists Summer 2027 at the park under The Bridge series, with no dates announced.",
+    metaDescription:
+      "Junction 2 2027: Summer at Boston Manor Park, London, dates not yet announced. The techno festival under the M4 flyover: history, travel, tickets.",
     image: "https://rts.fm/images/commons/junction-2-m4-flyover-boston-manor-park.jpg",
     imageAlt: "The underside of the M4 flyover as it crosses Boston Manor Park in Brentford, London, the site of Junction 2's Bridge stage.",
     imageCredit: "Photo by Ethan Doyle White, CC BY-SA 4.0, via Wikimedia Commons.",
@@ -448,6 +459,8 @@ export const FESTIVALS: Festival[] = [
     website: "https://www.houghtonfestival.co.uk",
     description:
       "A Craig Richards-curated festival of extended DJ sets and hidden stages in the grounds of Houghton Hall, Norfolk, running since 2017 and selling out quickly in recent years.",
+    metaDescription:
+      "Houghton 2027 runs 5-8 August at Houghton Hall, Norfolk: Craig Richards' festival of extended DJ sets. Dates, tickets, travel and history.",
     image: "https://rts.fm/images/commons/houghton-festival-houghton-hall-west-front.jpg",
     imageAlt: "The west front of Houghton Hall, the Palladian country house in Norfolk whose grounds host Houghton Festival.",
     imageCredit: "Photo by Elliott Brown, CC BY 2.0, via Wikimedia Commons.",
@@ -545,6 +558,8 @@ export const FESTIVALS: Festival[] = [
     ticketStatus: "open",
     description:
       "A four-day festival for adventurous music in The Hague's city centre since 2011, where experimental, electronic and club artists share bills across theatres, churches and clubs.",
+    metaDescription:
+      "Rewire 2027 runs 8-11 April in The Hague: four days of experimental, electronic and club music in theatres, churches and clubs. Dates, tickets, venues.",
     image: "https://rts.fm/images/commons/rewire-koninklijke-schouwburg-den-haag.jpg",
     imageAlt: "Interior of the Koninklijke Schouwburg in The Hague, one of Rewire's venues, looking from the stalls toward a black stage curtain framed by tiered balconies.",
     imageCredit: "Photo by PersianDutchNetwork, CC BY-SA 4.0, via Wikimedia Commons.",

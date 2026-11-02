@@ -34,6 +34,8 @@ export type ArtistMeta = {
   name: string;
   title: string;
   excerpt: string;
+  // Optional hand-written snippet that overrides the one built from facts.
+  metaDescription?: string;
   jobTitle: string;
   genres: string[];
   location: string;
@@ -65,6 +67,7 @@ function toMeta(slug: string, data: Record<string, unknown>): ArtistMeta {
     name: data.name as string,
     title: data.title as string,
     excerpt: data.excerpt as string,
+    metaDescription: data.metaDescription as string | undefined,
     jobTitle: data.jobTitle as string,
     genres: (data.genres as string[]) ?? [],
     location: (data.location as string | undefined) ?? "",

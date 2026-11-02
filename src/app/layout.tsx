@@ -42,7 +42,7 @@ const jetBrainsMono = localFont({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
-    default: `${SITE.name} — ${SITE.tagline} & Label`,
+    default: `${SITE.name} — Live DJ Sets, Online Underground Radio & Label`,
     template: `%s — ${SITE.name}`,
   },
   description: SITE.description,
@@ -69,13 +69,13 @@ export const metadata: Metadata = {
     type: "website",
     url: "/",
     siteName: SITE.name,
-    title: `${SITE.name} — ${SITE.tagline} & Label`,
+    title: `${SITE.name} — Live DJ Sets, Online Underground Radio & Label`,
     description: SITE.description,
     images: [{ url: "/og-image.jpg", width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
-    title: `${SITE.name} — ${SITE.tagline} & Label`,
+    title: `${SITE.name} — Live DJ Sets, Online Underground Radio & Label`,
     description: SITE.description,
     images: ["/og-image.jpg"],
   },
