@@ -21,6 +21,9 @@ const ARTIST_DATES: Record<string, { dateCreated: string; dateModified: string }
 export type ArtistFacts = {
   realName?: string;
   born?: string;
+  // Free text, e.g. "2026 (Mexico City)"; when set the page and snippet use
+  // past tense and never state a current age.
+  died?: string;
   birthplace?: string;
   nationality?: string;
   basedIn?: string;

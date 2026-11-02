@@ -188,6 +188,7 @@ const FACT_ROWS: { key: keyof NonNullable<ArtistMeta["facts"]>; label: string }[
   { key: "realName", label: "Real name" },
   { key: "aliases", label: "Also known as" },
   { key: "born", label: "Born" },
+  { key: "died", label: "Died" },
   { key: "birthplace", label: "Birthplace" },
   { key: "nationality", label: "Nationality" },
   { key: "basedIn", label: "Based in" },

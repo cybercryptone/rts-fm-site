@@ -23,15 +23,16 @@ function ageFromBorn(born: string, now = new Date()): number | null {
 // keep their hand-written excerpt (or an explicit metaDescription override).
 export function artistMetaDescription(artist: ArtistMeta, now = new Date()): string {
   if (artist.metaDescription) return metaDescription(artist.metaDescription);
-  const { born, birthplace, nationality } = artist.facts ?? {};
+  const { born, birthplace, nationality, died } = artist.facts ?? {};
   if (!born) return metaDescription(artist.excerpt);
+  if (died) return metaDescription(`${artist.name} (born ${born}${birthplace ? ` in ${birthplace}` : ""}) died in ${died}. ${artist.excerpt}`);
   const age = ageFromBorn(born, now);
   const place = birthplace ? ` in ${birthplace}` : "";
   const opener = age !== null
     ? `${artist.name} is ${age} years old, born ${born}${place}.`
     : `${artist.name} was born in ${born}${place}.`;
   const roleRaw = [nationality, artist.jobTitle.replace(/^DJ & /, "DJ and ").toLowerCase()].filter(Boolean).join(" ");
-  const role = `${roleRaw.charAt(0).toUpperCase()}${roleRaw.slice(1)}`.replace(/\bDj\b|\bdj\b/g, "DJ");
+  const role = `${roleRaw.charAt(0).toUpperCase()}${roleRaw.slice(1)}`.replace(/\bDj\b|\bdj\b/g, "DJ").replace(/\bberghain\b/gi, "Berghain");
   const genres = artist.genres.slice(0, 2).join(" and ");
   const full = `${opener} ${role}${genres ? ` known for ${genres}` : ""}.`;
   if (full.length <= 155) return full;
