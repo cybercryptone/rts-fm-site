@@ -65,6 +65,7 @@ export type Release = {
 // Sourced from the RTS.FM Label Bandcamp catalog (rtsfm.bandcamp.com) —
 // cover art and release links pulled directly from Bandcamp's own CDN.
 export const RELEASES: Release[] = [
+  { cat: "RTSFM020", artist: "Andrey Balance", href: "https://rtsfm.bandcamp.com/album/rtsfm020", cover: "/images/covers/bandcamp-a3339881871.jpg" },
   { cat: "RTSFM019", artist: "Techu", href: "https://rtsfm.bandcamp.com/album/rtsfm019", cover: "/images/covers/bandcamp-a3617226155.jpg" },
   { cat: "RTSFM018", artist: "Fedu", href: "https://rtsfm.bandcamp.com/album/rtsfm018", cover: "/images/covers/bandcamp-a0081594063.jpg" },
   { cat: "RTSFM017", artist: "Sapurra", href: "https://rtsfm.bandcamp.com/album/rtsfm017", cover: "/images/covers/bandcamp-a1605483395.jpg" },
