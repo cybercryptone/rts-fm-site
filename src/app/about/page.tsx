@@ -96,7 +96,7 @@ export default function AboutPage() {
             blog covering underground electronic music culture: club and festival
             news, label stories, artist profiles, and the industry stories that
             actually affect people who make and play this music. Every article is
-            written by RTS.FM&apos;s own editorial team, sourced from public,
+            written by the RTS.FM Editorial Desk, the site&apos;s own editorial team, sourced from public,
             verifiable reporting cited inline with links to the original outlets, and
             never copied or paraphrased wholesale from a single source.
           </p>

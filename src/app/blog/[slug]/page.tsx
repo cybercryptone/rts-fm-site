@@ -221,7 +221,7 @@ export default async function BlogPost({
     dateModified: isoDateTime(post.updated ?? post.date),
     url: `${SITE.url}/blog/${post.slug}`,
     mainEntityOfPage: `${SITE.url}/blog/${post.slug}`,
-    author: { "@type": "Organization", name: SITE.name, url: SITE.url },
+    author: { "@type": "Organization", name: "RTS.FM Editorial Desk", url: `${SITE.url}/about` },
     publisher: {
       "@type": "Organization",
       name: SITE.name,
@@ -277,7 +277,10 @@ export default async function BlogPost({
           </Link>
 
           <p className="mt-8 font-mono text-[11px] uppercase tracking-[0.18em] text-fg-dim">
-            {formatDate(post.date)} · rts.fm editorial
+            {formatDate(post.date)} · By{" "}
+            <Link href="/about" rel="author" className="transition-colors hover:text-accent">
+              RTS.FM Editorial Desk
+            </Link>
             {post.updated && post.updated !== post.date && (
               <> · updated {formatDate(post.updated)}</>
             )}
