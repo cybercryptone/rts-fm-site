@@ -5,6 +5,7 @@ import AboutFooter from "@/components/AboutFooter";
 import { getAllPosts } from "@/lib/blog";
 import { formatDateCompact } from "@/lib/format";
 import { breadcrumbJsonLd } from "@/lib/schema";
+import { TOPICS } from "@/lib/topics";
 
 const description = "Notes, releases, and studio updates from RTS.FM.";
 
@@ -42,6 +43,22 @@ export default function BlogIndex() {
           <h1 className="mt-[18px] font-display text-4xl font-bold uppercase tracking-[-0.02em] text-fg sm:text-5xl">
             Blog
           </h1>
+
+          <nav aria-label="Browse by topic" className="mt-8">
+            <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-fg-dim">browse by topic</p>
+            <ul className="mt-3 flex flex-wrap gap-2">
+              {TOPICS.map((t) => (
+                <li key={t.slug}>
+                  <Link
+                    href={`/topics/${t.slug}`}
+                    className="inline-block rounded-full border border-line px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.12em] text-fg-dim transition-colors hover:border-accent hover:text-accent"
+                  >
+                    {t.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
 
           {posts.length === 0 ? (
             <p className="mt-10 text-sm text-fg-dim">

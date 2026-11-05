@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { SITE } from "@/lib/data";
 import { getAllPosts } from "@/lib/blog";
 import { getAllArtists } from "@/lib/artists";
+import { TOPICS } from "@/lib/topics";
 import { FESTIVALS, getCalendarYears, getCountryHubs } from "@/lib/festivals";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -42,6 +43,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 0.7,
     },
+    {
+      url: `${SITE.url}/topics`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.7,
+    },
+    ...TOPICS.map((t) => ({
+      url: `${SITE.url}/topics/${t.slug}`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.7,
+    })),
     ...getAllPosts().map((post) => ({
       url: `${SITE.url}/blog/${post.slug}`,
       lastModified: new Date(post.updated ?? post.date),

@@ -16,6 +16,7 @@ import { formatDate, metaDescription } from "@/lib/format";
 import { getImageDims } from "@/lib/image-dims";
 import { relatedForPost } from "@/lib/related";
 import RelatedLinks from "@/components/RelatedLinks";
+import { getTopicForPost } from "@/lib/topics";
 import ListenBlock from "@/components/ListenBlock";
 import { SITE } from "@/lib/data";
 import {
@@ -204,6 +205,7 @@ export default async function BlogPost({
   const { slug } = await params;
   const post = getPostBySlug(slug);
   if (!post) notFound();
+  const topic = getTopicForPost(post.slug);
 
   // Google's NewsArticle guidance recommends an image; use the first real
   // image embedded in the post body (most posts now carry CC-licensed
@@ -275,6 +277,14 @@ export default async function BlogPost({
           >
             ← blog
           </Link>
+          {topic && (
+            <Link
+              href={`/topics/${topic.slug}`}
+              className="ml-4 font-mono text-[11px] uppercase tracking-[0.18em] text-accent transition-colors hover:text-fg"
+            >
+              {topic.name} →
+            </Link>
+          )}
 
           <p className="mt-8 font-mono text-[11px] uppercase tracking-[0.18em] text-fg-dim">
             {formatDate(post.date)} · By{" "}

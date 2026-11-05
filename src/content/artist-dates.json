@@ -57,7 +57,7 @@
   },
   "carl-cox": {
     "dateCreated": "2026-10-19T08:17:03+00:00",
-    "dateModified": "2026-10-19T08:17:03+00:00"
+    "dateModified": "2026-11-05T12:00:00+00:00"
   },
   "carl-craig": {
     "dateCreated": "2026-10-19T08:17:03+00:00",
@@ -125,7 +125,7 @@
   },
   "donato-dozzy": {
     "dateCreated": "2026-09-11T11:36:37+03:00",
-    "dateModified": "2026-09-11T11:36:37+03:00"
+    "dateModified": "2026-11-05T12:00:00+00:00"
   },
   "dubfire": {
     "dateCreated": "2026-10-19T08:17:03+00:00",
@@ -193,7 +193,7 @@
   },
   "jeff-mills": {
     "dateCreated": "2026-09-08T11:33:49+03:00",
-    "dateModified": "2026-10-20T08:25:41+00:00"
+    "dateModified": "2026-11-05T12:00:00+00:00"
   },
   "joseph-capriati": {
     "dateCreated": "2026-10-09T20:35:33+00:00",
@@ -237,7 +237,7 @@
   },
   "len-faki": {
     "dateCreated": "2026-10-19T08:17:03+00:00",
-    "dateModified": "2026-10-19T08:17:03+00:00"
+    "dateModified": "2026-11-05T12:00:00+00:00"
   },
   "loco-dice": {
     "dateCreated": "2026-10-19T08:17:03+00:00",
@@ -341,7 +341,7 @@
   },
   "raresh": {
     "dateCreated": "2026-10-19T08:17:03+00:00",
-    "dateModified": "2026-10-19T08:17:03+00:00"
+    "dateModified": "2026-11-05T12:00:00+00:00"
   },
   "rhadoo": {
     "dateCreated": "2026-10-22T14:06:26+00:00",
@@ -385,7 +385,7 @@
   },
   "seth-troxler": {
     "dateCreated": "2026-10-19T08:17:03+00:00",
-    "dateModified": "2026-10-19T08:17:03+00:00"
+    "dateModified": "2026-11-05T12:00:00+00:00"
   },
   "shonky": {
     "dateCreated": "2026-09-28T12:26:01+03:00",
@@ -401,7 +401,7 @@
   },
   "sonja-moonear": {
     "dateCreated": "2026-10-22T14:06:26+00:00",
-    "dateModified": "2026-10-22T14:06:26+00:00"
+    "dateModified": "2026-11-05T12:00:00+00:00"
   },
   "soultape": {
     "dateCreated": "2026-10-19T08:17:03+00:00",
@@ -481,7 +481,7 @@
   },
   "underground-resistance": {
     "dateCreated": "2026-10-19T08:17:03+00:00",
-    "dateModified": "2026-10-19T08:17:03+00:00"
+    "dateModified": "2026-11-05T12:00:00+00:00"
   },
   "victor-polo": {
     "dateCreated": "2026-10-19T08:17:03+00:00",
@@ -494,5 +494,25 @@
   "vlad-caia": {
     "dateCreated": "2026-10-22T14:06:26+00:00",
     "dateModified": "2026-10-22T14:06:26+00:00"
+  },
+  "dimitri-vegas-like-mike": {
+    "dateCreated": "2026-11-05T12:00:00+00:00",
+    "dateModified": "2026-11-05T12:00:00+00:00"
+  },
+  "lost-frequencies": {
+    "dateCreated": "2026-11-05T12:00:00+00:00",
+    "dateModified": "2026-11-05T12:00:00+00:00"
+  },
+  "netsky": {
+    "dateCreated": "2026-11-05T12:00:00+00:00",
+    "dateModified": "2026-11-05T12:00:00+00:00"
+  },
+  "soulwax": {
+    "dateCreated": "2026-11-05T12:00:00+00:00",
+    "dateModified": "2026-11-05T12:00:00+00:00"
+  },
+  "peter-van-hoesen": {
+    "dateCreated": "2026-11-05T12:00:00+00:00",
+    "dateModified": "2026-11-05T12:00:00+00:00"
   }
 }

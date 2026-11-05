@@ -43,6 +43,12 @@ export default function AboutFooter() {
               >
                 artist profiles →
               </Link>
+              <Link
+                href="/topics"
+                className="font-mono text-[11px] uppercase tracking-[0.18em] text-fg-dim transition-colors hover:text-accent"
+              >
+                topics →
+              </Link>
             </div>
           </div>
 

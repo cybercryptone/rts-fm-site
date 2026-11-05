@@ -7,6 +7,7 @@ import { Children, isValidElement } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import remarkGfm from "remark-gfm";
 import Nav from "@/components/Nav";
 import AboutFooter from "@/components/AboutFooter";
 import YouTubeEmbed from "@/components/YouTubeEmbed";
@@ -148,6 +149,21 @@ const mdxComponents = {
       {...props}
     />
   ),
+  table: (props: React.ComponentProps<"table">) => (
+    <div className="mt-5 overflow-x-auto rounded-xl border border-line">
+      <table className="w-full min-w-[480px] border-collapse text-sm" {...props} />
+    </div>
+  ),
+  thead: (props: React.ComponentProps<"thead">) => (
+    <thead className="bg-bg-elevated font-mono text-[11px] uppercase tracking-[0.1em] text-fg-dim" {...props} />
+  ),
+  th: (props: React.ComponentProps<"th">) => (
+    <th className="border-b border-line px-4 py-3 text-left font-normal" {...props} />
+  ),
+  td: (props: React.ComponentProps<"td">) => (
+    <td className="border-b border-line px-4 py-3 text-fg-dim" {...props} />
+  ),
+  tr: (props: React.ComponentProps<"tr">) => <tr className="last:[&>td]:border-b-0" {...props} />,
   img: MdxImage,
   YouTubeEmbed,
 };
@@ -404,7 +420,11 @@ export default async function ArtistPage({
           )}
 
           <div className="mt-6 border-t border-line pt-6">
-            <MDXRemote source={stripHeroImage(artist.content, artist.image)} components={mdxComponents} />
+            <MDXRemote
+              source={stripHeroImage(artist.content, artist.image)}
+              components={mdxComponents}
+              options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
+            />
           </div>
 
           {festivals.length > 0 && (

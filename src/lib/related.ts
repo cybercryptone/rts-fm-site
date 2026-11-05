@@ -1,6 +1,7 @@
 import { getAllPosts, getPostBySlug, type PostMeta } from "@/lib/blog";
 import { getAllArtists, getArtistBySlug, type ArtistMeta } from "@/lib/artists";
 import { FESTIVALS, type Festival } from "@/lib/festivals";
+import { getTopicForPost, getTopicPosts } from "@/lib/topics";
 
 // Automatic internal linking. Instead of hand-maintaining "related" lists, the
 // site derives them from the content itself: which artists/festivals a post
@@ -355,9 +356,36 @@ export function relatedForPost(slug: string): RelatedGroup[] {
     });
   }
 
+  // Topic siblings come first: they are the editorially chosen cluster, and the
+  // pillar is always included so every post links up to its hub's start page.
+  const topic = getTopicForPost(slug);
+  const topicSlugs = new Set<string>();
+  if (topic) {
+    const { pillar, posts: homed } = getTopicPosts(topic);
+    // The pillar plus the next posts after this one in the hub's order
+    // (wrapping around), so inbound links spread evenly across the cluster
+    // instead of piling onto the first few entries.
+    const ring = homed.filter((p) => p.slug !== slug);
+    const at = homed.findIndex((p) => p.slug === slug);
+    const rotated = at >= 0 ? [...homed.slice(at + 1), ...homed.slice(0, at)] : ring;
+    const siblings = [...(pillar && pillar.slug !== slug ? [pillar] : []), ...rotated]
+      .filter((p) => !already.has(`/blog/${p.slug}`))
+      .slice(0, 4);
+    if (siblings.length) {
+      siblings.forEach((p) => topicSlugs.add(p.slug));
+      groups.push({
+        heading: `More in ${topic.name}`,
+        items: [
+          ...siblings.map(postItem),
+          { href: `/topics/${topic.slug}`, title: `All ${topic.name} coverage`, meta: "Topic hub" },
+        ],
+      });
+    }
+  }
+
   const planned = (plan.posts.get(slug) ?? [])
     .map((q) => posts.find((p) => p.slug === q))
-    .filter((p): p is PostMeta => !!p && !already.has(`/blog/${p.slug}`));
+    .filter((p): p is PostMeta => !!p && !already.has(`/blog/${p.slug}`) && !topicSlugs.has(p.slug));
   if (planned.length) {
     groups.push({ heading: "Keep reading", items: planned.map(postItem) });
   }

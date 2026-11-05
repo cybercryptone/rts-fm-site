@@ -1,6 +1,7 @@
 import { SITE, RELEASES, CITIES, SOCIALS } from "@/lib/data";
 import { getAllPosts } from "@/lib/blog";
 import { getAllArtists } from "@/lib/artists";
+import { TOPICS } from "@/lib/topics";
 import {
   getUpcomingFestivals,
   getPastFestivals,
@@ -36,6 +37,11 @@ export async function GET() {
     ...RELEASES.slice(0, 8).map(
       (r) => `- [${r.artist} — ${r.cat}${r.title ? `, "${r.title}"` : ""}](${r.href})`,
     ),
+    "",
+    "## Topics",
+    "",
+    `- [All topics](${SITE.url}/topics): editorial hubs grouping the blog by subject.`,
+    ...TOPICS.map((t) => `- [${t.name}](${SITE.url}/topics/${t.slug}): ${t.description}`),
     "",
     "## Blog",
     "",
