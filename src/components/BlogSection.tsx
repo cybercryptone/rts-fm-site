@@ -2,8 +2,22 @@ import Link from "next/link";
 import { getAllPosts } from "@/lib/blog";
 import { formatDateCompact } from "@/lib/format";
 
+// Evergreen pages that earn most of the site's traffic. They are pinned here
+// so the homepage links straight to them instead of only to the newest posts.
+const POPULAR_SLUGS = [
+  "who-runs-berghain-ownership-operators",
+  "best-berlin-clubs-2026-guide",
+  "best-techno-house-festivals-2027",
+  "teenage-engineering-stop-making-synthesizers",
+  "why-people-go-out-less-nightlife-data-2026",
+];
+
 export default function BlogSection() {
-  const posts = getAllPosts().slice(0, 3);
+  const all = getAllPosts();
+  const posts = all.slice(0, 3);
+  const popular = POPULAR_SLUGS.map((slug) => all.find((p) => p.slug === slug)).filter(
+    (p): p is NonNullable<typeof p> => !!p,
+  );
 
   if (posts.length === 0) return null;
 
@@ -48,6 +62,36 @@ export default function BlogSection() {
             </Link>
           ))}
         </div>
+
+        <nav aria-label="Popular guides" className="mt-16 border-t border-line pt-8">
+          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-fg-dim">popular guides</p>
+          <ul className="mt-4 grid grid-cols-1 gap-x-8 gap-y-3 sm:grid-cols-2">
+            <li>
+              <Link
+                href="/festivals/calendar/2027"
+                className="text-sm font-semibold text-fg transition-colors hover:text-accent"
+              >
+                Techno &amp; house festivals 2027: dates, cities, tickets <span className="text-accent">→</span>
+              </Link>
+            </li>
+            {popular.map((post) => (
+              <li key={post.slug}>
+                <Link
+                  href={`/blog/${post.slug}`}
+                  className="text-sm font-semibold text-fg transition-colors hover:text-accent"
+                >
+                  {post.title} <span className="text-accent">→</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <Link
+            href="/topics"
+            className="mt-6 inline-block font-mono text-[11px] uppercase tracking-[0.18em] text-fg-dim transition-colors hover:text-accent"
+          >
+            browse all topics →
+          </Link>
+        </nav>
       </div>
     </section>
   );

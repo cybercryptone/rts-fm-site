@@ -7,14 +7,16 @@ import { formatDateCompact } from "@/lib/format";
 import { breadcrumbJsonLd } from "@/lib/schema";
 import { TOPICS } from "@/lib/topics";
 
-const description = "Notes, releases, and studio updates from RTS.FM.";
+const description =
+  "Independent reporting on techno, house and club culture: festival guides, Berlin and Berghain, labels and vinyl, DJ economics, AI and gear.";
+const title = "Techno and House Blog: Club Culture, Festivals, Labels";
 
 export const metadata: Metadata = {
-  title: "Blog",
+  title: { absolute: title },
   description,
   alternates: { canonical: "/blog" },
-  openGraph: { type: "website", url: "/blog", title: "Blog — RTS.FM", description, images: [{ url: "/og-image.jpg", width: 1200, height: 630 }] },
-  twitter: { card: "summary_large_image", title: "Blog — RTS.FM", description, images: ["/og-image.jpg"] },
+  openGraph: { type: "website", url: "/blog", title, description, images: [{ url: "/og-image.jpg", width: 1200, height: 630 }] },
+  twitter: { card: "summary_large_image", title, description, images: ["/og-image.jpg"] },
 };
 
 export default function BlogIndex() {
