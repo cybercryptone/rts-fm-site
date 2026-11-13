@@ -17,6 +17,8 @@ import { getImageDims } from "@/lib/image-dims";
 import { relatedForPost } from "@/lib/related";
 import RelatedLinks from "@/components/RelatedLinks";
 import { getTopicForPost } from "@/lib/topics";
+import { getArtistBySlug } from "@/lib/artists";
+import { getFestivalBySlug } from "@/lib/festivals";
 import ListenBlock from "@/components/ListenBlock";
 import { SITE } from "@/lib/data";
 import {
@@ -213,6 +215,20 @@ export default async function BlogPost({
   // don't have one, so the field is never empty.
   const articleImage = getArticleImage(post) ?? `${SITE.url}/og-image.jpg`;
 
+  // Entity links: the artists and festivals this article links to, exposed as
+  // `mentions` so search and AI systems can tie the article to the same
+  // entities our profile pages describe. Names come from the profile data, not
+  // from link text.
+  const mentioned: { "@type": "Thing"; name: string; url: string }[] = [];
+  const seenEntities = new Set<string>();
+  for (const [, kind, entitySlug] of post.content.matchAll(/\]\(\/(artists|festivals)\/([a-z0-9-]+)\)/g)) {
+    const key = `${kind}/${entitySlug}`;
+    if (seenEntities.has(key) || mentioned.length >= 12) continue;
+    seenEntities.add(key);
+    const name = kind === "artists" ? getArtistBySlug(entitySlug)?.name : getFestivalBySlug(entitySlug)?.name;
+    if (name) mentioned.push({ "@type": "Thing", name, url: `${SITE.url}/${kind}/${entitySlug}` });
+  }
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "NewsArticle",
@@ -223,6 +239,10 @@ export default async function BlogPost({
     dateModified: isoDateTime(post.updated ?? post.date),
     url: `${SITE.url}/blog/${post.slug}`,
     mainEntityOfPage: `${SITE.url}/blog/${post.slug}`,
+    ...(topic ? { articleSection: topic.name } : {}),
+    isAccessibleForFree: true,
+    inLanguage: "en",
+    ...(mentioned.length ? { mentions: mentioned } : {}),
     author: { "@type": "Organization", name: "RTS.FM Editorial Desk", url: `${SITE.url}/about` },
     publisher: {
       "@type": "Organization",

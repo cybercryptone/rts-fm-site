@@ -79,6 +79,8 @@ export const TOPICS: Topic[] = [
     ],
     pillar: "best-techno-house-festivals-2027",
     posts: [
+      "time-warp-mannheim-2027-lineup",
+      "coachella-2027-electronic-acts-charlotte-de-witte-solomun",
       "europe-festival-cancellations-2026",
       "sonar-is-dead-campaign-barcelona-festival-future",
       "bloc-reunion-2027-the-story",
@@ -232,6 +234,7 @@ export const TOPICS: Topic[] = [
     ],
     pillar: "teenage-engineering-stop-making-synthesizers",
     posts: [
+      "alphatheta-djm-a7-four-channel-mixer",
       "native-instruments-inmusic-traktor-what-happens-next",
       "best-standalone-dj-systems-2026",
       "ableton-25-years-independence-gerhard-behles",

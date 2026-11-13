@@ -134,13 +134,13 @@ export const FESTIVALS: Festival[] = [
     website: "https://www.time-warp.de",
     ticketUrl: "https://www.time-warp.de/tickets/",
     description:
-      "A single 19-hour night across five stages in Mannheim, the German original behind the Time Warp name now licensed to editions worldwide.",
+      "A single 17-hour night across five floors in Mannheim, the German original behind the Time Warp name now licensed to editions worldwide.",
     image: "https://rts.fm/images/commons/time-warp-maimarkt-entrance.jpg",
     imageAlt: "Main entrance to Mannheim's Maimarkt fairground, home to the Maimarkthalle where Time Warp's German edition is held.",
     imageCredit: "Photo by Radosław Drożdżewski, CC BY-SA 4.0, via Wikimedia Commons.",
     venue: "Maimarkthalle",
     venueAddress: "Xaver-Fuhr-Straße 101, 68163 Mannheim",
-    lastVerified: "2026-10-10",
+    lastVerified: "2026-11-13",
     artists: ["amelie-lens", "charlotte-de-witte", "chris-stussy", "joseph-capriati", "marco-carola", "nina-kraviz", "sara-landry", "sven-vath", "jeff-mills", "luciano", "nastia", "marek-hemmann", "steve-rachmad"],
   },
   {
@@ -419,6 +419,7 @@ export const FESTIVALS: Festival[] = [
     dateStatus: "confirmed",
     genres: ["house", "techno", "electronic", "dub"],
     website: "https://dimensionsfestival.com",
+    ticketUrl: "https://dimensionsfestival.com/tickets/",
     description:
       "Outlook's sister festival, running since 2012 and now based at The Garden in Tisno on Croatia's Dalmatian coast after years inside Pula's Fort Punta Christo.",
     image: "https://rts.fm/images/commons/dimensions-festival-tisno-harbour.jpg",
@@ -426,7 +427,7 @@ export const FESTIVALS: Festival[] = [
     imageCredit: "Photo by Cholo Aleman, CC BY-SA 3.0, via Wikimedia Commons.",
     venue: "The Garden Resort",
     venueAddress: "Petrića Glava 34, 22240 Tisno",
-    lastVerified: "2026-10-19",
+    lastVerified: "2026-11-13",
     artists: ["theo-parrish", "motor-city-drum-ensemble", "jeff-mills", "nina-kraviz"],
   },
   {
