@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getAllPosts } from "@/lib/blog";
+import { getAllArtists } from "@/lib/artists";
 import { formatDateCompact } from "@/lib/format";
 
 // Evergreen pages that earn most of the site's traffic. They are pinned here
@@ -12,9 +13,30 @@ const POPULAR_SLUGS = [
   "why-people-go-out-less-nightlife-data-2026",
 ];
 
+// Artist profiles that draw the most search interest; pinned on the homepage
+// so the strongest page on the site links straight to them.
+const POPULAR_ARTISTS = [
+  "jeff-mills",
+  "carl-cox",
+  "charlotte-de-witte",
+  "peggy-gou",
+  "underground-resistance",
+  "len-faki",
+  "seth-troxler",
+  "sven-marquardt",
+  "sonja-moonear",
+  "raresh",
+  "donato-dozzy",
+  "aphex-twin",
+];
+
 export default function BlogSection() {
   const all = getAllPosts();
   const posts = all.slice(0, 3);
+  const artistsBySlug = new Map(getAllArtists().map((a) => [a.slug, a]));
+  const popularArtists = POPULAR_ARTISTS.map((slug) => artistsBySlug.get(slug)).filter(
+    (a): a is NonNullable<ReturnType<typeof artistsBySlug.get>> => !!a,
+  );
   const popular = POPULAR_SLUGS.map((slug) => all.find((p) => p.slug === slug)).filter(
     (p): p is NonNullable<typeof p> => !!p,
   );
@@ -85,6 +107,23 @@ export default function BlogSection() {
               </li>
             ))}
           </ul>
+          {popularArtists.length > 0 && (
+            <>
+              <p className="mt-8 font-mono text-[11px] uppercase tracking-[0.18em] text-fg-dim">popular artist profiles</p>
+              <ul className="mt-4 flex flex-wrap gap-x-6 gap-y-2">
+                {popularArtists.map((a) => (
+                  <li key={a.slug}>
+                    <Link
+                      href={`/artists/${a.slug}`}
+                      className="text-sm font-semibold text-fg transition-colors hover:text-accent"
+                    >
+                      {a.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
           <Link
             href="/topics"
             className="mt-6 inline-block font-mono text-[11px] uppercase tracking-[0.18em] text-fg-dim transition-colors hover:text-accent"
