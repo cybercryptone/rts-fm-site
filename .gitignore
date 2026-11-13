@@ -45,3 +45,6 @@ next-env.d.ts
 
 # radar output (local leads)
 /.radar/
+
+# generated social assets
+/social/
