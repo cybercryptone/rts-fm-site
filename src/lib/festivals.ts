@@ -494,7 +494,7 @@ export const FESTIVALS: Festival[] = [
     imageCredit: "Photo by PersianDutchNetwork, CC BY-SA 4.0, via Wikimedia Commons.",
     venue: "Het Twiske",
     venueAddress: "De Zuiderlaaik 1, Oostzaan",
-    lastVerified: "2026-10-19",
+    lastVerified: "2026-11-16",
     artists: ["chris-stussy"],
   },
   {
@@ -520,7 +520,7 @@ export const FESTIVALS: Festival[] = [
     imageCredit: "Photo by Tinyflare, CC BY-SA 3.0, via Wikimedia Commons.",
     venue: "Quartier des spectacles, including the Society for Arts and Technology (SAT)",
     venueAddress: "1201 boulevard Saint-Laurent, Montréal QC H2X 2S6",
-    lastVerified: "2026-10-19",
+    lastVerified: "2026-11-16",
     artists: ["jeff-mills", "daniel-bell", "surgeon"],
   },
   {
@@ -570,7 +570,7 @@ export const FESTIVALS: Festival[] = [
     imageCredit: "Photo by PersianDutchNetwork, CC BY-SA 4.0, via Wikimedia Commons.",
     venue: "Multiple venues in The Hague city centre, including the Koninklijke Schouwburg and PAARD",
     venueAddress: "Korte Voorhout 3, 2511 CW The Hague",
-    lastVerified: "2026-10-19",
+    lastVerified: "2026-11-16",
     artists: ["nina-kraviz", "jeff-mills", "spekki-webu"],
   },
   {
@@ -725,12 +725,14 @@ export const FESTIVALS: Festival[] = [
     website: "https://www.gottwood.co.uk",
     description:
       "A small woodland and lakeside house and techno festival on the Carreglwyd Estate in north-west Anglesey, running since 2010 and still capped at a few thousand people.",
+    metaDescription:
+      "Gottwood Festival 2027 runs 10-13 June on Anglesey, Wales. Capacity is about 4,000 to 5,000 per past reviews. Dates, location, tickets and travel.",
     image: "https://rts.fm/images/commons/gottwood-menai-suspension-bridge.jpg",
     imageAlt: "The Menai Suspension Bridge crossing the Menai Strait, the water between mainland Wales and Anglesey, where Gottwood Festival is held.",
     imageCredit: "Photo by Julian Herzog, CC BY 4.0, via Wikimedia Commons.",
     venue: "Carreglwyd Estate",
     venueAddress: "Carreglwyd, Llanfaethlu, Holyhead, Anglesey LL65 4NY",
-    lastVerified: "2026-10-19",
+    lastVerified: "2026-11-16",
     artists: ["move-d", "ben-ufo", "motor-city-drum-ensemble"],
   },
 ];
