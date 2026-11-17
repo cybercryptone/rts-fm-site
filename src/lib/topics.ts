@@ -120,6 +120,32 @@ export const TOPICS: Topic[] = [
     also: ["ostgut-ton-berghain-label-history", "nina-kraviz-treats-label-brazilian-funk"],
   },
   {
+    slug: "record-shops-and-vinyl-culture",
+    name: "Record shops and vinyl culture",
+    title: "Best Record Shops: World, Europe, UK and Techno Guides",
+    description:
+      "Guides to the best record shops in the world, Europe, the UK, London, Berlin and Amsterdam, techno vinyl shops, and how Record Store Day works.",
+    intro: [
+      "Record shops are where electronic music still gets found, dug and bought on vinyl. This hub collects our verified shop guides, from a global overview to city-by-city lists for Berlin, London and Amsterdam, plus a dance-music specialist list and an explainer on Record Store Day.",
+      "Every guide checks each shop against its own site or a recent report, and says plainly which details we could not confirm. Older best-of lists carry stale addresses, so we note where shops have moved or closed.",
+    ],
+    pillar: "best-record-shops-in-the-world-2026",
+    posts: [
+      "best-record-shops-in-europe-2026",
+      "best-record-shops-in-the-uk-2026",
+      "best-record-shops-in-london-2026",
+      "best-record-shops-in-berlin-2026",
+      "best-record-shops-in-amsterdam-2026",
+      "best-techno-and-electronic-record-shops-2026",
+      "record-store-day-explained",
+    ],
+    also: [
+      "vinyl-sales-record-2025",
+      "vinyl-pressing-plant-capacity-crisis",
+      "jd-twitch-optimo-record-collection-sale-world-of-echo",
+    ],
+  },
+  {
     slug: "ai-and-electronic-music",
     name: "AI and electronic music",
     title: "AI and Electronic Music: Streaming, Fraud, DJ Tools",
