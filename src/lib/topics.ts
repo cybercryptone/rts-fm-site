@@ -60,6 +60,7 @@ export const TOPICS: Topic[] = [
     pillar: "best-berlin-clubs-2026-guide",
     posts: [
       "who-runs-berghain-ownership-operators",
+      "kraftwerk-berlin-helsing-launch-tresor-atonal",
       "ostgut-ton-berghain-label-history",
       "berghain-unvrs-dj-mag-top-100",
       "wilde-renate-berlin-club-history",
@@ -81,6 +82,8 @@ export const TOPICS: Topic[] = [
     posts: [
       "time-warp-mannheim-2027-lineup",
       "coachella-2027-electronic-acts-charlotte-de-witte-solomun",
+      "glastonbury-2027-electronic-acts-kraftwerk-underworld-chase-status",
+      "tomorrowland-2027-dates-tickets-weekends",
       "europe-festival-cancellations-2026",
       "sonar-is-dead-campaign-barcelona-festival-future",
       "bloc-reunion-2027-the-story",
@@ -108,6 +111,7 @@ export const TOPICS: Topic[] = [
     pillar: "independent-labels-market-share-2026",
     posts: [
       "independent-label-survival-study",
+      "sven-vath-roman-flugel-time-warp-records-rings-of-light",
       "drumcode-records-history-adam-beyer",
       "kompakt-records-cologne-history",
       "cocoon-recordings-history-timeline",
@@ -157,6 +161,7 @@ export const TOPICS: Topic[] = [
     pillar: "deezer-ai-uploads-streaming-flood",
     posts: [
       "spotify-ai-persona-badge-ifpi-fraud",
+      "deezer-ipsos-survey-ai-music-labelling-2026",
       "michael-smith-ai-streaming-fraud-sentencing",
       "bandcamp-ai-ban-six-months-on",
       "charlotte-de-witte-azadi-ep-ai-vocalist-nava",
@@ -183,6 +188,7 @@ export const TOPICS: Topic[] = [
       "electronic-music-fastest-growing-genre-us",
       "yougov-britons-listening-more-music-2026",
       "gta-vi-soundtrack-house-artists",
+      "gta-vi-the-album-electronic-artists-tracklist",
       "rtsfm-archive-data-2009-golden-era",
     ],
   },
