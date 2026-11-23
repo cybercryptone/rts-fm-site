@@ -166,7 +166,7 @@ export const FESTIVALS: Festival[] = [
     ticketStatus: "open",
     ticketPrice: 160,
     ticketPriceCurrency: "EUR",
-    lastVerified: "2026-11-08",
+    lastVerified: "2026-11-23",
     artists: ["amelie-lens", "charlotte-de-witte", "chris-stussy", "sara-landry", "surgeon", "nina-kraviz", "theo-parrish", "jeff-mills", "sven-vath", "kalabrese", "marcel-dettmann", "speedy-j"],
   },
   {
