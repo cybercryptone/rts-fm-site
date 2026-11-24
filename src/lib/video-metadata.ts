@@ -437,4 +437,130 @@ export const BLOG_VIDEO_META: Record<string, BlogVideoMeta> = {
     duration: "PT1H27M2S",
     thumbnailUrl: "https://i.ytimg.com/vi/yEV_H4o8TeQ/maxresdefault.jpg",
   },
+  "1cnGNd8_wms": {
+    description:
+      "Yoyaku instore session with Superpoze, published on the Yoyaku Record Store YouTube channel.",
+    uploadDate: "2025-06-06T08:41:43Z",
+    duration: "PT45M7S",
+    thumbnailUrl: "https://i.ytimg.com/vi/1cnGNd8_wms/maxresdefault.jpg",
+  },
+  "1hXS3_IDItA": {
+    description:
+      "Yoyaku instore session with Einzelkind, published on the Yoyaku Record Store YouTube channel.",
+    uploadDate: "2017-01-29T18:28:12Z",
+    duration: "PT1H38M15S",
+    thumbnailUrl: "https://i.ytimg.com/vi/1hXS3_IDItA/hqdefault.jpg",
+  },
+  "2uJb2d-587Y": {
+    description:
+      "Yoyaku instore session with Admo, published on the Yoyaku Record Store YouTube channel.",
+    uploadDate: "2025-10-21T15:26:59Z",
+    duration: "PT59M24S",
+    thumbnailUrl: "https://i.ytimg.com/vi/2uJb2d-587Y/maxresdefault.jpg",
+  },
+  "2yO564lOXiE": {
+    description:
+      "Yoyaku instore session with Shaun Reeves, published on the Yoyaku Record Store YouTube channel.",
+    uploadDate: "2025-02-21T16:28:33Z",
+    duration: "PT1H7M32S",
+    thumbnailUrl: "https://i.ytimg.com/vi/2yO564lOXiE/maxresdefault.jpg",
+  },
+  "4AmoA-n_xSU": {
+    description:
+      "Yoyaku instore session with Oshana, published on the Yoyaku Record Store YouTube channel.",
+    uploadDate: "2017-11-30T20:17:30Z",
+    duration: "PT1H31M17S",
+    thumbnailUrl: "https://i.ytimg.com/vi/4AmoA-n_xSU/maxresdefault.jpg",
+  },
+  "8HWfP7Uf1xw": {
+    description:
+      "Yoyaku instore session with Alex Albrecht, published on the Yoyaku Record Store YouTube channel.",
+    uploadDate: "2024-09-24T10:15:49Z",
+    duration: "PT59M42S",
+    thumbnailUrl: "https://i.ytimg.com/vi/8HWfP7Uf1xw/hqdefault.jpg",
+  },
+  AGVxHYe5hTM: {
+    description:
+      "Yoyaku instore session with Zendid, published on the Yoyaku Record Store YouTube channel.",
+    uploadDate: "2018-02-08T13:19:54Z",
+    duration: "PT1H46M34S",
+    thumbnailUrl: "https://i.ytimg.com/vi/AGVxHYe5hTM/hqdefault.jpg",
+  },
+  M6ZtOmtTWiw: {
+    description:
+      "Yoyaku instore session with Flo Massé, published on the Yoyaku Record Store YouTube channel.",
+    uploadDate: "2025-11-10T16:15:57Z",
+    duration: "PT58M35S",
+    thumbnailUrl: "https://i.ytimg.com/vi/M6ZtOmtTWiw/maxresdefault.jpg",
+  },
+  Ng1gjgITbxY: {
+    description:
+      "Yoyaku instore session with Lamache, published on the Yoyaku Record Store YouTube channel.",
+    uploadDate: "2018-12-06T21:55:14Z",
+    duration: "PT2H39S",
+    thumbnailUrl: "https://i.ytimg.com/vi/Ng1gjgITbxY/hqdefault.jpg",
+  },
+  RtEYja9ZPgQ: {
+    description:
+      "Yoyaku instore session with Que Sakamoto, published on the Yoyaku Record Store YouTube channel.",
+    uploadDate: "2026-01-21T11:24:21Z",
+    duration: "PT1H43M18S",
+    thumbnailUrl: "https://i.ytimg.com/vi/RtEYja9ZPgQ/hqdefault.jpg",
+  },
+  Se4QHXvqwnQ: {
+    description:
+      "Yoyaku instore session with Brawther, published on the Yoyaku Record Store YouTube channel.",
+    uploadDate: "2024-03-20T11:05:45Z",
+    duration: "PT1H8M23S",
+    thumbnailUrl: "https://i.ytimg.com/vi/Se4QHXvqwnQ/maxresdefault.jpg",
+  },
+  UjwFpbMxyaM: {
+    description:
+      "Yoyaku instore session with Delano Smith, published on the Yoyaku Record Store YouTube channel.",
+    uploadDate: "2017-10-14T19:02:33Z",
+    duration: "PT1H29M57S",
+    thumbnailUrl: "https://i.ytimg.com/vi/UjwFpbMxyaM/maxresdefault.jpg",
+  },
+  Xgh6AFeq1CY: {
+    description:
+      "Yoyaku instore session with Nacho Bolognani, published on the Yoyaku Record Store YouTube channel.",
+    uploadDate: "2024-08-20T09:59:00Z",
+    duration: "PT1H1M25S",
+    thumbnailUrl: "https://i.ytimg.com/vi/Xgh6AFeq1CY/maxresdefault.jpg",
+  },
+  du4ueG0VJKE: {
+    description:
+      "Yoyaku instore session with Cesare VS Disorder, published on the Yoyaku Record Store YouTube channel.",
+    uploadDate: "2023-11-14T09:45:02Z",
+    duration: "PT2H37M15S",
+    thumbnailUrl: "https://i.ytimg.com/vi/du4ueG0VJKE/maxresdefault.jpg",
+  },
+  kIZrex_eUzc: {
+    description:
+      "Yoyaku instore session with Vakula, published on the Yoyaku Record Store YouTube channel.",
+    uploadDate: "2017-09-23T21:15:26Z",
+    duration: "PT1H28M13S",
+    thumbnailUrl: "https://i.ytimg.com/vi/kIZrex_eUzc/maxresdefault.jpg",
+  },
+  npkXteboCf8: {
+    description:
+      "Yoyaku instore session with O.BEE, published on the Yoyaku Record Store YouTube channel.",
+    uploadDate: "2024-03-13T16:47:37Z",
+    duration: "PT1H19M16S",
+    thumbnailUrl: "https://i.ytimg.com/vi/npkXteboCf8/maxresdefault.jpg",
+  },
+  rbycgPnlK1Y: {
+    description:
+      "Yoyaku instore session with Nicole, published on the Yoyaku Record Store YouTube channel.",
+    uploadDate: "2024-11-28T14:09:28Z",
+    duration: "PT57M39S",
+    thumbnailUrl: "https://i.ytimg.com/vi/rbycgPnlK1Y/hqdefault.jpg",
+  },
+  "tnpTY-IvYVE": {
+    description:
+      "Yoyaku instore session with Mai Iachetti, published on the Yoyaku Record Store YouTube channel.",
+    uploadDate: "2026-07-07T14:10:15Z",
+    duration: "PT1H7M7S",
+    thumbnailUrl: "https://i.ytimg.com/vi/tnpTY-IvYVE/maxresdefault.jpg",
+  },
 };
