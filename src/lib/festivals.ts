@@ -117,7 +117,7 @@ export const FESTIVALS: Festival[] = [
     imageCredit: "Photo by Ceescamel, CC BY-SA 4.0, via Wikimedia Commons.",
     venue: "NDSM Docklands",
     venueAddress: "NDSM-Plein 85, 1033 WC Amsterdam",
-    lastVerified: "2026-11-08",
+    lastVerified: "2026-11-24",
     artists: ["nina-kraviz", "jeff-mills", "amelie-lens", "motor-city-drum-ensemble", "chris-stussy"],
   },
   {
@@ -208,7 +208,7 @@ export const FESTIVALS: Festival[] = [
     genres: ["techno", "house"],
     website: "https://www.kappafuturfestival.it",
     ticketUrl: "https://www.kappafuturfestival.it/en/tickets",
-    ticketStatus: "sold-out",
+    ticketStatus: "open",
     description:
       "A three-day techno and house festival in Turin's Parco Dora, built around a former steel plant, regularly among Europe's earliest sellouts.",
     image: "https://rts.fm/images/commons/kappa-parco-dora-vitali-area.jpg",
@@ -216,7 +216,7 @@ export const FESTIVALS: Festival[] = [
     imageCredit: "Photo by Pmk58, CC BY-SA 4.0, via Wikimedia Commons.",
     venue: "Parco Dora (Vitali area)",
     venueAddress: "Corso Mortara, 10149 Torino",
-    lastVerified: "2026-10-19",
+    lastVerified: "2026-11-24",
     artists: ["amelie-lens", "anyma", "batu", "charlotte-de-witte", "chris-stussy", "donato-dozzy", "jeff-mills", "joseph-capriati", "luciano", "marco-carola", "motor-city-drum-ensemble", "nastia", "nina-kraviz", "sara-landry", "sven-vath", "surgeon", "ben-klock", "marcel-dettmann", "carl-craig", "floating-points", "four-tet", "maceo-plex", "richie-hawtin", "seth-troxler"],
   },
   {
@@ -267,7 +267,8 @@ export const FESTIVALS: Festival[] = [
     imageCredit: "Photo by Robert Richter, CC BY 2.0, via Wikimedia Commons.",
     venue: "Bungalowdorf Olganitz",
     venueAddress: "Zum Bungalowdorf 1, 04758 Cavertitz",
-    lastVerified: "2026-10-19",
+    ticketStatus: "open",
+    lastVerified: "2026-11-24",
     artists: ["marek-hemmann", "move-d", "theo-parrish", "donato-dozzy", "jeff-mills", "batu", "ben-ufo", "richie-hawtin", "dixon", "floating-points", "four-tet", "henrik-schwarz", "josh-wink", "stephan-bodzin", "electric-indigo", "monolake", "carl-craig", "ricardo-villalobos"],
   },
   {
@@ -404,7 +405,7 @@ export const FESTIVALS: Festival[] = [
     imageCredit: "Photo by Ethan Doyle White, CC BY-SA 4.0, via Wikimedia Commons.",
     venue: "Boston Manor Park",
     venueAddress: "Boston Manor Road, TW8 9JX Brentford, London",
-    lastVerified: "2026-10-20",
+    lastVerified: "2026-11-24",
     artists: ["jeff-mills", "nina-kraviz", "adam-beyer", "charlotte-de-witte"],
   },
   {
@@ -659,7 +660,8 @@ export const FESTIVALS: Festival[] = [
     imageCredit: "Photo by Silverije, CC BY-SA 4.0, via Wikimedia Commons.",
     venue: "The Garden Resort",
     venueAddress: "Petrića Glava 34, 22240 Tisno",
-    lastVerified: "2026-10-19",
+    ticketStatus: "open",
+    lastVerified: "2026-11-24",
     artists: ["motor-city-drum-ensemble"],
   },
   {
@@ -701,7 +703,9 @@ export const FESTIVALS: Festival[] = [
     image: "https://rts.fm/images/commons/nuits-sonores-2026-la-sucriere.jpg",
     imageAlt: "The silos of La Sucrière in Lyon lit at night with the Nuits Sonores logo during the 2026 edition, with festival-goers and signage in the foreground.",
     imageCredit: "Photo by Sebleouf, CC BY-SA 4.0, via Wikimedia Commons.",
-    lastVerified: "2026-10-19",
+    ticketStatus: "open",
+    ticketUrl: "https://shotgun.live/fr/festivals/nuits-sonores-days",
+    lastVerified: "2026-11-24",
     artists: [
       "carl-craig",
       "seth-troxler",
