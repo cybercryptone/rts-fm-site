@@ -142,6 +142,7 @@ export const TOPICS: Topic[] = [
       "best-record-shops-in-amsterdam-2026",
       "best-techno-and-electronic-record-shops-2026",
       "record-store-day-explained",
+      "yoyaku-paris-barcelona-record-shop-label-guide",
     ],
     also: [
       "vinyl-sales-record-2025",

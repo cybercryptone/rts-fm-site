@@ -445,6 +445,9 @@ export const FESTIVALS: Festival[] = [
     ticketUrl: "https://shop.dockyardfestival.com/s/CuRyUd7Ru8af06b8T7j3Tu",
     description:
       "A one-day daytime techno festival timed to Amsterdam Dance Event, running since 2014 and now held at Havenpark alongside Mystic Garden Festival on a single shared ticket.",
+    image: "https://rts.fm/images/commons/dockyard-westpoort-port-of-amsterdam.jpg",
+    imageAlt: "Bulk carrier moored beside port cranes at Westpoort in the Port of Amsterdam, the harbour district around Dockyard Festival's Havenpark site.",
+    imageCredit: "Photo by Alf van Beem, CC0, via Wikimedia Commons. Illustration only.",
     venue: "Havenpark",
     venueAddress: "Havenpark, Wethouder van Essenweg (official navigation address), Amsterdam",
     lastVerified: "2026-10-19",
@@ -586,6 +589,9 @@ export const FESTIVALS: Festival[] = [
     ticketUrl: "https://sunwaves-fest.ro/edition/sunwaves-festival-sw39-spring-edition-golden-sands/",
     description:
       "A beach festival of minimal and house that began in Mamaia, Romania in 2007 and now travels, with its 20th anniversary Spring Edition set for Golden Sands on Bulgaria's Black Sea coast. Known for marathon sets, including Marco Carola's 24 hours in 2015.",
+    image: "https://rts.fm/images/commons/mamaia-beach-black-sea-romania.jpg",
+    imageAlt: "Crowded beach with straw umbrellas on the Black Sea at Mamaia, Romania, where Sunwaves began in 2007.",
+    imageCredit: "Photo by Alexandru Panoiu, CC BY 2.0, via Wikimedia Commons. Illustration only; the current edition is in Golden Sands, Bulgaria.",
     venue: "PR Beach",
     lastVerified: "2026-10-22",
     artists: ["marco-carola", "joseph-capriati", "traumer", "chris-stussy", "raresh", "rhadoo", "petre-inspirescu", "priku", "sit", "cristi-cons", "vlad-caia", "sonja-moonear", "praslea"],
