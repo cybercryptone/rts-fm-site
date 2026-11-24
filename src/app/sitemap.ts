@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { SITE } from "@/lib/data";
-import { getAllPosts } from "@/lib/blog";
+import { getAllPosts, getPostImages } from "@/lib/blog";
 import { getAllArtists } from "@/lib/artists";
 import { TOPICS } from "@/lib/topics";
 import { FESTIVALS, getCalendarYears, getCountryHubs } from "@/lib/festivals";
@@ -60,18 +60,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(post.updated ?? post.date),
       changeFrequency: "monthly" as const,
       priority: 0.6,
+      images: getPostImages(post.slug),
     })),
     ...getAllArtists().map((artist) => ({
       url: `${SITE.url}/artists/${artist.slug}`,
       lastModified: new Date(),
       changeFrequency: "monthly" as const,
       priority: 0.6,
+      images: artist.image?.startsWith("https://rts.fm/") ? [artist.image] : [],
     })),
     ...FESTIVALS.map((festival) => ({
       url: `${SITE.url}/festivals/${festival.slug}`,
       lastModified: festival.lastVerified ? new Date(festival.lastVerified) : new Date(),
       changeFrequency: "monthly" as const,
       priority: 0.6,
+      images: festival.image?.startsWith("https://rts.fm/") ? [festival.image] : [],
     })),
     ...getCalendarYears().map((year) => ({
       url: `${SITE.url}/festivals/calendar/${year}`,

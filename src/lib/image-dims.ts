@@ -1,4 +1,4 @@
-import { openSync, readSync, closeSync } from "node:fs";
+import { openSync, readSync, closeSync, existsSync } from "node:fs";
 import path from "node:path";
 
 // Intrinsic width/height for self-hosted images, read from the file header at
@@ -54,4 +54,23 @@ export function getImageDims(src: string | undefined) {
   const dims = file ? readDims(file) : undefined;
   cache.set(src, dims);
   return dims;
+}
+
+// If a self-hosted JPEG/PNG has a sibling .webp file in /public, return its
+// URL (same host prefix as the source) so the renderer can offer it through
+// <picture> with the original as the fallback. Remote or unconverted images
+// return undefined and render as a plain <img>, exactly as before.
+const webpCache = new Map<string, string | undefined>();
+
+export function getWebpVariant(src: string | undefined) {
+  if (!src) return undefined;
+  if (webpCache.has(src)) return webpCache.get(src);
+  const m = src.match(/^((?:https:\/\/rts\.fm)?\/images\/[^?#]+)\.(?:jpe?g|png)$/i);
+  let out: string | undefined;
+  if (m) {
+    const file = localPath(`${m[1]}.webp`);
+    if (file && existsSync(file)) out = `${m[1]}.webp`;
+  }
+  webpCache.set(src, out);
+  return out;
 }

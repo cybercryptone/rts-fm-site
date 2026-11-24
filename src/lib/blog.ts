@@ -66,3 +66,13 @@ export function getArticleImage(post: Post): string | null {
   const match = post.content.match(/!\[[^\]]*\]\((https?:\/\/[^\s)]+)\)/);
   return match ? match[1] : null;
 }
+
+// Self-hosted images embedded in a post's body, for the image sitemap.
+// Third-party hosts (Wikimedia and similar) are left out: an image sitemap
+// should only list images on a domain we control.
+export function getPostImages(slug: string): string[] {
+  const post = getPostBySlug(slug);
+  if (!post) return [];
+  const urls = [...post.content.matchAll(/!\[[^\]]*\]\((https:\/\/rts\.fm\/[^\s)]+)\)/g)].map((m) => m[1]);
+  return [...new Set(urls)];
+}

@@ -13,7 +13,7 @@ import SoundCloudEmbed from "@/components/SoundCloudEmbed";
 import BandcampEmbed from "@/components/BandcampEmbed";
 import { getAllPosts, getArticleImage, getPostBySlug } from "@/lib/blog";
 import { formatDate, metaDescription } from "@/lib/format";
-import { getImageDims } from "@/lib/image-dims";
+import { getImageDims, getWebpVariant } from "@/lib/image-dims";
 import { relatedForPost } from "@/lib/related";
 import RelatedLinks from "@/components/RelatedLinks";
 import { getTopicForPost } from "@/lib/topics";
@@ -77,8 +77,10 @@ const heroImage = cache(() => ({ src: "" }));
 
 function MdxFigureImg({ alt, ...props }: React.ComponentProps<"img">) {
   const isHero = !!props.src && props.src === heroImage().src;
-  const dims = getImageDims(typeof props.src === "string" ? props.src : undefined);
-  return (
+  const src = typeof props.src === "string" ? props.src : undefined;
+  const dims = getImageDims(src);
+  const webp = getWebpVariant(src);
+  const img = (
     /* eslint-disable-next-line @next/next/no-img-element -- external, CC-licensed editorial images; not worth Next/Image's remote-domain allowlisting for one-off blog credits */
     <img
       alt={alt}
@@ -90,6 +92,17 @@ function MdxFigureImg({ alt, ...props }: React.ComponentProps<"img">) {
       className="h-auto w-full rounded-xl border border-line object-cover"
       {...props}
     />
+  );
+  // Self-hosted images with a .webp sibling are offered as WebP first, with
+  // the original JPEG/PNG as the fallback for browsers and crawlers that
+  // ignore <source>.
+  return webp ? (
+    <picture>
+      <source type="image/webp" srcSet={webp} />
+      {img}
+    </picture>
+  ) : (
+    img
   );
 }
 
