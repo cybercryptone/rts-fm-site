@@ -122,4 +122,46 @@ export const BLOG_VIDEO_META: Record<string, BlogVideoMeta> = {
     duration: "PT1H59M36S",
     thumbnailUrl: "https://i.ytimg.com/vi/-8H0Jc1GfKE/maxresdefault.jpg",
   },
+  Clg_CILE5Eo: {
+    description:
+      "Yoyaku instore session with Satoshi Tomiie, published on the Yoyaku Record Store YouTube channel.",
+    uploadDate: "2017-12-21T21:02:00Z",
+    duration: "PT2H6M32S",
+    thumbnailUrl: "https://i.ytimg.com/vi/Clg_CILE5Eo/maxresdefault.jpg",
+  },
+  pKChDHiWh54: {
+    description:
+      "Yoyaku instore session with E.lina, published on the Yoyaku Record Store YouTube channel.",
+    uploadDate: "2026-09-17T15:00:26Z",
+    duration: "PT1H2M48S",
+    thumbnailUrl: "https://i.ytimg.com/vi/pKChDHiWh54/maxresdefault.jpg",
+  },
+  A99ejtc75E0: {
+    description:
+      "Yoyaku instore session with Cabanne, published on the Yoyaku Record Store YouTube channel.",
+    uploadDate: "2018-09-08T01:28:31Z",
+    duration: "PT2H1M17S",
+    thumbnailUrl: "https://i.ytimg.com/vi/A99ejtc75E0/hqdefault.jpg",
+  },
+  "025Edpr2vUY": {
+    description:
+      "Yoyaku instore session with Cabanne, published on the Yoyaku Record Store YouTube channel.",
+    uploadDate: "2025-11-27T14:52:50Z",
+    duration: "PT56M42S",
+    thumbnailUrl: "https://i.ytimg.com/vi/025Edpr2vUY/maxresdefault.jpg",
+  },
+  O8HZQ8q8m2E: {
+    description:
+      "Yoyaku instore session with Cabanne, published on the Yoyaku Record Store YouTube channel.",
+    uploadDate: "2017-05-12T20:14:01Z",
+    duration: "PT1H54M16S",
+    thumbnailUrl: "https://i.ytimg.com/vi/O8HZQ8q8m2E/hqdefault.jpg",
+  },
+  "g-bIqoogMek": {
+    description:
+      "Yoyaku instore session with E.lina, published on the Yoyaku Record Store YouTube channel.",
+    uploadDate: "2024-11-27T09:53:05Z",
+    duration: "PT58M27S",
+    thumbnailUrl: "https://i.ytimg.com/vi/g-bIqoogMek/hqdefault.jpg",
+  },
 };

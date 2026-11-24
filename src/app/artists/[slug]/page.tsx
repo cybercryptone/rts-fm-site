@@ -23,6 +23,7 @@ import {
   videoObjectJsonLd,
 } from "@/lib/schema";
 import { ARTIST_VIDEO_META } from "@/lib/artist-video-metadata";
+import { BLOG_VIDEO_META } from "@/lib/video-metadata";
 
 // The meta description states the artist's current age, so re-render daily.
 export const revalidate = 86400;
@@ -255,8 +256,9 @@ export default async function ArtistPage({
   const faqItems = extractFaqItems(artist.content);
 
   const videoJsonLds = extractYouTubeEmbeds(artist.content)
-    .filter((embed) => ARTIST_VIDEO_META[embed.videoId])
-    .map((embed) => videoObjectJsonLd(embed, ARTIST_VIDEO_META[embed.videoId]));
+    .map((embed) => ({ embed, meta: ARTIST_VIDEO_META[embed.videoId] ?? BLOG_VIDEO_META[embed.videoId] }))
+    .filter(({ meta }) => meta)
+    .map(({ embed, meta }) => videoObjectJsonLd(embed, meta));
 
   return (
     <>
