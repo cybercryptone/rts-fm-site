@@ -14,6 +14,7 @@ import {
   festivalDurationDays,
   getCalendarYears,
   getCountryHub,
+  YEAR_GUIDES,
   getFestivalBySlug,
   slugifyCountry,
   type Festival,
@@ -261,6 +262,7 @@ export default async function FestivalPage({
   const startYear = festival.startDate ? Number(festival.startDate.slice(0, 4)) : null;
   const calendarYear = startYear && getCalendarYears().includes(startYear) ? startYear : null;
   const countryHub = getCountryHub(slugifyCountry(festival.country));
+  const yearGuide = calendarYear ? YEAR_GUIDES[calendarYear] : undefined;
   const verifiedAge = festival.lastVerified ? daysSince(festival.lastVerified) : null;
 
   return (
@@ -409,6 +411,14 @@ export default async function FestivalPage({
                 <Link href={`/festivals/country/${countryHub.slug}`} className="text-accent hover:text-accent-soft">
                   Festivals in {festival.country}
                 </Link>
+              )}
+              {yearGuide && (
+                <>
+                  {" · "}
+                  <Link href={`/blog/${yearGuide.slug}`} className="text-accent hover:text-accent-soft">
+                    Best festivals of {calendarYear}
+                  </Link>
+                </>
               )}
             </p>
           )}

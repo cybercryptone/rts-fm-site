@@ -7,6 +7,7 @@ import FestivalCalendar from "@/components/FestivalCalendar";
 import {
   getCalendarYears,
   getCountryHubs,
+  YEAR_GUIDES,
   getFestivalsForYear,
   festivalDateLabel,
   type Festival,
@@ -121,6 +122,16 @@ export default async function FestivalCalendarPage({
               : ""}
             . Every ticket link goes to the festival&apos;s own vendor; RTS.FM never sells tickets.
           </p>
+
+          {YEAR_GUIDES[year] && (
+            <p className="mt-4 text-sm leading-relaxed text-fg-dim sm:text-base">
+              Want picks rather than a full list? Read our guide to the{" "}
+              <Link href={`/blog/${YEAR_GUIDES[year].slug}`} className="text-accent underline decoration-accent/40 underline-offset-4 hover:text-accent-soft">
+                {YEAR_GUIDES[year].title}
+              </Link>
+              , with tickets, lineups and what changed since the dates were announced.
+            </p>
+          )}
 
           <FestivalCalendar festivals={festivals} byMonth />
 

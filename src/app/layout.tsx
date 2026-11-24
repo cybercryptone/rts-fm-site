@@ -105,6 +105,10 @@ const organizationJsonLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
   name: SITE.name,
+  // Searchers type the name with a space or without the dot ("rts fm",
+  // "rtsfm"); declaring those spellings helps Google attach them to this
+  // entity instead of the Swiss broadcaster or the French FM stations.
+  alternateName: ["RTS FM", "RTSFM"],
   url: SITE.url,
   logo: `${SITE.url}/icon.png`,
   description: SITE.description,
@@ -120,6 +124,7 @@ const websiteJsonLd = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   name: SITE.name,
+  alternateName: ["RTS FM", "RTSFM"],
   url: SITE.url,
 };
 

@@ -899,3 +899,14 @@ export function oldestVerified(): string | null {
 export function daysSince(isoDate: string): number {
   return Math.floor((Date.now() - new Date(isoDate).getTime()) / 86_400_000);
 }
+
+// Editorial "best festivals of the year" guide that pairs with each calendar
+// year's data page. The calendar is the full list; the guide is the curated
+// read. Linking both ways keeps their roles distinct and stops the two from
+// competing for the same generic "festivals 2027" queries.
+export const YEAR_GUIDES: Record<number, { slug: string; title: string }> = {
+  2027: {
+    slug: "best-techno-house-festivals-2027",
+    title: "best techno and house festivals in 2027",
+  },
+};

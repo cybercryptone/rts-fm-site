@@ -87,6 +87,12 @@ export default function AboutPage() {
             </Link>
             .
           </p>
+          <p className="mt-4 text-sm leading-relaxed text-fg-dim sm:text-base">
+            {SITE.name}, also written RTS FM or RTSFM, is an independent internet radio
+            project and record label. It is not affiliated with the Swiss public
+            broadcaster RTS or with the FM radio stations that use the name RTS FM in
+            southern France.
+          </p>
 
           <h2 className="mt-10 font-display text-xl font-bold uppercase tracking-[-0.01em] text-fg">
             What We Cover
