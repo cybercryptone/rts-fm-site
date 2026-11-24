@@ -268,6 +268,7 @@ export const TOPICS: Topic[] = [
     ],
     pillar: "teenage-engineering-stop-making-synthesizers",
     posts: [
+      "teenage-engineering-history-products-op-1",
       "alphatheta-djm-a7-four-channel-mixer",
       "native-instruments-inmusic-traktor-what-happens-next",
       "best-standalone-dj-systems-2026",

@@ -614,7 +614,7 @@ export const FESTIVALS: Festival[] = [
     imageCredit: "Photo by Zygmunt Put, CC BY-SA 4.0, via Wikimedia Commons.",
     venue: "Hotel Forum (late-night programme) and other venues in Kraków",
     venueAddress: "ul. Marii Konopnickiej 28, Kraków",
-    lastVerified: "2026-10-10",
+    lastVerified: "2026-11-24",
     artists: ["donato-dozzy", "batu", "move-d", "surgeon"],
   },
   {

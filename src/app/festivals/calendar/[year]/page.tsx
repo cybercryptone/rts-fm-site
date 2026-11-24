@@ -10,6 +10,7 @@ import {
   YEAR_GUIDES,
   getFestivalsForYear,
   festivalDateLabel,
+  regionOf,
   type Festival,
 } from "@/lib/festivals";
 import { breadcrumbJsonLd, eventJsonLd, faqJsonLd } from "@/lib/schema";
@@ -24,7 +25,8 @@ function summary(year: number) {
   const festivals = getFestivalsForYear(year);
   const confirmed = festivals.filter((f) => f.dateStatus === "confirmed");
   const countries = [...new Set(festivals.map((f) => f.country))];
-  return { festivals, confirmed, countries };
+  const europe = festivals.filter((f) => regionOf(f.country) === "Europe");
+  return { festivals, confirmed, countries, europe };
 }
 
 export async function generateMetadata({
@@ -34,9 +36,12 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { year } = await params;
   if (!getCalendarYears().includes(Number(year))) return {};
-  const { festivals, confirmed } = summary(Number(year));
-  const title = `Techno & House Festivals ${year}: Dates, Cities, Tickets`;
-  const description = `A month-by-month calendar of ${festivals.length} underground techno and house festivals in ${year}, ${confirmed.length} with confirmed dates, with cities and official ticket links.`;
+  const { festivals, confirmed, europe } = summary(Number(year));
+  const mostlyEurope = europe.length * 2 > festivals.length;
+  const title = mostlyEurope
+    ? `Techno & House Festivals ${year}: Europe Dates and Tickets`
+    : `Techno & House Festivals ${year}: Dates, Cities, Tickets`;
+  const description = `Calendar of ${festivals.length} techno, house and rave festivals in ${year}${mostlyEurope ? `, ${europe.length} in Europe` : ""}, ${confirmed.length} with confirmed dates, with cities and official ticket links.`;
   return {
     title: { absolute: title },
     description,
@@ -55,7 +60,7 @@ export default async function FestivalCalendarPage({
   const year = Number(yearParam);
   if (!getCalendarYears().includes(year)) notFound();
 
-  const { festivals, confirmed, countries } = summary(year);
+  const { festivals, confirmed, countries, europe } = summary(year);
   const first = confirmed[0];
   const last = confirmed[confirmed.length - 1];
   const hubs = getCountryHubs().filter((h) => festivals.some((f) => f.country === h.country));
@@ -77,6 +82,18 @@ export default async function FestivalCalendarPage({
     question: `How many techno and house festivals does RTS.FM list for ${year}?`,
     answer: `RTS.FM lists ${festivals.length} festivals for ${year}, ${confirmed.length} of them with confirmed dates, across ${countries.length} ${countries.length === 1 ? "country" : "countries"}: ${countries.join(", ")}. The list is hand-picked rather than complete.`,
   });
+  if (europe.length > 0) {
+    const europeConfirmed = europe.filter((f) => f.dateStatus === "confirmed");
+    const earliest = europeConfirmed.slice(0, 3).map((f) => `${f.name} (${f.city}, ${festivalDateLabel(f)})`);
+    faq.push({
+      question: `What are the best techno festivals in Europe in ${year}?`,
+      answer: `RTS.FM lists ${europe.length} European techno and house festivals for ${year}, ${europeConfirmed.length} with confirmed dates${earliest.length ? `, starting with ${earliest.join("; ")}` : ""}. The calendar is chronological, not a ranking; editorial picks are in our ${YEAR_GUIDES[year] ? YEAR_GUIDES[year].title : `${year} festival guide`}.`,
+    });
+    faq.push({
+      question: `Which raves and rave festivals are happening in Europe in ${year}?`,
+      answer: `The festivals above are multi-day raves and club festivals, from beach and forest sites to warehouse events, across ${[...new Set(europe.map((f) => f.country))].length} European countries. Filter by month in the calendar, then use the official ticket link on each festival page.`,
+    });
+  }
   faq.push({
     question: `Are the ${year} festival dates confirmed?`,
     answer: `Only entries labelled with a plain date range are confirmed by the festival. Entries marked "est., unconfirmed" are based on the last known pattern and can change once the organiser announces.`,
@@ -115,7 +132,8 @@ export default async function FestivalCalendarPage({
             Underground techno &amp; house festivals {year}
           </h1>
           <p className="mt-4 max-w-2xl text-sm leading-relaxed text-fg-dim sm:text-base">
-            {festivals.length} hand-picked festivals in {year}, {confirmed.length} with dates confirmed by
+            {festivals.length} hand-picked techno, house and rave festivals in {year}
+            {europe.length > 0 ? `, ${europe.length} of them in Europe` : ""}, {confirmed.length} with dates confirmed by
             the organisers, listed month by month
             {first && last && first !== last
               ? `, from ${first.name} on ${festivalDateLabel(first)} to ${last.name} on ${festivalDateLabel(last)}`
