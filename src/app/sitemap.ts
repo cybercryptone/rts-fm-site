@@ -64,7 +64,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
     ...getAllArtists().map((artist) => ({
       url: `${SITE.url}/artists/${artist.slug}`,
-      lastModified: new Date(),
+      lastModified: artist.dateModified ? new Date(artist.dateModified) : new Date(),
       changeFrequency: "monthly" as const,
       priority: 0.6,
       images: artist.image?.startsWith("https://rts.fm/") ? [artist.image] : [],
