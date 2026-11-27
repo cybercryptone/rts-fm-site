@@ -59,6 +59,7 @@ export const TOPICS: Topic[] = [
     ],
     pillar: "best-berlin-clubs-2026-guide",
     posts: [
+      "berlin-new-years-eve-2026-techno-club-guide",
       "who-runs-berghain-ownership-operators",
       "kraftwerk-berlin-helsing-launch-tresor-atonal",
       "ostgut-ton-berghain-label-history",
@@ -164,6 +165,7 @@ export const TOPICS: Topic[] = [
     posts: [
       "spotify-ai-persona-badge-ifpi-fraud",
       "deezer-ipsos-survey-ai-music-labelling-2026",
+      "tidal-ai-music-ban-december-2026-deezer-survey",
       "michael-smith-ai-streaming-fraud-sentencing",
       "bandcamp-ai-ban-six-months-on",
       "charlotte-de-witte-azadi-ep-ai-vocalist-nava",

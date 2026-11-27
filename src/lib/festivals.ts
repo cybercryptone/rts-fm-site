@@ -498,8 +498,8 @@ export const FESTIVALS: Festival[] = [
     imageCredit: "Photo by PersianDutchNetwork, CC BY-SA 4.0, via Wikimedia Commons.",
     venue: "Het Twiske",
     venueAddress: "De Zuiderlaaik 1, Oostzaan",
-    lastVerified: "2026-11-16",
-    artists: ["chris-stussy"],
+    lastVerified: "2026-11-26",
+    artists: ["chris-stussy", "craig-richards", "cinthie", "raresh", "sonja-moonear"],
   },
   {
     slug: "mutek",

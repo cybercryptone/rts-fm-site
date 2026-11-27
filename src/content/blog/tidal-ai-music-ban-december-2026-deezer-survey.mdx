@@ -1,0 +1,176 @@
+---
+title: "TIDAL AI Music Ban: What Goes From 9 December"
+date: "2026-11-26"
+excerpt: "TIDAL will remove fully AI-generated tracks from 9 December 2026. What stays, how detection works and how it compares with Deezer's listener survey."
+---
+
+![A 1989 studio at IRCAM in Paris with a beige computer monitor, two keyboards, racks of black audio hardware and a mixing desk against acoustic wall panels](https://rts.fm/images/commons/IRCAM_studio_Paris_1989.jpg)
+*Photo by Martinwguy2, CC BY-SA 3.0, via Wikimedia Commons. A studio at IRCAM in Paris in 1989. The institute's commercial subsidiary, Ircam Amplify, supplies AI detection for TIDAL's ban.*
+
+TIDAL will remove tracks it determines are fully AI-generated, starting on 9 December 2026. Announced on 24 November, the policy also bars distributors from delivering such tracks. Music made with AI assistance stays. Until now the service had labelled these recordings and withheld royalties. From next month, it intends to delete them.
+
+The wording that matters is short. In a statement carried by [Consequence](https://consequence.net/2026/11/tidal-bans-fully-ai-generated-music/), the company said "we're removing all tracks that we determine are 100% AI-generated." The open question sits inside the middle of that sentence: how TIDAL determines it, and what happens when it gets one wrong.
+
+We could not read TIDAL's own policy pages, which refused our requests. Everything below comes from published reporting, a statement as quoted by other outlets and the sources listed at the end.
+
+## What is TIDAL banning?
+
+TIDAL is banning recordings that it judges to be generated entirely by AI. Existing tracks in that category will be removed, distributors may not deliver new ones, and a delivery whose metadata says a track was made solely with AI tools will be rejected. Tracks that only used AI tools along the way are not covered.
+
+[Hypebot](https://www.hypebot.com/tidal-bans-100-ai-music-deleting-29-million-tracks/) reports that stem separation, mixing and production aids remain eligible, and that for now TIDAL will act only against wholly AI-generated recordings, not against AI-generated compositions. [What Hi-Fi](https://www.whathifi.com/streaming-entertainment/music-streaming/tidal-bans-100-percent-ai-generated-music-in-a-first-for-major-streaming-services) says assisted work is allowed when it is not simply the output of a generator such as Suno or Lyria. Hypebot says the ban reaches both distributor deliveries and TIDAL Upload.
+
+### When does the ban start?
+
+Removal begins on 9 December 2026. Reports differ on the finish: [TechCrunch](https://techcrunch.com/2026/11/24/tidal-to-ban-and-remove-millions-of-ai-generated-tracks-as-ai-slop-inundates-music-streaming/) gives the end of the year, while Hypebot and [Electronic Groove](https://electronicgroove.com/tidal-to-remove-fully-ai-generated-music-from-its-platform/) point to early 2027.
+
+## How much AI music is on TIDAL?
+
+TIDAL's figures, as reported, put about 27 million tracks, or 6.3% of its catalogue, under an AI tag. They are the company's own measurements, and nobody outside it has checked them in the coverage we read.
+
+| Measure | Reported figure | Whose figure, and where we read it |
+|---|---|---|
+| Tracks tagged as fully AI-generated | About 27 million (6.3% of the catalogue) | TIDAL, via TechCrunch, Hypebot and CMU |
+| Share of those tagged tracks from Suno | 94% | Via Hypebot |
+| Tagged tracks with no streams in three months | 96% | TIDAL, via CMU and Hypebot |
+| AI share of deliveries over the past 90 days | 43%, passing 60% on 6 November | TIDAL, via CMU and Hypebot |
+| Estimated total deletions | About 29 million | Robert Andersen of TIDAL, via TechCrunch and Hypebot |
+| Expected rejections | 80,000 to 85,000 tracks a day | Robert Andersen of TIDAL, via TechCrunch and Hypebot |
+| Tracks already removed over suspected artist impersonation | More than 65,000 | Hypebot and Digital Music News |
+
+Two cautions apply. First, 29 million and 27 million are different measures in most reports: an estimate of what will be deleted and a count of what is tagged. Some outlets use 27 million for both, and the gap is not explained. Second, the impersonation count varies between outlets, from about 60,000 to 66,000.
+
+The 96% figure is the one to sit with. If it holds, most of the tagged material had no listener at all over the period measured, so for the bulk of it removal would change little about what anyone actually plays.
+
+## What changed since June?
+
+TIDAL's earlier policy, announced on 29 June 2026, labelled AI tracks and stopped paying royalties on fully AI-generated ones, but left them playable. [TechCrunch reported at the time](https://techcrunch.com/2026/06/29/tidal-cracks-down-on-ai-music-by-cutting-off-monetization/) that it took effect on 15 July, with a badge on affected tracks and removal for impersonation.
+
+[Resident Advisor's June report](https://ra.co/news/85507) said that policy described AI-generated music as wholly or substantially produced by generative AI. The November removal is described throughout the new coverage as covering fully generated tracks only. We have not been able to compare the two definitions on TIDAL's own pages.
+
+Our [report on Todd Edwards and AI sampling](/blog/todd-edwards-ai-sampling-producers-split) was written under the June rules. A producer who chops and rearranges generated material is exactly the case that a line between "assisted" and "generated" has to settle, and [Complete Music Update](https://completemusicupdate.com/tidal-has-banned-ai-generated-music-from-its-platform-but-can-the-industry-agree-where-the-line-between-ai-generated-and-ai-assisted-should-be-drawn/) argues the industry has not agreed where that line falls.
+
+## How will TIDAL detect AI tracks?
+
+TIDAL is using detection technology from Ircam Amplify, the commercial subsidiary of the French research institute IRCAM, alongside the declarations in delivery metadata. Ircam Amplify claims a false positive rate below 0.02%, meaning fewer than two human recordings in 10,000 wrongly flagged. That is the supplier's own figure.
+
+Nathalie Birocheau, Ircam Amplify's chief executive, repeated it to Complete Music Update and argued that accuracy matters because a wrong flag can cast doubt on an artist's work. Hypebot attributes the same rate, with a 99% accuracy claim, to the company's product marketing.
+
+### Has the detector been tested independently?
+
+One outside data point is a research preprint, [MUSEBENCH](https://arxiv.org/html/2610.20310v1), posted on arXiv in October 2026. In its default test it recorded a 9.0% false positive rate for Ircam Amplify's commercial interface, with 98.6% precision and 71.1% recall. That is far from the supplier's figure, but the two should not be read as a direct contradiction.
+
+The paper queried a black-box service, applied its own 0.5 decision threshold and describes the commercial systems as reference points, not controlled comparisons. It also notes sensitivity to compressed formats. It did not test TIDAL's deployment, which may use a different version, threshold or review step. We found no published error rate for TIDAL's system as it will actually run.
+
+## What happens if a human track is flagged?
+
+TIDAL accepts that some mistakes will happen and says there is an appeals process. A spokesperson told Rolling Stone, [as quoted by What Hi-Fi](https://www.whathifi.com/streaming-entertainment/music-streaming/tidal-bans-100-percent-ai-generated-music-in-a-first-for-major-streaming-services), that the vast majority of appeals so far had been reaffirmed on closer review, which the company reads as evidence of a high detection success rate. In other words, most original decisions stood. The spokesperson also said a small number of false positives is inevitable.
+
+No count of appeals or reversals came with that statement, so the claim cannot be sized. We also saw no published deadline for a review. If you release music through a distributor, three habits are worth adopting now:
+
+1. Keep stems, project files and dated session notes, so you can show how a track was made.
+2. Check what your distributor writes into the metadata about AI use, because a declaration of sole AI creation means rejection.
+3. Look at your catalogue on TIDAL before and after 9 December, and keep a record of anything that disappears.
+
+Our report on [Bandcamp's AI ban six months on](/blog/bandcamp-ai-ban-six-months-on) looks at how that kind of enforcement has played out on another platform.
+
+## How does TIDAL compare with other platforms?
+
+TIDAL's rule goes further than detection and labelling, though it is not the only ban. Bandcamp has prohibited music generated wholly or substantially by AI since January 2026, and our earlier reporting records Beatport blocking fully or majority AI-generated tracks.
+
+| Platform | Approach to AI music | Source |
+|---|---|---|
+| TIDAL | Removes and refuses fully AI-generated tracks from 9 December 2026; assisted work allowed | Reports above |
+| Bandcamp | Bans music generated wholly or substantially by AI, and AI impersonation | [Bandcamp blog](https://blog.bandcamp.com/2026/01/13/keeping-bandcamp-human) |
+| Beatport | Blocks fully or majority AI-generated tracks and tags assisted ones | [Beatportal](https://www.beatportal.com/articles/1571333-beatport-expands-beatdapp-partnership-to-detect-ai-generated-music) |
+| Deezer | Keeps detected tracks out of algorithmic and editorial recommendations. Said in July it would take down AI tracks used for stream fraud or unplayed for six months; announced a search filter in October | [July release](https://newsroom-deezer.com/2026/07/ai-music-exceeds-50-percent-daily-uploads-deezer/), [October release](https://newsroom-deezer.com/2026/10/deezer-ai-music-toggle/) |
+| Spotify | No blanket ban in the October update. AI Persona artists are excluded from recommendations by default unless followed, and spam and slop tracks are pulled from them | [Spotify newsroom](https://newsroom.spotify.com/2026-10-20/prioritizing-human-artistry/) |
+
+Spotify's badge concerns whether an artist's identity is synthetic, which is a different question from how a recording was made. Our [report on the AI Persona badge](/blog/spotify-ai-persona-badge-ifpi-fraud) explains the distinction.
+
+Money explains part of the pressure. Deezer says up to 85% of streams on fully AI-generated tracks in 2025 were fraudulent, a figure about its own platform and not about TIDAL. For a criminal example of the scheme, see our coverage of [Michael Smith's sentence for AI streaming fraud](/blog/michael-smith-ai-streaming-fraud-sentencing).
+
+## Do listeners want AI music removed?
+
+The latest [Deezer and Ipsos survey](/blog/deezer-ipsos-survey-ai-music-labelling-2026) does not answer that question directly. It shows strong support for disclosure and for keeping AI songs out of the charts: 80% of 9,000 adults in eight countries want fully AI-generated music clearly labelled, and 60% say fully AI-generated songs should not sit in the main charts beside human-made ones.
+
+It also found that 72% of streaming users want to be told when a service recommends fully AI-generated music. Our reading of the coverage we opened for that article found no question asking whether services should delete AI tracks. So the survey supports the case that listeners care where AI music appears, and it cannot be cited as a vote for TIDAL's ban. Deezer commissioned the research and sells AI detection technology, which is worth keeping in mind.
+
+The same survey offers a reason detection has to carry the weight. In its 2025 edition, 97% of respondents could not pick the human-made track in a blind test against two AI songs. A policy that relied on listeners to report fakes would not get far.
+
+## What does it mean for DJs and labels?
+
+For DJs, the practical risk is a gap in a library. TIDAL streaming is built into several [standalone DJ systems](/blog/best-standalone-dj-systems-2026). We would expect a track removed from the catalogue to be unavailable through those connections too, but the reports we read do not discuss DJ playlists, so treat that as our inference and check your crates after 9 December.
+
+For labels, the burden of proof matters more than the principle. Few underground labels will object to losing machine-made uploads that compete for the same shelf space. The cost falls on anyone whose human work is flagged, or whose process sits between the two categories. [Charlotte de Witte's Azadi EP](/blog/charlotte-de-witte-azadi-ep-ai-vocalist-nava), built around an AI singer, shows how quickly the question reaches dance music. We have seen nothing saying how TIDAL would classify that release or any other named record.
+
+For the wider picture, from [Deezer's upload figures](/blog/deezer-ai-uploads-streaming-flood) to platform rules, see our [AI and electronic music hub](/topics/ai-and-electronic-music).
+
+## What we could not verify
+
+- **TIDAL's own text.** Its website and support pages refused our requests, so we have no first-hand copy of the definition, the terms or the appeals instructions.
+- **Platform data.** Catalogue, delivery and streaming figures are TIDAL's own, as reported by others.
+- **Real-world error rate.** The 0.02% figure is the supplier's claim, and the 9.0% preprint result comes from different test conditions.
+- **Appeals.** No numbers of appeals, reversals or review times accompanied the spokesperson's statement.
+- **Final deletion count.** The estimate of about 29 million and the 27 million tagged tracks are not reconciled in the reports.
+
+<QuickWins>
+- TIDAL starts removing fully AI-generated tracks on 9 December 2026 and bars distributors from delivering them.
+- AI-assisted music, including work that uses stem separation, mixing or production tools, stays eligible.
+- Reported TIDAL figures: about 27 million tagged tracks (6.3% of the catalogue), 96% of them unplayed in three months, and AI making up 43% of recent deliveries.
+- Detection comes from Ircam Amplify. Its false positive rate below 0.02% is a supplier claim, and one research preprint measured 9.0% under its own test conditions.
+- Keep stems and session files, check your distributor's AI metadata, and check your TIDAL catalogue and DJ crates after 9 December.
+- The Deezer survey backs labelling and chart exclusion, but the coverage we read shows no question on deleting AI tracks.
+</QuickWins>
+
+## Frequently Asked Questions
+
+### When does TIDAL ban AI music?
+
+TIDAL begins removing fully AI-generated tracks on 9 December 2026. It announced the policy on 24 November. Reports place the end of the clean-up at either the end of 2026 or early 2027.
+
+### Does TIDAL ban all music made with AI?
+
+No. The ban covers tracks TIDAL determines are 100% AI-generated. Reports say AI-assisted music remains allowed, including work that uses tools for stem separation, mixing or production.
+
+### How many tracks will TIDAL delete?
+
+A TIDAL executive's estimate, as reported, is about 29 million. About 27 million tracks are tagged as fully AI-generated, which TIDAL puts at 6.3% of its catalogue.
+
+### How does TIDAL detect AI-generated songs?
+
+It uses technology from Ircam Amplify, a commercial subsidiary of IRCAM, and rejects deliveries whose metadata says a track was made solely with AI tools.
+
+### Can TIDAL flag a human track by mistake?
+
+Yes, it can. A TIDAL spokesperson said a small amount of false positives is inevitable and pointed to an appeals process. Ircam Amplify claims a false positive rate below 0.02%, which we have not seen independently confirmed for TIDAL's setup.
+
+### Did TIDAL already demonetise AI music?
+
+Yes. A policy announced on 29 June 2026 stopped royalties on fully AI-generated tracks and added labels, with an effective date of 15 July reported by TechCrunch. Those tracks stayed on the service.
+
+### Which other music platforms ban AI tracks?
+
+Bandcamp bans music generated wholly or substantially by AI, and Beatport blocks fully or majority AI-generated tracks. Deezer and Spotify mainly limit or label AI content, with Deezer also announcing takedowns in specific cases.
+
+### What did the Deezer survey say about AI music?
+
+In the 2026 Deezer and Ipsos survey, 80% of respondents wanted fully AI-generated music clearly labelled and 60% said fully AI-generated songs should stay out of the main charts. It was commissioned by Deezer.
+
+## Sources
+
+Read on 26 November 2026.
+
+- [TechCrunch, 24 November 2026: Tidal to ban and remove millions of AI-generated tracks](https://techcrunch.com/2026/11/24/tidal-to-ban-and-remove-millions-of-ai-generated-tracks-as-ai-slop-inundates-music-streaming/)
+- [Hypebot, 25 November 2026: TIDAL bans 100% AI music](https://www.hypebot.com/tidal-bans-100-ai-music-deleting-29-million-tracks/)
+- [Complete Music Update, 25 November 2026: TIDAL has banned AI generated music](https://completemusicupdate.com/tidal-has-banned-ai-generated-music-from-its-platform-but-can-the-industry-agree-where-the-line-between-ai-generated-and-ai-assisted-should-be-drawn/)
+- [What Hi-Fi, 25 November 2026: Tidal bans 100% AI-generated music](https://www.whathifi.com/streaming-entertainment/music-streaming/tidal-bans-100-percent-ai-generated-music-in-a-first-for-major-streaming-services)
+- [Consequence, 24 November 2026: Tidal bans fully AI-generated music](https://consequence.net/2026/11/tidal-bans-fully-ai-generated-music/)
+- [Digital Music News, 24 November 2026: Tidal bans AI-generated music](https://www.digitalmusicnews.com/2026/11/24/tidal-bans-ai-generated-music/)
+- [Electronic Groove, 25 November 2026: TIDAL to remove fully AI-generated music](https://electronicgroove.com/tidal-to-remove-fully-ai-generated-music-from-its-platform/)
+- [TechCrunch, 29 June 2026: Tidal cuts off monetization for AI music](https://techcrunch.com/2026/06/29/tidal-cracks-down-on-ai-music-by-cutting-off-monetization/)
+- [Resident Advisor: June 2026 report on TIDAL's AI policy](https://ra.co/news/85507)
+- [Ircam Amplify](https://www.ircamamplify.com/)
+- [MUSEBENCH research preprint, arXiv 2610.20310](https://arxiv.org/html/2610.20310v1)
+- [Deezer newsroom, 21 July 2026](https://newsroom-deezer.com/2026/07/ai-music-exceeds-50-percent-daily-uploads-deezer/) and [13 October 2026](https://newsroom-deezer.com/2026/10/deezer-ai-music-toggle/)
+- [Spotify newsroom, 20 October 2026](https://newsroom.spotify.com/2026-10-20/prioritizing-human-artistry/)
+- [Bandcamp blog, 13 January 2026](https://blog.bandcamp.com/2026/01/13/keeping-bandcamp-human)
